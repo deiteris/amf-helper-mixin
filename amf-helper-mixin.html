@@ -1,0 +1,336 @@
+<!--
+@license
+Copyright 2018 The Advanced REST client authors <arc@mulesoft.com>
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+-->
+<link rel="import" href="../polymer/lib/utils/mixin.html">
+<script>
+(function(global) {
+'use strict';
+if (!global.ApiComponents) {
+  /**
+   * @namespace ApiComponents
+   */
+  global.ApiComponents = {};
+}
+/**
+ * Common functions used by AMF components to compute AMF values.
+ *
+ * ## Updating API's base URI
+ *
+ * (Only applies when using `_computeEndpointUri()` function)
+ *
+ * By default the component render the documentation as it is defined
+ * in the AMF model. Sometimes, however, you may need to replace the base URI
+ * of the API with something else. It is useful when the API does not
+ * have base URI property defined (therefore this component render relative
+ * paths instead of URIs) or when you want to manage different environments.
+ *
+ * To update base URI value either update `baseUri` property or use
+ * `iron-meta` with key `ApiBaseUri`. First method is easier but the second
+ * gives much more flexibility since it use a [monostate pattern](http://wiki.c2.com/?MonostatePattern)
+ * to manage base URI property.
+ *
+ * When the component constructs the funal URI for the endpoint it does the following:
+ * - if `baseUri` is set it uses this value as a base uri for the endpoint
+ * - else if `iron-meta` with key `ApiBaseUri` exists and contains a value
+ * it uses it uses this value as a base uri for the endpoint
+ * - else if `amfModel` is set then it computes base uri value from main
+ * model document
+ * Then it concatenates computed base URI with `endpoint`'s path property.
+ *
+ * @polymer
+ * @mixinFunction
+ * @memberof ApiComponents
+ */
+ApiComponents.AmfHelperMixin = Polymer.dedupingMixin((base) => {
+  /**
+   * @polymer
+   * @mixinClass
+   */
+  class AHmixin extends base {
+    static get properties() {
+      return {
+        /**
+         * Generated AMF json/ld model form the API spec.
+         * The element assumes the object of the first array item to be a
+         * type of `"http://raml.org/vocabularies/document#Document`
+         * on AMF vocabulary.
+         *
+         * It is only usefult for the element to resolve references.
+         *
+         * @type {Object|Array}
+         */
+        amfModel: Object
+      };
+    }
+    /**
+     * Gets a signle scalar value from a model.
+     * @param {Object} model Amf model to extract the value from.
+     * @param {String} key Model key to search for the value
+     * @return {any} Value for key
+     */
+    _getValue(model, key) {
+      let data = (model && model[key]);
+      if (!data || !(data instanceof Array)) {
+        return;
+      }
+      data = data[0];
+      if (!data) {
+        return;
+      }
+      return data['@value'];
+    }
+    /**
+     * Gets values from a model as an array of `@value` properties.
+     * @param {Object} model Amf model to extract the value from.
+     * @param {String} key Model key to search for the value
+     * @return {Array<any>} Value for key
+     */
+    _getValueArray(model, key) {
+      let data = (model && model[key]);
+      if (!data || !(data instanceof Array)) {
+        return;
+      }
+      return data.map((item) => item['@value']);
+    }
+    /**
+     * Checks if a model has a type.
+     * @param {Object} model Model to test
+     * @param {String} type Type name
+     * @return {Boolean} True if model has a type.
+     */
+    _hasType(model, type) {
+      let types = model && model['@type'] || [];
+      for (let i = 0; i < types.length; i++) {
+        if (types[i] === type) {
+          return true;
+        }
+      }
+      return false;
+    }
+    /**
+     * Checks if a shape has a property.
+     * @param {?Object} shape The shape to test
+     * @param {?String} key Property name to test
+     * @return {Boolean}
+     */
+    _hasProperty(model, key) {
+      return !!(model && key && (key in model));
+    }
+
+    _computePropertyArray(shape, key) {
+      if (!shape) {
+        return;
+      }
+      let data = (shape && shape[key]);
+      if (!data || !(data instanceof Array)) {
+        return;
+      }
+      return data;
+    }
+
+    _computePropertyObject(shape, key) {
+      const data = this._computePropertyArray(shape, key);
+      return data && data[0];
+    }
+
+    _computeHasStringValue(value) {
+      return !!value;
+    }
+
+    _computeHasArrayValue(value) {
+      return !!(value && value.length);
+    }
+
+    _computeDescription(shape) {
+      return this._getValue(shape, 'http://schema.org/description');
+    }
+
+    _computeHeaders(shape) {
+      return this._computePropertyArray(shape, 'http://raml.org/vocabularies/http#header');
+    }
+
+    _computeQueryParameters(shape) {
+      return this._computePropertyArray(shape, 'http://raml.org/vocabularies/http#parameter');
+    }
+
+    _computeResponses(shape) {
+      return this._computePropertyArray(shape, 'http://www.w3.org/ns/hydra/core#response');
+    }
+
+    /**
+     * Computes value for `serverVariables` property.
+     *
+     * @param {Object} server AMF API model for Server.
+     * @return {Array<Object>|undefined} Variables if defined.
+     */
+    _computeServerVariables(server) {
+      return this._computePropertyArray(server, 'http://raml.org/vocabularies/http#variable');
+    }
+    /**
+     * Computes value for `endpointVariables` property.
+     *
+     * @param {Object} endpoint Endpoint model
+     * @return {Array<Object>|undefined} Parameters if defined.
+     */
+    _computeEndpointVariables(endpoint) {
+      return this._computePropertyArray(endpoint, 'http://raml.org/vocabularies/http#parameter');
+    }
+    /**
+     * Computes value for the `payload` property
+     *
+     * @param {Object} expects Current value of `expects` property.
+     * @return {Array<Object>|undefined} Payload model if defined.
+     */
+    _computePayload(expects) {
+      return this._computePropertyArray(expects, 'http://raml.org/vocabularies/http#payload');
+    }
+    /**
+     * Computes value for `returns` property
+     *
+     * @param {Object} method AMF `supportedOperation` model
+     * @return {Array<Object>|undefined}
+     */
+    _computeReturns(method) {
+      return this._computePropertyArray(method, 'http://www.w3.org/ns/hydra/core#returns');
+    }
+    /**
+     * Computes value for `security` property
+     *
+     * @param {Object} method AMF `supportedOperation` model
+     * @return {Array<Object>|undefined}
+     */
+    _computeSecurity(method) {
+      return this._computePropertyArray(method, 'http://raml.org/vocabularies/security#security');
+    }
+    /**
+     * Computes value for `hasCustomProperties` property.
+     *
+     * @param {Object} shape AMF `supportedOperation` model
+     * @return {Boolean}
+     */
+    _computeHasCustomProperties(shape) {
+      return this._hasProperty(shape, 'http://raml.org/vocabularies/document#customDomainProperties');
+    }
+    /**
+     * Computes value for `server` property that is later used with other computations.
+     *
+     * @param {Array|Object} model AMF model for an API
+     * @return {Object} The server model
+     */
+    _computeServer(model) {
+      if (!model) {
+        return;
+      }
+      if (model instanceof Array) {
+        model = model[0];
+      }
+      const enc = model['http://raml.org/vocabularies/document#encodes'];
+      if (!enc) {
+        return;
+      }
+      const api = enc.find((item) => item['@type'] && item['@type'].indexOf('http://schema.org/WebAPI') !== -1);
+      if (!api) {
+        return;
+      }
+      const srv = api['http://raml.org/vocabularies/http#server'];
+      return srv ? srv[0] : undefined;
+    }
+    /**
+     * Computes endpoint's URI based on `amfModel` and `endpoint` models.
+     *
+     * @param {Object} server Server model of AMF API.
+     * @param {Object} endpoint Endpoint model
+     * @param {?String} baseUri Current value of `baseUri` property
+     * @return {String} Endpoint's URI
+     */
+    _computeEndpointUri(server, endpoint, baseUri) {
+      let base = this._getBaseUri(baseUri, server);
+      if (base && base[base.length - 1] === '/') {
+        base = base.substr(0, base.length - 1);
+      }
+      const path = this._getValue(endpoint, 'http://raml.org/vocabularies/http#path');
+      return base + (path || '');
+    }
+    /**
+     * Computes base URI value from either `baseUri`, `iron-meta` with
+     * `ApiBaseUri` key or `amfModel` value (in this order).
+     *
+     * @param {String} baseUri Value of `baseUri` property
+     * @param {Object} server AMF API model for Server.
+     * @return {String} Base uri value. Can be empty string.
+     */
+    _getBaseUri(baseUri, server) {
+      if (baseUri) {
+        return baseUri;
+      }
+      if (Polymer.IronMeta) {
+        let value = new Polymer.IronMeta({key: 'ApiBaseUri'}).value;
+        if (value) {
+          return value;
+        }
+      }
+      return this._getAmfBaseUri(server) || '';
+    }
+    /**
+     * Computes base URI from AMF model.
+     *
+     * @param {Object} server AMF API model for Server.
+     * @return {String|undefined} Base uri value if exists.
+     */
+    _getAmfBaseUri(server) {
+      return this._getValue(server, 'http://raml.org/vocabularies/http#url');
+    }
+    /**
+     * Computes value for the `expects` property.
+     *
+     * @param {Object} method AMF `supportedOperation` model
+     * @return {Object}
+     */
+    _computeExpects(method) {
+      if (this._hasType(method, 'http://www.w3.org/ns/hydra/core#Operation')) {
+        const expects = method['http://www.w3.org/ns/hydra/core#expects'];
+        if (expects) {
+          return expects[0];
+        }
+      }
+    }
+    /**
+     * Tries to find an example value (whether it's default value or from an
+     * example) to put it into snippet's values.
+     *
+     * @param {Object} item A http://raml.org/vocabularies/http#Parameter property
+     * @return {String|undefined}
+     */
+    _computePropertyValue(item) {
+      let schema = item && item['http://raml.org/vocabularies/http#schema'];
+      if (!schema) {
+        return;
+      }
+      schema = schema[0];
+      const defValKey = 'http://www.w3.org/ns/shacl#defaultValue';
+      let value = this._getValue(item, defValKey);
+      if (!value) {
+        const examplesKey = 'http://raml.org/vocabularies/document#examples';
+        let example = item[examplesKey];
+        if (example) {
+          example = example[0];
+          value = this._getValue(item, 'http://raml.org/vocabularies/document#value');
+        }
+      }
+      return value;
+    }
+  }
+return AHmixin;
+});
+})(window);
+</script>
