@@ -1,0 +1,723 @@
+{
+  "schema_version": "1.0.0",
+  "namespaces": [
+    {
+      "name": "ApiElements",
+      "description": "",
+      "summary": "",
+      "sourceRange": {
+        "file": "amf-helper-mixin.html",
+        "start": {
+          "line": 21,
+          "column": 2
+        },
+        "end": {
+          "line": 21,
+          "column": 26
+        }
+      },
+      "mixins": [
+        {
+          "description": "Common functions used by AMF components to compute AMF values.\n\n## Updating API's base URI\n\n(Only applies when using `_computeEndpointUri()` function)\n\nBy default the component render the documentation as it is defined\nin the AMF model. Sometimes, however, you may need to replace the base URI\nof the API with something else. It is useful when the API does not\nhave base URI property defined (therefore this component render relative\npaths instead of URIs) or when you want to manage different environments.\n\nTo update base URI value either update `baseUri` property or use\n`iron-meta` with key `ApiBaseUri`. First method is easier but the second\ngives much more flexibility since it use a [monostate pattern](http://wiki.c2.com/?MonostatePattern)\nto manage base URI property.\n\nWhen the component constructs the funal URI for the endpoint it does the following:\n- if `baseUri` is set it uses this value as a base uri for the endpoint\n- else if `iron-meta` with key `ApiBaseUri` exists and contains a value\nit uses it uses this value as a base uri for the endpoint\n- else if `amfModel` is set then it computes base uri value from main\nmodel document\nThen it concatenates computed base URI with `endpoint`'s path property.",
+          "summary": "",
+          "path": "amf-helper-mixin.html",
+          "properties": [
+            {
+              "name": "amfModel",
+              "type": "(Object | Array)",
+              "description": "Generated AMF json/ld model form the API spec.\nThe element assumes the object of the first array item to be a\ntype of `\"http://raml.org/vocabularies/document#Document`\non AMF vocabulary.\n\nIt is only usefult for the element to resolve references.",
+              "privacy": "public",
+              "sourceRange": {
+                "start": {
+                  "line": 71,
+                  "column": 8
+                },
+                "end": {
+                  "line": 71,
+                  "column": 24
+                }
+              },
+              "metadata": {
+                "polymer": {}
+              }
+            }
+          ],
+          "methods": [
+            {
+              "name": "_getValue",
+              "description": "Gets a signle scalar value from a model.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 80,
+                  "column": 4
+                },
+                "end": {
+                  "line": 90,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "model",
+                  "type": "Object",
+                  "description": "Amf model to extract the value from."
+                },
+                {
+                  "name": "key",
+                  "type": "String",
+                  "description": "Model key to search for the value"
+                }
+              ],
+              "return": {
+                "type": "any",
+                "desc": "Value for key"
+              }
+            },
+            {
+              "name": "_getValueArray",
+              "description": "Gets values from a model as an array of `@value` properties.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 97,
+                  "column": 4
+                },
+                "end": {
+                  "line": 103,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "model",
+                  "type": "Object",
+                  "description": "Amf model to extract the value from."
+                },
+                {
+                  "name": "key",
+                  "type": "String",
+                  "description": "Model key to search for the value"
+                }
+              ],
+              "return": {
+                "type": "Array.<any>",
+                "desc": "Value for key"
+              }
+            },
+            {
+              "name": "_hasType",
+              "description": "Checks if a model has a type.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 110,
+                  "column": 4
+                },
+                "end": {
+                  "line": 118,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "model",
+                  "type": "Object",
+                  "description": "Model to test"
+                },
+                {
+                  "name": "type",
+                  "type": "String",
+                  "description": "Type name"
+                }
+              ],
+              "return": {
+                "type": "Boolean",
+                "desc": "True if model has a type."
+              }
+            },
+            {
+              "name": "_hasProperty",
+              "description": "Checks if a shape has a property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 125,
+                  "column": 4
+                },
+                "end": {
+                  "line": 127,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "model"
+                },
+                {
+                  "name": "key",
+                  "type": "?String",
+                  "description": "Property name to test"
+                }
+              ],
+              "return": {
+                "type": "Boolean"
+              }
+            },
+            {
+              "name": "_computePropertyArray",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 129,
+                  "column": 4
+                },
+                "end": {
+                  "line": 138,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "shape"
+                },
+                {
+                  "name": "key"
+                }
+              ]
+            },
+            {
+              "name": "_computePropertyObject",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 140,
+                  "column": 4
+                },
+                "end": {
+                  "line": 143,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "shape"
+                },
+                {
+                  "name": "key"
+                }
+              ]
+            },
+            {
+              "name": "_computeHasStringValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 145,
+                  "column": 4
+                },
+                "end": {
+                  "line": 147,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ]
+            },
+            {
+              "name": "_computeHasArrayValue",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 149,
+                  "column": 4
+                },
+                "end": {
+                  "line": 151,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "value"
+                }
+              ]
+            },
+            {
+              "name": "_computeDescription",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 153,
+                  "column": 4
+                },
+                "end": {
+                  "line": 155,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "shape"
+                }
+              ]
+            },
+            {
+              "name": "_computeHeaders",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 157,
+                  "column": 4
+                },
+                "end": {
+                  "line": 159,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "shape"
+                }
+              ]
+            },
+            {
+              "name": "_computeQueryParameters",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 161,
+                  "column": 4
+                },
+                "end": {
+                  "line": 163,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "shape"
+                }
+              ]
+            },
+            {
+              "name": "_computeResponses",
+              "description": "",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 165,
+                  "column": 4
+                },
+                "end": {
+                  "line": 167,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "shape"
+                }
+              ]
+            },
+            {
+              "name": "_computeServerVariables",
+              "description": "Computes value for `serverVariables` property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 175,
+                  "column": 4
+                },
+                "end": {
+                  "line": 177,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "server",
+                  "type": "Object",
+                  "description": "AMF API model for Server."
+                }
+              ],
+              "return": {
+                "type": "(Array.<Object> | undefined)",
+                "desc": "Variables if defined."
+              }
+            },
+            {
+              "name": "_computeEndpointVariables",
+              "description": "Computes value for `endpointVariables` property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 184,
+                  "column": 4
+                },
+                "end": {
+                  "line": 186,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "endpoint",
+                  "type": "Object",
+                  "description": "Endpoint model"
+                }
+              ],
+              "return": {
+                "type": "(Array.<Object> | undefined)",
+                "desc": "Parameters if defined."
+              }
+            },
+            {
+              "name": "_computePayload",
+              "description": "Computes value for the `payload` property",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 193,
+                  "column": 4
+                },
+                "end": {
+                  "line": 195,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "expects",
+                  "type": "Object",
+                  "description": "Current value of `expects` property."
+                }
+              ],
+              "return": {
+                "type": "(Array.<Object> | undefined)",
+                "desc": "Payload model if defined."
+              }
+            },
+            {
+              "name": "_computeReturns",
+              "description": "Computes value for `returns` property",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 202,
+                  "column": 4
+                },
+                "end": {
+                  "line": 204,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "method",
+                  "type": "Object",
+                  "description": "AMF `supportedOperation` model"
+                }
+              ],
+              "return": {
+                "type": "(Array.<Object> | undefined)"
+              }
+            },
+            {
+              "name": "_computeSecurity",
+              "description": "Computes value for `security` property",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 211,
+                  "column": 4
+                },
+                "end": {
+                  "line": 213,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "method",
+                  "type": "Object",
+                  "description": "AMF `supportedOperation` model"
+                }
+              ],
+              "return": {
+                "type": "(Array.<Object> | undefined)"
+              }
+            },
+            {
+              "name": "_computeHasCustomProperties",
+              "description": "Computes value for `hasCustomProperties` property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 220,
+                  "column": 4
+                },
+                "end": {
+                  "line": 222,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "shape",
+                  "type": "Object",
+                  "description": "AMF `supportedOperation` model"
+                }
+              ],
+              "return": {
+                "type": "Boolean"
+              }
+            },
+            {
+              "name": "_computeServer",
+              "description": "Computes value for `server` property that is later used with other computations.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 229,
+                  "column": 4
+                },
+                "end": {
+                  "line": 246,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "model",
+                  "type": "(Array | Object)",
+                  "description": "AMF model for an API"
+                }
+              ],
+              "return": {
+                "type": "Object",
+                "desc": "The server model"
+              }
+            },
+            {
+              "name": "_computeEndpointUri",
+              "description": "Computes endpoint's URI based on `amfModel` and `endpoint` models.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 255,
+                  "column": 4
+                },
+                "end": {
+                  "line": 262,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "server",
+                  "type": "Object",
+                  "description": "Server model of AMF API."
+                },
+                {
+                  "name": "endpoint",
+                  "type": "Object",
+                  "description": "Endpoint model"
+                },
+                {
+                  "name": "baseUri",
+                  "type": "?String",
+                  "description": "Current value of `baseUri` property"
+                }
+              ],
+              "return": {
+                "type": "String",
+                "desc": "Endpoint's URI"
+              }
+            },
+            {
+              "name": "_getBaseUri",
+              "description": "Computes base URI value from either `baseUri`, `iron-meta` with\n`ApiBaseUri` key or `amfModel` value (in this order).",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 271,
+                  "column": 4
+                },
+                "end": {
+                  "line": 282,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "baseUri",
+                  "type": "String",
+                  "description": "Value of `baseUri` property"
+                },
+                {
+                  "name": "server",
+                  "type": "Object",
+                  "description": "AMF API model for Server."
+                }
+              ],
+              "return": {
+                "type": "String",
+                "desc": "Base uri value. Can be empty string."
+              }
+            },
+            {
+              "name": "_getAmfBaseUri",
+              "description": "Computes base URI from AMF model.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 289,
+                  "column": 4
+                },
+                "end": {
+                  "line": 291,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "server",
+                  "type": "Object",
+                  "description": "AMF API model for Server."
+                }
+              ],
+              "return": {
+                "type": "(String | undefined)",
+                "desc": "Base uri value if exists."
+              }
+            },
+            {
+              "name": "_computeExpects",
+              "description": "Computes value for the `expects` property.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 298,
+                  "column": 4
+                },
+                "end": {
+                  "line": 305,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "method",
+                  "type": "Object",
+                  "description": "AMF `supportedOperation` model"
+                }
+              ],
+              "return": {
+                "type": "Object"
+              }
+            },
+            {
+              "name": "_computePropertyValue",
+              "description": "Tries to find an example value (whether it's default value or from an\nexample) to put it into snippet's values.",
+              "privacy": "protected",
+              "sourceRange": {
+                "start": {
+                  "line": 313,
+                  "column": 4
+                },
+                "end": {
+                  "line": 330,
+                  "column": 5
+                }
+              },
+              "metadata": {},
+              "params": [
+                {
+                  "name": "item",
+                  "type": "Object",
+                  "description": "A http://raml.org/vocabularies/http#Parameter property"
+                }
+              ],
+              "return": {
+                "type": "(String | undefined)"
+              }
+            }
+          ],
+          "staticMethods": [],
+          "demos": [],
+          "metadata": {},
+          "sourceRange": {
+            "start": {
+              "line": 53,
+              "column": 0
+            },
+            "end": {
+              "line": 333,
+              "column": 2
+            }
+          },
+          "privacy": "public",
+          "name": "ApiElements.AmfHelperMixin",
+          "attributes": [
+            {
+              "name": "amf-model",
+              "description": "Generated AMF json/ld model form the API spec.\nThe element assumes the object of the first array item to be a\ntype of `\"http://raml.org/vocabularies/document#Document`\non AMF vocabulary.\n\nIt is only usefult for the element to resolve references.",
+              "sourceRange": {
+                "start": {
+                  "line": 71,
+                  "column": 8
+                },
+                "end": {
+                  "line": 71,
+                  "column": 24
+                }
+              },
+              "metadata": {},
+              "type": "(Object | Array)"
+            }
+          ],
+          "events": [],
+          "styling": {
+            "cssVariables": [],
+            "selectors": []
+          },
+          "slots": []
+        }
+      ]
+    }
+  ]
+}
