@@ -15,11 +15,11 @@ the License.
 <script>
 (function(global) {
 'use strict';
-if (!global.ApiComponents) {
+if (!global.ApiElements) {
   /**
-   * @namespace ApiComponents
+   * @namespace ApiElements
    */
-  global.ApiComponents = {};
+  global.ApiElements = {};
 }
 /**
  * Common functions used by AMF components to compute AMF values.
@@ -49,9 +49,9 @@ if (!global.ApiComponents) {
  *
  * @polymer
  * @mixinFunction
- * @memberof ApiComponents
+ * @memberof ApiElements
  */
-ApiComponents.AmfHelperMixin = Polymer.dedupingMixin((base) => {
+ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
   /**
    * @polymer
    * @mixinClass
