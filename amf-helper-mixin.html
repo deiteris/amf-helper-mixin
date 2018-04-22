@@ -222,19 +222,70 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       return this._hasProperty(shape, 'http://raml.org/vocabularies/document#customDomainProperties');
     }
     /**
-     * Computes value for `server` property that is later used with other computations.
+     * Computes model's `encodes` property.
      *
-     * @param {Array|Object} model AMF model for an API
-     * @return {Object} The server model
+     * @param {?Object} model AMF data model
+     * @return {Array<Object>} List of encodes
      */
-    _computeServer(model) {
+    _computeEncodes(model) {
       if (!model) {
         return;
       }
       if (model instanceof Array) {
         model = model[0];
       }
+      const data = model['http://raml.org/vocabularies/document#encodes'];
+      return data instanceof Array ? data : undefined;
+    }
+    /**
+     * Computes list of declarations in the AMF api model.
+     *
+     * @param {Array|Object} model AMF json/ld model for an API
+     * @return {Array<Object>} List of declarations
+     */
+    _computeDeclares(model) {
+      if (!model) {
+        return;
+      }
+      if (model instanceof Array) {
+        model = model[0];
+      }
+      if (!model) {
+        return;
+      }
+      const data = model['http://raml.org/vocabularies/document#declares'];
+      return data instanceof Array ? data : undefined;
+    }
+    /**
+     * Computes AMF's `http://schema.org/WebAPI` model
+     *
+     * @param {Array|Object} model AMF json/ld model for an API
+     * @return {Object} Web API declaration.
+     */
+    _computeWebApi(model) {
+      if (!model) {
+        return;
+      }
+      if (model instanceof Array) {
+        model = model[0];
+      }
+      if (!model) {
+        return;
+      }
       const enc = model['http://raml.org/vocabularies/document#encodes'];
+      if (!enc) {
+        return;
+      }
+      return enc.find((item) => this._hasType(item, 'http://schema.org/WebAPI'));
+    }
+    /**
+     * Computes value for `server` property that is later used with other computations.
+     *
+     * @param {Array|Object} model AMF model for an API
+     * @return {Object} The server model
+     */
+    _computeServer(model) {
+      const enc = this._computeEncodes(model);
       if (!enc) {
         return;
       }
@@ -328,6 +379,74 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
         }
       }
       return value;
+    }
+    /**
+     * Computes model for an endpoint documentation.
+     *
+     * @param {Object} webApi Current value of `webApi` property
+     * @param {String} selected Selected shape ID
+     * @return {Object} An endponit definition
+     */
+    _computeEndpointModel(webApi, selected) {
+      if (!webApi || !selected) {
+        return;
+      }
+      const endpoints = webApi['http://raml.org/vocabularies/http#endpoint'];
+      return endpoints.find((item) => item['@id'] === selected);
+    }
+    /**
+     * Computes method for the method documentation.
+     *
+     * @param {Object} webApi Current value of `webApi` property
+     * @param {String} selected Selected shape
+     * @return {Object} A method definition
+     */
+    _computeMethodModel(webApi, selected) {
+      const methods = this.__computeMethodsListForMethod(webApi, selected);
+      if (!methods) {
+        return;
+      }
+      return methods.find((item) => item['@id'] === selected);
+    }
+    /**
+     * Computes a type documentation model.
+     *
+     * @param {Array} declares Current value of `declares` property
+     * @param {String} selected Selected shape
+     * @return {Object} A type definition
+     */
+    _computeType(declares, selected) {
+      if (!declares || !selected) {
+        return;
+      }
+      return declares.find((item) => item['@id'] === selected);
+    }
+    /**
+     * Computes model for selected security definition.
+     *
+     * @param {Array} declares Current value of `declares` property
+     * @param {String} selected Selected shape
+     * @return {Object} A security definition
+     */
+    _computeSecurityModel(declares, selected) {
+      if (!declares || !selected) {
+        return;
+      }
+      return declares.find((item) => item['@id'] === selected);
+    }
+    /**
+     * Computes a documentation model.
+     *
+     * @param {Object} webApi Current value of `webApi` property
+     * @param {String} selected Selected shape
+     * @return {Object} A method definition
+     */
+    _computeDocument(webApi, selected) {
+      if (!webApi || !selected) {
+        return;
+      }
+      const docs = webApi['http://schema.org/documentation'];
+      return docs && docs.find((item) => item['@id'] === selected);
     }
   }
 return AHmixin;
