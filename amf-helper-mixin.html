@@ -73,6 +73,23 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       };
     }
     /**
+     * Ensures that the model is AMF object.
+     *
+     * @param {Object|Array} amf AMF json/ld model
+     * @return {Object|undefined} API spec
+     */
+    _ensureAmfModel(amf) {
+      if (!amf) {
+        return;
+      }
+      if (amf instanceof Array) {
+        amf = amf[0];
+      }
+      if (this._hasType(amf, 'http://raml.org/vocabularies/document#Document')) {
+        return amf;
+      }
+    }
+    /**
      * Gets a signle scalar value from a model.
      * @param {Object} model Amf model to extract the value from.
      * @param {String} key Model key to search for the value
@@ -263,16 +280,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Object} Web API declaration.
      */
     _computeWebApi(model) {
-      if (!model) {
-        return;
-      }
-      if (model instanceof Array) {
-        model = model[0];
-      }
-      if (!model) {
-        return;
-      }
-      const enc = model['http://raml.org/vocabularies/document#encodes'];
+      const enc = this._computeEncodes(model);
       if (!enc) {
         return;
       }
