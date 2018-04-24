@@ -274,6 +274,25 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       return data instanceof Array ? data : undefined;
     }
     /**
+     * Computes list of references in the AMF api model.
+     *
+     * @param {Array|Object} model AMF json/ld model for an API
+     * @return {Array<Object>} List of declarations
+     */
+    _computeReferences(model) {
+      if (!model) {
+        return;
+      }
+      if (model instanceof Array) {
+        model = model[0];
+      }
+      if (!model) {
+        return;
+      }
+      const data = model['http://raml.org/vocabularies/document#references'];
+      return data instanceof Array ? data : undefined;
+    }
+    /**
      * Computes AMF's `http://schema.org/WebAPI` model
      *
      * @param {Array|Object} model AMF json/ld model for an API
@@ -455,6 +474,52 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       }
       const docs = webApi['http://schema.org/documentation'];
       return docs && docs.find((item) => item['@id'] === selected);
+    }
+    /**
+     * Resolves a reference to an external fragment.
+     *
+     * @param {Object} shape A shape to resolve
+     * @return {Object} Resolved shape.
+     */
+    _resolve(shape) {
+      const amf = this.amfModel;
+      if (!shape || !amf || shape.__apicResolved) {
+        return shape;
+      }
+      if (!('http://raml.org/vocabularies/document#reference-id' in shape)) {
+        shape.__apicResolved = true;
+        return shape;
+      }
+      const refs = this._computeReferences(amf);
+      if (!refs) {
+        return shape;
+      }
+      let id = shape['http://raml.org/vocabularies/document#reference-id'][0]['@id'];
+      const ref = refs.find((item) => {
+        if (!this._hasType(item, 'http://raml.org/vocabularies/document#Fragment')) {
+          return false;
+        }
+        const enc = item['http://raml.org/vocabularies/document#encodes'][0];
+        return enc['@id'] === id;
+      });
+      if (!ref) {
+        return shape;
+      }
+      const data = ref['http://raml.org/vocabularies/document#encodes'][0];
+      const copy = Object.assign({}, data);
+      delete copy['@id'];
+      const types = copy['@type'];
+      if (types) {
+        if (shape['@type']) {
+          shape['@type'] = shape['@type'].concat(types);
+        } else {
+          shape['@type'] = types;
+        }
+        delete copy['@type'];
+      }
+      Object.assign(shape, copy);
+      shape.__apicResolved = true;
+      return shape;
     }
   }
 return AHmixin;
