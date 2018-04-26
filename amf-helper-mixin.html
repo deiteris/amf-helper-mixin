@@ -521,6 +521,83 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       shape.__apicResolved = true;
       return shape;
     }
+    /**
+     * Gets string value for an example data model.
+     *
+     * @param {Object} item Example item model
+     * @param {Boolean} isJson If set it checks if the `raw` value is valid JSON.
+     * If it isn't then it parses structured value.
+     * @return {String}
+     */
+    _getExampleValue(item, isJson) {
+      item = this._resolve(item);
+      let data = this._getValue(item, 'http://www.w3.org/ns/shacl#raw');
+      // This suppose to be a JSON data so lets test it.
+      if (!data || (isJson && !(data[0] === '{' || data[0] === '['))) {
+        const structured = item['http://raml.org/vocabularies/document#structuredValue'];
+        if (structured) {
+          data = this._computeExampleFromStructuredValue(structured[0]);
+          data = JSON.stringify(data, null, 2);
+        }
+      }
+      return data;
+    }
+    /**
+     * Computes an example from example structured value.
+     *
+     * @param {Object} model `structuredValue` item model.
+     * @return {Object|Array} Javascript object or array with structured value.
+     */
+    _computeExampleFromStructuredValue(model) {
+      if (this._hasType(model, 'http://raml.org/vocabularies/data#Scalar')) {
+        return this._computeStructuredExampleValue(
+          this._getValue(model, 'http://raml.org/vocabularies/data#value'));
+      }
+      const isObject = this._hasType(model, 'http://raml.org/vocabularies/data#Object');
+      const result = isObject ? {} : [];
+      const modelKeys = ['@id', '@type'];
+      Object.keys(model).forEach((key) => {
+        if (modelKeys.indexOf(key) !== -1) {
+          return;
+        }
+        const value = this._computeStructuredExampleValue(model[key][0]);
+        if (isObject) {
+          const name = key.substr(key.indexOf('#') + 1);
+          result[name] = value;
+        } else {
+          result.push(value);
+        }
+      });
+      return result;
+    }
+    /**
+     * Computes value with propert data type for a structured example.
+     * @param {Object} model Structured example item model.
+     * @return {String|Boolean|Number} Value for the example.
+     */
+    _computeStructuredExampleValue(model) {
+      if (!model) {
+        return;
+      }
+      if (this._hasType(model, 'http://raml.org/vocabularies/data#Scalar')) {
+        const mValue = model['http://raml.org/vocabularies/data#value'][0];
+        const type = mValue['@type'];
+        const value = mValue['@value'];
+        switch (type) {
+          case 'http://www.w3.org/2001/XMLSchema#boolean':
+            return value === 'true' ? true : false;
+          case 'http://www.w3.org/2001/XMLSchema#integer':
+          case 'http://www.w3.org/2001/XMLSchema#long':
+          case 'http://www.w3.org/2001/XMLSchema#double':
+          case 'http://www.w3.org/2001/XMLSchema#float':
+          case 'http://raml.org/vocabularies/shapes#number':
+            return Number(value);
+          default:
+            return value;
+        }
+      }
+      return this._computeExampleFromStructuredValue(model);
+    }
   }
 return AHmixin;
 });
