@@ -372,10 +372,9 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
           if (!protocols || !protocols.length) {
             protocols = this._computeProtocols(this.amfModel);
           }
-          if (!protocols || !protocols.length) {
-            return value;
+          if (protocols && protocols.length) {
+            value = protocols[0].toLowerCase() + '://' + value;
           }
-          value = protocols[0] + '://' + value;
         }
       }
       return value;
