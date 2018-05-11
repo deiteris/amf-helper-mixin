@@ -439,10 +439,11 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * Computes a type documentation model.
      *
      * @param {Array} declares Current value of `declares` property
+     * @param {?Array} references Current value of `references` property
      * @param {String} selected Selected shape
      * @return {Object} A type definition
      */
-    _computeType(declares, selected) {
+    _computeType(declares, references, selected) {
       if (!declares || !selected) {
         return;
       }
