@@ -312,11 +312,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Object} The server model
      */
     _computeServer(model) {
-      const enc = this._computeEncodes(model);
-      if (!enc) {
-        return;
-      }
-      const api = enc.find((item) => item['@type'] && item['@type'].indexOf('http://schema.org/WebAPI') !== -1);
+      const api = this._computeWebApi(model);
       if (!api) {
         return;
       }
@@ -345,9 +341,10 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      *
      * @param {String} baseUri Value of `baseUri` property
      * @param {Object} server AMF API model for Server.
+     * @param {?Array<String>} protocols List of supported protocols
      * @return {String} Base uri value. Can be empty string.
      */
-    _getBaseUri(baseUri, server) {
+    _getBaseUri(baseUri, server, protocols) {
       if (baseUri) {
         return baseUri;
       }
@@ -357,16 +354,47 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
           return value;
         }
       }
-      return this._getAmfBaseUri(server) || '';
+      return this._getAmfBaseUri(server, protocols) || '';
     }
     /**
      * Computes base URI from AMF model.
      *
      * @param {Object} server AMF API model for Server.
+     * @param {?Array<String>} protocols Listy of supporte dprotocols. If not
+     * provided and required to compute the url it uses `amfModel` to compute
+     * protocols
      * @return {String|undefined} Base uri value if exists.
      */
-    _getAmfBaseUri(server) {
-      return this._getValue(server, 'http://raml.org/vocabularies/http#url');
+    _getAmfBaseUri(server, protocols) {
+      let value = this._getValue(server, 'http://raml.org/vocabularies/http#url');
+      if (value) {
+        if (value.indexOf('http') !== 0) {
+          if (!protocols || !protocols.length) {
+            protocols = this._computeProtocols(this.amfModel);
+          }
+          if (protocols && protocols.length) {
+            value = protocols[0].toLowerCase() + '://' + value;
+          }
+        }
+      }
+      return value;
+    }
+    /**
+     * Computes supported protocols by the API.
+     *
+     * @param {Object|Array} model AMF data model
+     * @return {Array<String>|undefined}
+     */
+    _computeProtocols(model) {
+      const api = this._computeWebApi(model);
+      if (!api) {
+        return;
+      }
+      const scheme = api['http://raml.org/vocabularies/http#scheme'];
+      if (!(scheme instanceof Array)) {
+        return;
+      }
+      return scheme.map((item) => item['@value']);
     }
     /**
      * Computes value for the `expects` property.
@@ -579,6 +607,9 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
     _computeStructuredExampleValue(model) {
       if (!model) {
         return;
+      }
+      if (typeof model === 'string') {
+        return model;
       }
       if (this._hasType(model, 'http://raml.org/vocabularies/data#Scalar')) {
         const mValue = model['http://raml.org/vocabularies/data#value'][0];
