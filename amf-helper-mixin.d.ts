@@ -58,6 +58,14 @@ declare namespace ApiElements {
     amfModel: object|any[]|null;
 
     /**
+     * Ensures that the model is AMF object.
+     *
+     * @param amf AMF json/ld model
+     * @returns API spec
+     */
+    _ensureAmfModel(amf: object|any[]|null): object|null|undefined;
+
+    /**
      * Gets a signle scalar value from a model.
      *
      * @param model Amf model to extract the value from.
@@ -90,11 +98,46 @@ declare namespace ApiElements {
      * @param key Property name to test
      */
     _hasProperty(model: any, key: String|null): Boolean|null;
-    _computePropertyArray(shape: any, key: any): any;
-    _computePropertyObject(shape: any, key: any): any;
-    _computeHasStringValue(value: any): any;
-    _computeHasArrayValue(value: any): any;
-    _computeDescription(shape: any): any;
+
+    /**
+     * Computes array value of a property in a model (shape).
+     *
+     * @param shape AMF shape object
+     * @param key Property name
+     */
+    _computePropertyArray(shape: object|null, key: String|null): Array<any|null>|null|undefined;
+
+    /**
+     * Computes a value of a property in a model (shape).
+     * It takes first value of a property, if exists.
+     *
+     * @param shape AMF shape object
+     * @param key Property name
+     */
+    _computePropertyObject(shape: object|null, key: String|null): any|null|undefined;
+
+    /**
+     * Tests if a passed argumet exists.
+     *
+     * @param value A value to test
+     */
+    _computeHasStringValue(value: String|object|Number|null): Boolean|null;
+
+    /**
+     * Computes if passed argument is an array and has a value.
+     * It does not check for type or value of the array items.
+     *
+     * @param value Value to test
+     */
+    _computeHasArrayValue(value: any[]|null): Boolean|null;
+
+    /**
+     * Computes description for a shape.
+     *
+     * @param shape AMF shape
+     * @returns Description value.
+     */
+    _computeDescription(shape: object|null): String|null;
     _computeHeaders(shape: any): any;
     _computeQueryParameters(shape: any): any;
     _computeResponses(shape: any): any;
@@ -145,6 +188,38 @@ declare namespace ApiElements {
     _computeHasCustomProperties(shape: object|null): Boolean|null;
 
     /**
+     * Computes model's `encodes` property.
+     *
+     * @param model AMF data model
+     * @returns List of encodes
+     */
+    _computeEncodes(model: object|null): Array<object|null>|null;
+
+    /**
+     * Computes list of declarations in the AMF api model.
+     *
+     * @param model AMF json/ld model for an API
+     * @returns List of declarations
+     */
+    _computeDeclares(model: any[]|object|null): Array<object|null>|null;
+
+    /**
+     * Computes list of references in the AMF api model.
+     *
+     * @param model AMF json/ld model for an API
+     * @returns List of declarations
+     */
+    _computeReferences(model: any[]|object|null): Array<object|null>|null;
+
+    /**
+     * Computes AMF's `http://schema.org/WebAPI` model
+     *
+     * @param model AMF json/ld model for an API
+     * @returns Web API declaration.
+     */
+    _computeWebApi(model: any[]|object|null): object|null;
+
+    /**
      * Computes value for `server` property that is later used with other computations.
      *
      * @param model AMF model for an API
@@ -168,17 +243,41 @@ declare namespace ApiElements {
      *
      * @param baseUri Value of `baseUri` property
      * @param server AMF API model for Server.
+     * @param protocols List of supported protocols
      * @returns Base uri value. Can be empty string.
      */
-    _getBaseUri(baseUri: String|null, server: object|null): String|null;
+    _getBaseUri(baseUri: String|null, server: object|null, protocols: Array<String|null>|null): String|null;
 
     /**
      * Computes base URI from AMF model.
      *
      * @param server AMF API model for Server.
+     * @param protocols Listy of supporte dprotocols. If not
+     * provided and required to compute the url it uses `amfModel` to compute
+     * protocols
      * @returns Base uri value if exists.
      */
-    _getAmfBaseUri(server: object|null): String|null|undefined;
+    _getAmfBaseUri(server: object|null, protocols: Array<String|null>|null): String|null|undefined;
+
+    /**
+     * A function that makes sure that the URL has a scheme definition.
+     * If no supported protocols information is available it assumes `http`.
+     *
+     * @param value A url value
+     * @param protocols List of supported by the API protocols
+     * An array of string like: `['HTTP', 'HTTPS']`. It lowercase the value.
+     * If not set it tries to read supported protocols value from `amfModel`
+     * property.
+     * @returns Url with scheme.
+     */
+    _ensureUrlScheme(value: String|null, protocols: Array<String|null>|null): String|null;
+
+    /**
+     * Computes supported protocols by the API.
+     *
+     * @param model AMF data model
+     */
+    _computeProtocols(model: object|any[]|null): Array<String|null>|null|undefined;
 
     /**
      * Computes value for the `expects` property.
@@ -194,5 +293,85 @@ declare namespace ApiElements {
      * @param item A http://raml.org/vocabularies/http#Parameter property
      */
     _computePropertyValue(item: object|null): String|null|undefined;
+
+    /**
+     * Computes model for an endpoint documentation.
+     *
+     * @param webApi Current value of `webApi` property
+     * @param selected Selected shape ID
+     * @returns An endponit definition
+     */
+    _computeEndpointModel(webApi: object|null, selected: String|null): object|null;
+
+    /**
+     * Computes method for the method documentation.
+     *
+     * @param webApi Current value of `webApi` property
+     * @param selected Selected shape
+     * @returns A method definition
+     */
+    _computeMethodModel(webApi: object|null, selected: String|null): object|null;
+
+    /**
+     * Computes a type documentation model.
+     *
+     * @param declares Current value of `declares` property
+     * @param references Current value of `references` property
+     * @param selected Selected shape
+     * @returns A type definition
+     */
+    _computeType(declares: any[]|null, references: any[]|null, selected: String|null): object|null;
+    _computeReferenceType(reference: any, selected: any): any;
+
+    /**
+     * Computes model for selected security definition.
+     *
+     * @param declares Current value of `declares` property
+     * @param selected Selected shape
+     * @returns A security definition
+     */
+    _computeSecurityModel(declares: any[]|null, selected: String|null): object|null;
+
+    /**
+     * Computes a documentation model.
+     *
+     * @param webApi Current value of `webApi` property
+     * @param selected Selected shape
+     * @returns A method definition
+     */
+    _computeDocument(webApi: object|null, selected: String|null): object|null;
+
+    /**
+     * Resolves a reference to an external fragment.
+     *
+     * @param shape A shape to resolve
+     * @returns Resolved shape.
+     */
+    _resolve(shape: object|null): object|null;
+
+    /**
+     * Gets string value for an example data model.
+     *
+     * @param item Example item model
+     * @param isJson If set it checks if the `raw` value is valid JSON.
+     * If it isn't then it parses structured value.
+     */
+    _getExampleValue(item: object|null, isJson: Boolean|null): String|null;
+
+    /**
+     * Computes an example from example structured value.
+     *
+     * @param model `structuredValue` item model.
+     * @returns Javascript object or array with structured value.
+     */
+    _computeExampleFromStructuredValue(model: object|null): object|any[]|null;
+
+    /**
+     * Computes value with propert data type for a structured example.
+     *
+     * @param model Structured example item model.
+     * @returns Value for the example.
+     */
+    _computeStructuredExampleValue(model: object|null): String|Boolean|Number|null;
   }
 }
