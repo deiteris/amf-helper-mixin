@@ -143,7 +143,13 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
     _hasProperty(model, key) {
       return !!(model && key && (key in model));
     }
-
+    /**
+     * Computes array value of a property in a model (shape).
+     *
+     * @param {Object} shape AMF shape object
+     * @param {String} key Property name
+     * @return {Array<any>|undefined}
+     */
     _computePropertyArray(shape, key) {
       if (!shape) {
         return;
@@ -154,20 +160,41 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       }
       return data;
     }
-
+    /**
+     * Computes a value of a property in a model (shape).
+     * It takes first value of a property, if exists.
+     *
+     * @param {Object} shape AMF shape object
+     * @param {String} key Property name
+     * @return {any|undefined}
+     */
     _computePropertyObject(shape, key) {
       const data = this._computePropertyArray(shape, key);
       return data && data[0];
     }
-
+    /**
+     * Tests if a passed argumet exists.
+     *
+     * @param {String|Object|Number} value A value to test
+     * @return {Boolean}
+     */
     _computeHasStringValue(value) {
-      return !!value;
+      return !!value || value === 0;
     }
-
+    /**
+     * Computes if passed argument is an array and has a value.
+     * It does not check for type or value of the array items.
+     * @param {Array} value Value to test
+     * @return {Boolean}
+     */
     _computeHasArrayValue(value) {
-      return !!(value && value.length);
+      return !!(value instanceof Array && value.length);
     }
-
+    /**
+     * Computes description for a shape.
+     * @param {Object} shape AMF shape
+     * @return {String} Description value.
+     */
     _computeDescription(shape) {
       return this._getValue(shape, 'http://schema.org/description');
     }
@@ -328,10 +355,11 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {String} Endpoint's URI
      */
     _computeEndpointUri(server, endpoint, baseUri) {
-      let base = this._getBaseUri(baseUri, server);
+      let base = this._getBaseUri(baseUri, server) || '';
       if (base && base[base.length - 1] === '/') {
         base = base.substr(0, base.length - 1);
       }
+      base = this._ensureUrlScheme(base);
       const path = this._getValue(endpoint, 'http://raml.org/vocabularies/http#path');
       return base + (path || '');
     }
@@ -367,13 +395,30 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      */
     _getAmfBaseUri(server, protocols) {
       let value = this._getValue(server, 'http://raml.org/vocabularies/http#url');
-      if (value) {
+      value = this._ensureUrlScheme(value, protocols);
+      return value;
+    }
+    /**
+     * A function that makes sure that the URL has a scheme definition.
+     * If no supported protocols information is available it assumes `http`.
+     *
+     * @param {String} value A url value
+     * @param {?Array<String>} protocols List of supported by the API protocols
+     * An array of string like: `['HTTP', 'HTTPS']`. It lowercase the value.
+     * If not set it tries to read supported protocols value from `amfModel`
+     * property.
+     * @return {String} Url with scheme.
+     */
+    _ensureUrlScheme(value, protocols) {
+      if (value && typeof value === 'string') {
         if (value.indexOf('http') !== 0) {
           if (!protocols || !protocols.length) {
             protocols = this._computeProtocols(this.amfModel);
           }
           if (protocols && protocols.length) {
             value = protocols[0].toLowerCase() + '://' + value;
+          } else {
+            value = 'http://' + value;
           }
         }
       }

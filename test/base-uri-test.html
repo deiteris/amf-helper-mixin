@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+  <title>amf-helper-mixin test</title>
+  <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+  <link rel="import" href="../../iron-meta/iron-meta.html">
+  <link rel="import" href="test-element.html">
+
+  <script src="amf-loader.js"></script>
+</head>
+<body>
+  <test-fixture id="Basic">
+    <template>
+      <test-element></test-element>
+    </template>
+  </test-fixture>
+
+  <script>
+  /* global AmfLoader */
+  suite('Base URI test', () => {
+    let element;
+    let model;
+    let server;
+    let endpoint;
+
+    suiteSetup(() => {
+      return AmfLoader.load()
+      .then((data) => {
+        model = data;
+      });
+    });
+
+    setup(() => {
+      element = fixture('Basic');
+      element.amfModel = model;
+      server = element._computeServer(model);
+      endpoint = element._computeEndpointModel(
+        element._computeWebApi(model),
+        'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Ffiles'
+      );
+    });
+
+    teardown(() => {
+      new Polymer.IronMeta({key: 'ApiBaseUri'}).value = undefined;
+    });
+
+    test('_getAmfBaseUri returns server\'s base uri', () => {
+      const result = element._getAmfBaseUri(server);
+      assert.equal(result, 'https://api.mulesoft.com/{version}');
+    });
+
+    const noSchemeServer = {
+      '@id': 'file://test/demo-api/demo-api.raml#/web-api/https%3A%2F%2Fapi.mulesoft.com%2F%7Bversion%7D',
+      '@type': [
+        'http://raml.org/vocabularies/http#Server',
+        'http://raml.org/vocabularies/document#DomainElement'
+      ],
+      'http://raml.org/vocabularies/http#url': [
+        {
+          '@value': 'api.mulesoft.com/test'
+        }
+      ]
+    };
+
+    test('_getAmfBaseUri uses protocols with the base uri', () => {
+      const result = element._getAmfBaseUri(noSchemeServer, ['http']);
+      assert.equal(result, 'http://api.mulesoft.com/test');
+    });
+
+    test('_getAmfBaseUri uses AMF encoded protocols with the base uri', () => {
+      const result = element._getAmfBaseUri(noSchemeServer);
+      assert.equal(result, 'https://api.mulesoft.com/test');
+    });
+
+    test('_getBaseUri() returns baseUri argument if set', () => {
+      const value = 'https://api.domain.com';
+      const result = element._getBaseUri(value, server);
+      assert.equal(result, value);
+    });
+
+    test('_getBaseUri() returns baseUri argument IronMeta', () => {
+      const value = 'https://meta.com/base';
+      new Polymer.IronMeta({key: 'ApiBaseUri'}).value = value;
+      const result = element._getBaseUri(undefined, server);
+      assert.equal(result, value);
+    });
+
+    test('_getBaseUri() prefers baseUri over IronMeta', () => {
+      const value = 'https://api.domain.com';
+      new Polymer.IronMeta({key: 'ApiBaseUri'}).value = 'https://meta.com/base';
+      const result = element._getBaseUri(value, server);
+      assert.equal(result, value);
+    });
+
+    test('_computeEndpointUri() computes APIs encoded URI', () => {
+      const result = element._computeEndpointUri(server, endpoint);
+      assert.equal(result, 'https://api.mulesoft.com/{version}/files');
+    });
+
+    test('_computeEndpointUri() computes URI for altered baseUri', () => {
+      const result = element._computeEndpointUri(server, endpoint, 'https://domain.com');
+      assert.equal(result, 'https://domain.com/files');
+    });
+
+    test('_computeEndpointUri() computes URI for altered baseUri withouth scheme', () => {
+      const result = element._computeEndpointUri(server, endpoint, 'domain.com');
+      assert.equal(result, 'https://domain.com/files');
+    });
+
+    test('_ensureUrlScheme() adds scheme for url from AMF model', () => {
+      const result = element._ensureUrlScheme('domain.com');
+      assert.equal(result, 'https://domain.com');
+    });
+
+    test('_ensureUrlScheme() adds scheme for url from passed argument', () => {
+      const result = element._ensureUrlScheme('domain.com', ['ftp']);
+      assert.equal(result, 'ftp://domain.com');
+    });
+
+    test('_ensureUrlScheme() adds default scheme', () => {
+      element.amfModel = undefined;
+      const result = element._ensureUrlScheme('domain.com');
+      assert.equal(result, 'http://domain.com');
+    });
+  });
+  </script>
+</body>
+</html>

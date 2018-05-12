@@ -7,6 +7,7 @@
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
   <link rel="import" href="test-element.html">
+  <script src="amf-loader.js"></script>
 </head>
 <body>
   <test-fixture id="Basic">
@@ -16,14 +17,621 @@
   </test-fixture>
 
   <script>
+  /* global AmfLoader */
   suite('amf-helper-mixin', () => {
     let element;
-    setup(() => {
-      element = fixture('Basic');
+    let model;
+    suiteSetup(() => {
+      return AmfLoader.load()
+      .then((data) => {
+        model = data;
+      });
     });
 
-    test('Initializes the element', () => {
-      assert.ok(element);
+
+    suite('_ensureAmfModel()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no argument', () => {
+        assert.isUndefined(element._ensureAmfModel());
+      });
+
+      test('Returns model for array model value', () => {
+        const result = element._ensureAmfModel(model);
+        assert.typeOf(result, 'object');
+      });
+
+      test('Returns model for object model value', () => {
+        const result = element._ensureAmfModel(model[0]);
+        assert.typeOf(result, 'object');
+      });
+
+      test('Returns undefined when no type', () => {
+        const result = element._ensureAmfModel([{}]);
+        assert.isUndefined(result);
+      });
+    });
+
+    suite('_getValue()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no arguments', () => {
+        assert.isUndefined(element._getValue());
+      });
+
+      test('Returns undefined if no model argument', () => {
+        assert.isUndefined(element._getValue(undefined, 'test'));
+      });
+
+      test('Returns undefined if no key argument', () => {
+        assert.isUndefined(element._getValue({}));
+      });
+
+      test('Returns undefined if no key in object', () => {
+        assert.isUndefined(element._getValue({
+          a: [],
+          b: []
+        }, 'c'));
+      });
+
+      test('Returns undefined if no value in value array', () => {
+        assert.isUndefined(element._getValue({
+          a: []
+        }, 'a'));
+      });
+
+      test('Returns the value', () => {
+        assert.equal(element._getValue({
+          a: [{
+            '@value': 'test'
+          }]
+        }, 'a'), 'test');
+      });
+    });
+
+    suite('_getValueArray()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no arguments', () => {
+        assert.isUndefined(element._getValueArray());
+      });
+
+      test('Returns undefined if no model argument', () => {
+        assert.isUndefined(element._getValueArray(undefined, 'test'));
+      });
+
+      test('Returns undefined if no key argument', () => {
+        assert.isUndefined(element._getValueArray({}));
+      });
+
+      test('Returns undefined if no key in object', () => {
+        assert.isUndefined(element._getValueArray({
+          a: [],
+          b: []
+        }, 'c'));
+      });
+
+      test('Returns empty array if no value in value array', () => {
+        assert.deepEqual(element._getValueArray({
+          a: []
+        }, 'a'), []);
+      });
+
+      test('Returns the values', () => {
+        assert.deepEqual(element._getValueArray({
+          a: [{
+            '@value': 'test'
+          }, {
+            '@value': 'test2'
+          }]
+        }, 'a'), ['test', 'test2']);
+      });
+    });
+
+    suite('_hasType()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns false if no arguments', () => {
+        assert.isFalse(element._hasType());
+      });
+
+      test('Returns false if no model argument', () => {
+        assert.isFalse(element._hasType(undefined, 'test'));
+      });
+
+      test('Returns false if no key argument', () => {
+        assert.isFalse(element._hasType({}));
+      });
+
+      test('Returns false if type does not match', () => {
+        assert.isFalse(element._hasType({
+          '@type': ['a', 'b']
+        }, 'c'));
+      });
+
+      test('Returns true if type does match', () => {
+        assert.isTrue(element._hasType({
+          '@type': ['a', 'b', 'c']
+        }, 'c'));
+      });
+    });
+
+    suite('_hasProperty()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns false if no arguments', () => {
+        assert.isFalse(element._hasProperty());
+      });
+
+      test('Returns false if no model argument', () => {
+        assert.isFalse(element._hasProperty(undefined, 'test'));
+      });
+
+      test('Returns false if no key argument', () => {
+        assert.isFalse(element._hasProperty({}));
+      });
+
+      test('Returns false if type does not have property', () => {
+        assert.isFalse(element._hasProperty({
+          a: 'test',
+          b: 'test'
+        }, 'c'));
+      });
+
+      test('Returns true if have a property', () => {
+        assert.isTrue(element._hasProperty({
+          a: 'test',
+          b: 'test',
+          c: 'test'
+        }, 'c'));
+      });
+    });
+
+    suite('_computePropertyArray()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no arguments', () => {
+        assert.isUndefined(element._computePropertyArray());
+      });
+
+      test('Returns undefined if no model argument', () => {
+        assert.isUndefined(element._computePropertyArray(undefined, 'test'));
+      });
+
+      test('Returns undefined if no key argument', () => {
+        assert.isUndefined(element._computePropertyArray({}));
+      });
+
+      test('Returns undefined if property is not an array', () => {
+        assert.isUndefined(element._computePropertyArray({
+          test: true
+        }, 'test'));
+      });
+
+      test('Returns undefined if property is not an array', () => {
+        assert.deepEqual(element._computePropertyArray({
+          test: ['a', 'b', 'c']
+        }, 'test'), ['a', 'b', 'c']);
+      });
+    });
+
+    suite('_computePropertyObject()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no arguments', () => {
+        assert.isUndefined(element._computePropertyObject());
+      });
+
+      test('Returns undefined if no model argument', () => {
+        assert.isUndefined(element._computePropertyObject(undefined, 'test'));
+      });
+
+      test('Returns undefined if no key argument', () => {
+        assert.isUndefined(element._computePropertyObject({}));
+      });
+
+      test('Returns bolean value', () => {
+        assert.isTrue(element._computePropertyObject({
+          test: [true]
+        }, 'test'));
+
+        assert.isFalse(element._computePropertyObject({
+          test: [false]
+        }, 'test'));
+      });
+
+      test('Returns null value', () => {
+        assert.equal(element._computePropertyObject({
+          test: [null]
+        }, 'test'), null);
+      });
+
+      test('Returns string value', () => {
+        assert.equal(element._computePropertyObject({
+          test: ['test-value']
+        }, 'test'), 'test-value');
+      });
+
+      test('Returns number value', () => {
+        assert.equal(element._computePropertyObject({
+          test: [123]
+        }, 'test'), 123);
+      });
+
+      test('Returns 0 value', () => {
+        assert.equal(element._computePropertyObject({
+          test: [0]
+        }, 'test'), 0);
+      });
+    });
+
+    suite('_computeHasStringValue()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns false if no argument', () => {
+        assert.isFalse(element._computeHasStringValue());
+      });
+
+      test('Returns false if empty string', () => {
+        assert.isFalse(element._computeHasStringValue(''));
+      });
+
+      test('Returns true if not empty string', () => {
+        assert.isTrue(element._computeHasStringValue('a'));
+      });
+
+      test('Returns true if an object', () => {
+        assert.isTrue(element._computeHasStringValue({'a': 'b'}));
+      });
+
+      test('Returns true if a number', () => {
+        assert.isTrue(element._computeHasStringValue(125));
+        assert.isTrue(element._computeHasStringValue(0));
+      });
+    });
+
+    suite('_computeHasStringValue()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns false if no argument', () => {
+        assert.isFalse(element._computeHasStringValue());
+      });
+
+      test('Returns false if empty string', () => {
+        assert.isFalse(element._computeHasStringValue(''));
+      });
+
+      test('Returns true if not empty string', () => {
+        assert.isTrue(element._computeHasStringValue('a'));
+      });
+
+      test('Returns true if an object', () => {
+        assert.isTrue(element._computeHasStringValue({'a': 'b'}));
+      });
+
+      test('Returns true if a number', () => {
+        assert.isTrue(element._computeHasStringValue(125));
+        assert.isTrue(element._computeHasStringValue(0));
+      });
+    });
+
+    suite('_computeHasArrayValue()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns false if no argument', () => {
+        assert.isFalse(element._computeHasArrayValue());
+      });
+
+      test('Returns false if empty array', () => {
+        assert.isFalse(element._computeHasArrayValue([]));
+      });
+
+      test('Returns false if not array', () => {
+        assert.isFalse(element._computeHasArrayValue('a'));
+      });
+
+      test('Returns true if array has items', () => {
+        assert.isTrue(element._computeHasStringValue(['a']));
+      });
+    });
+
+    suite('_computeDescription()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no argument', () => {
+        assert.isUndefined(element._computeDescription());
+      });
+
+      test('Returns undefined if empty object', () => {
+        assert.isUndefined(element._computeDescription({}));
+      });
+
+      test('Returns undefined if no description key', () => {
+        assert.isUndefined(element._computeDescription({
+          a: 'test'
+        }));
+      });
+
+      test('Returns undefined if no description key', () => {
+        assert.equal(element._computeDescription({
+          'http://schema.org/description': [{
+            '@value': ['test']
+          }]
+        }), 'test');
+      });
+    });
+
+    suite('_computeEncodes()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no argument', () => {
+        assert.isUndefined(element._computeEncodes());
+      });
+
+      test('Returns undefined if no encodes', () => {
+        assert.isUndefined(element._computeEncodes({}));
+      });
+
+      test('Returns an array from AMF model', () => {
+        const result = element._computeEncodes(model);
+        assert.typeOf(result, 'array');
+      });
+
+      test('Returns single item in the array', () => {
+        const result = element._computeEncodes(model);
+        assert.lengthOf(result, 1);
+      });
+    });
+
+    suite('_computeDeclares()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no argument', () => {
+        assert.isUndefined(element._computeDeclares());
+      });
+
+      test('Returns undefined if no declares', () => {
+        assert.isUndefined(element._computeDeclares({}));
+      });
+
+      test('Returns an array from AMF model', () => {
+        const result = element._computeDeclares(model);
+        assert.typeOf(result, 'array');
+      });
+
+      test('Returns all items in the array', () => {
+        const result = element._computeDeclares(model);
+        assert.lengthOf(result, 11);
+      });
+    });
+
+    suite('_computeReferences()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no argument', () => {
+        assert.isUndefined(element._computeReferences());
+      });
+
+      test('Returns undefined if no references', () => {
+        assert.isUndefined(element._computeReferences({}));
+      });
+
+      test('Returns an array from AMF model', () => {
+        const result = element._computeReferences(model);
+        assert.typeOf(result, 'array');
+      });
+
+      test('Returns all items in the array', () => {
+        const result = element._computeReferences(model);
+        assert.lengthOf(result, 5);
+      });
+    });
+
+    suite('_computeWebApi()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no argument', () => {
+        assert.isUndefined(element._computeWebApi());
+      });
+
+      test('Returns undefined if no encodes', () => {
+        assert.isUndefined(element._computeWebApi({}));
+      });
+
+      test('Returns an object from AMF model', () => {
+        const result = element._computeWebApi(model);
+        assert.typeOf(result, 'object');
+      });
+    });
+
+    suite('_computeServer()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no argument', () => {
+        assert.isUndefined(element._computeServer());
+      });
+
+      test('Returns undefined if no encodes', () => {
+        assert.isUndefined(element._computeServer({}));
+      });
+
+      test('Returns an object from AMF model', () => {
+        const result = element._computeServer(model);
+        assert.typeOf(result, 'object');
+      });
+    });
+
+    suite('_computeProtocols()', () => {
+      setup(() => {
+        element = fixture('Basic');
+      });
+
+      test('Returns undefined if no argument', () => {
+        assert.isUndefined(element._computeProtocols());
+      });
+
+      test('Returns array with values', () => {
+        const result = element._computeProtocols(model);
+        assert.typeOf(result, 'array');
+        assert.deepEqual(result, ['HTTPS']);
+      });
+    });
+
+    suite('_computeExpects()', () => {
+      let operation;
+      let noExpectsOperation;
+      suiteSetup(() => {
+        element = fixture('Basic');
+        const endpoint = element._computeEndpointModel(
+          element._computeWebApi(model),
+          'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Fchanges%2Fwatch'
+        );
+        operation = endpoint['http://www.w3.org/ns/hydra/core#supportedOperation'][0];
+        noExpectsOperation = endpoint['http://www.w3.org/ns/hydra/core#supportedOperation'][1];
+      });
+
+      test('Returns undefined if no argument', () => {
+        assert.isUndefined(element._computeExpects());
+      });
+
+      test('Returns undefined if operation does not have "expects"', () => {
+        assert.isUndefined(element._computeExpects(noExpectsOperation));
+      });
+
+      test('Returns object for an operation', () => {
+        const result = element._computeExpects(operation);
+        assert.typeOf(result, 'object');
+      });
+    });
+
+    suite('_computeEndpointModel()', () => {
+      let webApi;
+      suiteSetup(() => {
+        element = fixture('Basic');
+        webApi = element._computeWebApi(model);
+      });
+
+      test('Returns undefined if no arguments', () => {
+        assert.isUndefined(element._computeEndpointModel());
+      });
+
+      test('Returns undefined if no model argument', () => {
+        assert.isUndefined(element._computeEndpointModel(undefined, 'test'));
+      });
+
+      test('Returns undefined if no selected argument', () => {
+        assert.isUndefined(element._computeEndpointModel(webApi));
+      });
+
+      test('Returns undefined if selection does not exists', () => {
+        assert.isUndefined(element._computeEndpointModel(webApi, 'hello'));
+      });
+
+      test('Returns object for endpoint', () => {
+        const result = element._computeEndpointModel(webApi, 'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Fchanges%2Fwatch');
+        assert.typeOf(result, 'object');
+        assert.equal(result['@type'][0], 'http://raml.org/vocabularies/http#EndPoint');
+      });
+    });
+
+    suite('_computeMethodModel()', () => {
+      let webApi;
+      suiteSetup(() => {
+        element = fixture('Basic');
+        webApi = element._computeWebApi(model);
+      });
+
+      test('Returns undefined if no arguments', () => {
+        assert.isUndefined(element._computeMethodModel());
+      });
+
+      test('Returns undefined if no model argument', () => {
+        assert.isUndefined(element._computeMethodModel(undefined, 'test'));
+      });
+
+      test('Returns undefined if no selected argument', () => {
+        assert.isUndefined(element._computeMethodModel(webApi));
+      });
+
+      test('Returns undefined if selection does not exists', () => {
+        assert.isUndefined(element._computeMethodModel(webApi, 'hello'));
+      });
+
+      test('Returns object for method', () => {
+        const result = element._computeMethodModel(webApi, 'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FpermissionIds%2F%7Bemail%7D/get');
+        assert.typeOf(result, 'object');
+        assert.equal(result['@type'][0], 'http://www.w3.org/ns/hydra/core#Operation');
+      });
+    });
+
+    suite('_computeType()', () => {
+      let references;
+      let declares;
+      suiteSetup(() => {
+        element = fixture('Basic');
+        declares = element._computeDeclares(model);
+        references = element._computeReferences(model);
+      });
+
+      test('Returns undefined if no arguments', () => {
+        assert.isUndefined(element._computeType());
+      });
+
+      test('Returns undefined if no model argument', () => {
+        assert.isUndefined(element._computeType(undefined, undefined, 'test'));
+      });
+
+      test('Returns undefined if no selected argument', () => {
+        assert.isUndefined(element._computeType(declares, references));
+      });
+
+      test('Returns undefined if selection does not exists', () => {
+        assert.isUndefined(element._computeType(declares, references, 'not-here'));
+      });
+
+      test('Returns type in declarations', () => {
+        const result = element._computeType(declares, undefined, 'file://test/demo-api/types/app-person.raml/type');
+        assert.typeOf(result, 'object');
+        assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
+      });
+
+      test('Returns type in references (library)', () => {
+        const result = element._computeType(declares, references, 'file://test/demo-api/library.raml#/declarations/TypeFromLibray');
+        assert.typeOf(result, 'object');
+        assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
+      });
     });
   });
   </script>

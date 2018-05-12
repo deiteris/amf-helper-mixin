@@ -34,6 +34,11 @@
             ]
           }
         ],
+        "http://raml.org/vocabularies/http#scheme": [
+          {
+            "@value": "HTTPS"
+          }
+        ],
         "http://schema.org/version": [
           {
             "@value": "v2"
@@ -6372,7 +6377,7 @@
         ],
         "http://www.w3.org/ns/shacl#name": [
           {
-            "@value": "Image"
+            "@value": "image"
           }
         ],
         "http://schema.org/description": [
@@ -7035,7 +7040,7 @@
             ],
             "http://www.w3.org/ns/shacl#name": [
               {
-                "@value": "Image"
+                "@value": "image"
               }
             ],
             "http://schema.org/description": [
@@ -9651,7 +9656,7 @@
                 ],
                 "http://www.w3.org/ns/shacl#name": [
                   {
-                    "@value": "type"
+                    "@value": "Resource"
                   }
                 ],
                 "http://schema.org/description": [
