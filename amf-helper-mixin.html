@@ -463,6 +463,21 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       }
       return methods.find((item) => item['@id'] === selected);
     }
+    __computeMethodsListForMethod(webApi, selected) {
+      if (!webApi || !selected) {
+        return;
+      }
+      const endpointId = selected.substr(0, selected.lastIndexOf('/'));
+      const endpoint = this._computeEndpointModel(webApi, endpointId);
+      if (!endpoint) {
+        return;
+      }
+      const methods = endpoint['http://www.w3.org/ns/hydra/core#supportedOperation'];
+      if (!(methods instanceof Array)) {
+        return;
+      }
+      return methods;
+    }
     /**
      * Computes a type documentation model.
      *
