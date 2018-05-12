@@ -475,7 +475,26 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!declares || !selected) {
         return;
       }
-      return declares.find((item) => item['@id'] === selected);
+      let type = declares.find((item) => item['@id'] === selected);
+      if (!type && references && references.length) {
+        for (let i = 0, len = references.length; i < len; i++) {
+          if (!this._hasType(references[i], 'http://raml.org/vocabularies/document#Module')) {
+            continue;
+          }
+          type = this._computeReferenceType(references[i], selected);
+          if (type) {
+            break;
+          }
+        }
+      }
+      return type;
+    }
+    _computeReferenceType(reference, selected) {
+      const declare = this._computeDeclares(reference);
+      if (!declare) {
+        return;
+      }
+      return declare.find((item) => item['@id'] === selected);
     }
     /**
      * Computes model for selected security definition.
