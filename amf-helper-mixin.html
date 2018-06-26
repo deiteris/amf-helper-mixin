@@ -21,6 +21,62 @@ if (!global.ApiElements) {
    */
   global.ApiElements = {};
 }
+
+if (!global.ApiElements.Amf) {
+  global.ApiElements.Amf = {};
+}
+const ns = {};
+// RAML namespace
+ns.raml = {};
+ns.raml.name = 'http://a.ml/';
+ns.raml.vocabularies = {};
+ns.raml.vocabularies.name = ns.raml.name + 'vocabularies/';
+ns.raml.vocabularies.document = ns.raml.vocabularies.name + 'document#';
+ns.raml.vocabularies.http = ns.raml.vocabularies.name + 'http#';
+ns.raml.vocabularies.security = ns.raml.vocabularies.name + 'security#';
+ns.raml.vocabularies.shapes = ns.raml.vocabularies.name + 'shapes#';
+ns.raml.vocabularies.data = ns.raml.vocabularies.name + 'data#';
+// W3 namespace
+ns.w3 = {};
+ns.w3.name = 'http://www.w3.org/';
+ns.w3.hydra = {};
+ns.w3.hydra.name = ns.w3.name + 'ns/hydra/';
+ns.w3.hydra.core = ns.w3.hydra.name + 'core#';
+ns.w3.xmlSchema = ns.w3.name + '2001/XMLSchema#';
+// w3 types
+ns.w3.shacl = {};
+ns.w3.shacl.name = ns.w3.name + 'ns/shacl#';
+ns.w3.shacl.in = ns.w3.shacl.name + 'in';
+ns.w3.shacl.defaultValueStr = ns.w3.shacl.name + 'defaultValueStr';
+ns.w3.shacl.pattern = ns.w3.shacl.name + 'pattern';
+ns.w3.shacl.minInclusive = ns.w3.shacl.name + 'minInclusive';
+ns.w3.shacl.maxInclusive = ns.w3.shacl.name + 'maxInclusive';
+ns.w3.shacl.multipleOf = ns.w3.shacl.name + 'multipleOf';
+ns.w3.shacl.minLength = ns.w3.shacl.name + 'minLength';
+ns.w3.shacl.maxLength = ns.w3.shacl.name + 'maxLength';
+ns.w3.shacl.fileType = ns.w3.shacl.name + 'fileType';
+ns.w3.shacl.shape = ns.w3.shacl.name + 'Shape';
+// Hydra shortcuts
+ns.w3.hydra.supportedOperation = ns.w3.hydra.core + 'supportedOperation';
+// Schema org namespace
+ns.schema = {};
+ns.schema.name = 'http://schema.org/';
+ns.schema.schemaName = ns.schema.name + 'name';
+ns.schema.desc = ns.schema.name + 'description';
+ns.schema.doc = ns.schema.name + 'documentation';
+ns.schema.webApi = ns.schema.name + 'WebAPI';
+ns.schema.creativeWork = ns.schema.name + 'CreativeWork';
+ns.schema.displayName = ns.schema.name + 'displayName';
+ns.schema.title = ns.schema.name + 'title';
+
+Object.freeze(ns.raml);
+Object.freeze(ns.raml.vocabularies);
+Object.freeze(ns.w3);
+Object.freeze(ns.w3.hydra);
+Object.freeze(ns.w3.shacl);
+Object.freeze(ns.schema);
+Object.freeze(ns);
+global.ApiElements.Amf.ns = ns;
 /**
  * Common functions used by AMF components to compute AMF values.
  *
@@ -36,7 +92,8 @@ if (!global.ApiElements) {
  *
  * To update base URI value either update `baseUri` property or use
  * `iron-meta` with key `ApiBaseUri`. First method is easier but the second
- * gives much more flexibility since it use a [monostate pattern](http://wiki.c2.com/?MonostatePattern)
+ * gives much more flexibility since it use a
+ * [monostate pattern](http://wiki.c2.com/?MonostatePattern)
  * to manage base URI property.
  *
  * When the component constructs the funal URI for the endpoint it does the following:
@@ -69,7 +126,17 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
          *
          * @type {Object|Array}
          */
-        amfModel: Object
+        amfModel: Object,
+        /**
+         * A namespace for AMF model
+         */
+        ns: {
+          type: Object,
+          value: function() {
+            return ns;
+          },
+          readOnly: true
+        }
       };
     }
     /**
@@ -85,7 +152,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (amf instanceof Array) {
         amf = amf[0];
       }
-      if (this._hasType(amf, 'http://raml.org/vocabularies/document#Document')) {
+      if (this._hasType(amf, ns.raml.vocabularies.document + 'Document')) {
         return amf;
       }
     }
@@ -196,19 +263,19 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {String} Description value.
      */
     _computeDescription(shape) {
-      return this._getValue(shape, 'http://schema.org/description');
+      return this._getValue(shape, ns.schema.desc);
     }
 
     _computeHeaders(shape) {
-      return this._computePropertyArray(shape, 'http://raml.org/vocabularies/http#header');
+      return this._computePropertyArray(shape, ns.raml.vocabularies.http + 'header');
     }
 
     _computeQueryParameters(shape) {
-      return this._computePropertyArray(shape, 'http://raml.org/vocabularies/http#parameter');
+      return this._computePropertyArray(shape, ns.raml.vocabularies.http + 'parameter');
     }
 
     _computeResponses(shape) {
-      return this._computePropertyArray(shape, 'http://www.w3.org/ns/hydra/core#response');
+      return this._computePropertyArray(shape, ns.w3.hydra.core + 'response');
     }
 
     /**
@@ -218,7 +285,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Array<Object>|undefined} Variables if defined.
      */
     _computeServerVariables(server) {
-      return this._computePropertyArray(server, 'http://raml.org/vocabularies/http#variable');
+      return this._computePropertyArray(server, ns.raml.vocabularies.http + 'variable');
     }
     /**
      * Computes value for `endpointVariables` property.
@@ -227,7 +294,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Array<Object>|undefined} Parameters if defined.
      */
     _computeEndpointVariables(endpoint) {
-      return this._computePropertyArray(endpoint, 'http://raml.org/vocabularies/http#parameter');
+      return this._computePropertyArray(endpoint, ns.raml.vocabularies.http + 'parameter');
     }
     /**
      * Computes value for the `payload` property
@@ -236,7 +303,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Array<Object>|undefined} Payload model if defined.
      */
     _computePayload(expects) {
-      return this._computePropertyArray(expects, 'http://raml.org/vocabularies/http#payload');
+      return this._computePropertyArray(expects, ns.raml.vocabularies.http + 'payload');
     }
     /**
      * Computes value for `returns` property
@@ -245,7 +312,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Array<Object>|undefined}
      */
     _computeReturns(method) {
-      return this._computePropertyArray(method, 'http://www.w3.org/ns/hydra/core#returns');
+      return this._computePropertyArray(method, ns.w3.hydra.core + 'returns');
     }
     /**
      * Computes value for `security` property
@@ -254,7 +321,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Array<Object>|undefined}
      */
     _computeSecurity(method) {
-      return this._computePropertyArray(method, 'http://raml.org/vocabularies/security#security');
+      return this._computePropertyArray(method, ns.raml.vocabularies.security + 'security');
     }
     /**
      * Computes value for `hasCustomProperties` property.
@@ -263,7 +330,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Boolean}
      */
     _computeHasCustomProperties(shape) {
-      return this._hasProperty(shape, 'http://raml.org/vocabularies/document#customDomainProperties');
+      return this._hasProperty(shape, ns.raml.vocabularies.document + 'customDomainProperties');
     }
     /**
      * Computes model's `encodes` property.
@@ -278,7 +345,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (model instanceof Array) {
         model = model[0];
       }
-      const data = model['http://raml.org/vocabularies/document#encodes'];
+      const data = model[ns.raml.vocabularies.document + 'encodes'];
       return data instanceof Array ? data : undefined;
     }
     /**
@@ -297,7 +364,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!model) {
         return;
       }
-      const data = model['http://raml.org/vocabularies/document#declares'];
+      const data = model[ns.raml.vocabularies.document + 'declares'];
       return data instanceof Array ? data : undefined;
     }
     /**
@@ -316,7 +383,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!model) {
         return;
       }
-      const data = model['http://raml.org/vocabularies/document#references'];
+      const data = model[ns.raml.vocabularies.document + 'references'];
       return data instanceof Array ? data : undefined;
     }
     /**
@@ -330,7 +397,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!enc) {
         return;
       }
-      return enc.find((item) => this._hasType(item, 'http://schema.org/WebAPI'));
+      return enc.find((item) => this._hasType(item, ns.schema.webApi));
     }
     /**
      * Computes value for `server` property that is later used with other computations.
@@ -343,7 +410,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!api) {
         return;
       }
-      const srv = api['http://raml.org/vocabularies/http#server'];
+      const srv = api[ns.raml.vocabularies.http + 'server'];
       return srv ? srv[0] : undefined;
     }
     /**
@@ -360,7 +427,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
         base = base.substr(0, base.length - 1);
       }
       base = this._ensureUrlScheme(base);
-      const path = this._getValue(endpoint, 'http://raml.org/vocabularies/http#path');
+      const path = this._getValue(endpoint, ns.raml.vocabularies.http + 'path');
       return base + (path || '');
     }
     /**
@@ -394,7 +461,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {String|undefined} Base uri value if exists.
      */
     _getAmfBaseUri(server, protocols) {
-      let value = this._getValue(server, 'http://raml.org/vocabularies/http#url');
+      let value = this._getValue(server, ns.raml.vocabularies.http + 'url');
       value = this._ensureUrlScheme(value, protocols);
       return value;
     }
@@ -435,7 +502,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!api) {
         return;
       }
-      const scheme = api['http://raml.org/vocabularies/http#scheme'];
+      const scheme = api[ns.raml.vocabularies.http + 'scheme'];
       if (!(scheme instanceof Array)) {
         return;
       }
@@ -448,8 +515,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Object}
      */
     _computeExpects(method) {
-      if (this._hasType(method, 'http://www.w3.org/ns/hydra/core#Operation')) {
-        const expects = method['http://www.w3.org/ns/hydra/core#expects'];
+      if (this._hasType(method, ns.w3.hydra.core + 'Operation')) {
+        const expects = method[ns.w3.hydra.core + 'expects'];
         if (expects) {
           return expects[0];
         }
@@ -463,19 +530,19 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {String|undefined}
      */
     _computePropertyValue(item) {
-      let schema = item && item['http://raml.org/vocabularies/http#schema'];
+      let schema = item && item[ns.raml.vocabularies.http + 'schema'];
       if (!schema) {
         return;
       }
       schema = schema[0];
-      const defValKey = 'http://www.w3.org/ns/shacl#defaultValue';
+      const defValKey = ns.w3.shacl.name + 'defaultValue';
       let value = this._getValue(item, defValKey);
       if (!value) {
-        const examplesKey = 'http://raml.org/vocabularies/document#examples';
+        const examplesKey = ns.raml.vocabularies.document + 'examples';
         let example = item[examplesKey];
         if (example) {
           example = example[0];
-          value = this._getValue(item, 'http://raml.org/vocabularies/document#value');
+          value = this._getValue(item, ns.raml.vocabularies.document + 'value');
         }
       }
       return value;
@@ -491,7 +558,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!webApi || !selected) {
         return;
       }
-      const endpoints = webApi['http://raml.org/vocabularies/http#endpoint'];
+      const endpoints = webApi[ns.raml.vocabularies.http + 'endpoint'];
       return endpoints.find((item) => item['@id'] === selected);
     }
     /**
@@ -517,7 +584,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!endpoint) {
         return;
       }
-      const methods = endpoint['http://www.w3.org/ns/hydra/core#supportedOperation'];
+      const methods = endpoint[ns.w3.hydra.supportedOperation];
       if (!(methods instanceof Array)) {
         return;
       }
@@ -538,7 +605,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       let type = declares.find((item) => item['@id'] === selected);
       if (!type && references && references.length) {
         for (let i = 0, len = references.length; i < len; i++) {
-          if (!this._hasType(references[i], 'http://raml.org/vocabularies/document#Module')) {
+          if (!this._hasType(references[i], ns.raml.vocabularies.document + 'Module')) {
             continue;
           }
           type = this._computeReferenceType(references[i], selected);
@@ -580,7 +647,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!webApi || !selected) {
         return;
       }
-      const docs = webApi['http://schema.org/documentation'];
+      const docs = webApi[ns.schema.doc];
       return docs && docs.find((item) => item['@id'] === selected);
     }
     /**
@@ -594,7 +661,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!shape || !amf || shape.__apicResolved) {
         return shape;
       }
-      if (!('http://raml.org/vocabularies/document#reference-id' in shape)) {
+      if (!(ns.raml.vocabularies.document + 'reference-id' in shape)) {
         shape.__apicResolved = true;
         return shape;
       }
@@ -602,18 +669,18 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!refs) {
         return shape;
       }
-      let id = shape['http://raml.org/vocabularies/document#reference-id'][0]['@id'];
+      let id = shape[ns.raml.vocabularies.document + 'reference-id'][0]['@id'];
       const ref = refs.find((item) => {
-        if (!this._hasType(item, 'http://raml.org/vocabularies/document#Fragment')) {
+        if (!this._hasType(item, ns.raml.vocabularies.document + 'Fragment')) {
           return false;
         }
-        const enc = item['http://raml.org/vocabularies/document#encodes'][0];
+        const enc = item[ns.raml.vocabularies.document + 'encodes'][0];
         return enc['@id'] === id;
       });
       if (!ref) {
         return shape;
       }
-      const data = ref['http://raml.org/vocabularies/document#encodes'][0];
+      const data = ref[ns.raml.vocabularies.document + 'encodes'][0];
       const copy = Object.assign({}, data);
       delete copy['@id'];
       const types = copy['@type'];
@@ -639,10 +706,10 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      */
     _getExampleValue(item, isJson) {
       item = this._resolve(item);
-      let data = this._getValue(item, 'http://www.w3.org/ns/shacl#raw');
+      let data = this._getValue(item, ns.w3.shacl.name + 'raw');
       // This suppose to be a JSON data so lets test it.
       if (!data || (isJson && !(data[0] === '{' || data[0] === '['))) {
-        const structured = item['http://raml.org/vocabularies/document#structuredValue'];
+        const structured = item[ns.raml.vocabularies.document + 'structuredValue'];
         if (structured) {
           data = this._computeExampleFromStructuredValue(structured[0]);
           data = JSON.stringify(data, null, 2);
@@ -657,11 +724,11 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Object|Array} Javascript object or array with structured value.
      */
     _computeExampleFromStructuredValue(model) {
-      if (this._hasType(model, 'http://raml.org/vocabularies/data#Scalar')) {
+      if (this._hasType(model, ns.raml.vocabularies.data + 'Scalar')) {
         return this._computeStructuredExampleValue(
-          this._getValue(model, 'http://raml.org/vocabularies/data#value'));
+          this._getValue(model, ns.raml.vocabularies.data + 'value'));
       }
-      const isObject = this._hasType(model, 'http://raml.org/vocabularies/data#Object');
+      const isObject = this._hasType(model, ns.raml.vocabularies.data + 'Object');
       const result = isObject ? {} : [];
       const modelKeys = ['@id', '@type'];
       Object.keys(model).forEach((key) => {
@@ -690,18 +757,18 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (typeof model === 'string') {
         return model;
       }
-      if (this._hasType(model, 'http://raml.org/vocabularies/data#Scalar')) {
-        const mValue = model['http://raml.org/vocabularies/data#value'][0];
+      if (this._hasType(model, ns.raml.vocabularies.data + 'Scalar')) {
+        const mValue = model[ns.raml.vocabularies.data + 'value'][0];
         const type = mValue['@type'];
         const value = mValue['@value'];
         switch (type) {
-          case 'http://www.w3.org/2001/XMLSchema#boolean':
+          case ns.w3.xmlSchema + 'boolean':
             return value === 'true' ? true : false;
-          case 'http://www.w3.org/2001/XMLSchema#integer':
-          case 'http://www.w3.org/2001/XMLSchema#long':
-          case 'http://www.w3.org/2001/XMLSchema#double':
-          case 'http://www.w3.org/2001/XMLSchema#float':
-          case 'http://raml.org/vocabularies/shapes#number':
+          case ns.w3.xmlSchema + 'integer':
+          case ns.w3.xmlSchema + 'long':
+          case ns.w3.xmlSchema + 'double':
+          case ns.w3.xmlSchema + 'float':
+          case ns.raml.vocabularies.shapes + 'number':
             return Number(value);
           default:
             return value;

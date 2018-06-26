@@ -53,6 +53,125 @@
         const result = element._ensureAmfModel([{}]);
         assert.isUndefined(result);
       });
+
+      test('Namespace property is set', () => {
+        assert.typeOf(element.ns, 'object');
+      });
+    });
+
+    suite('AMF keys namespace', () => {
+      test('Global variable is set', () => {
+        assert.typeOf(window.ApiElements.Amf, 'object');
+      });
+
+      test('ns variable is set', () => {
+        assert.typeOf(window.ApiElements.Amf.ns, 'object');
+      });
+
+      test('ns has all keys', () => {
+        const keys = Object.keys(window.ApiElements.Amf.ns);
+        const compare = ['raml', 'w3', 'schema'];
+        assert.deepEqual(keys, compare);
+      });
+
+      test('raml properties are set', () => {
+        const r = ApiElements.Amf.ns.raml;
+        assert.equal(r.name, 'http://a.ml/');
+        assert.typeOf(r.vocabularies, 'object');
+      });
+
+      test('raml cannot be changed', () => {
+        window.ApiElements.Amf.ns.raml = 'test';
+        assert.typeOf(window.ApiElements.Amf.ns.raml, 'object');
+      });
+
+      test('vocabularies properties are set', () => {
+        const v = ApiElements.Amf.ns.raml.vocabularies;
+        const key = 'http://a.ml/vocabularies/';
+        assert.equal(v.name, key);
+        assert.equal(v.document, key + 'document#');
+        assert.equal(v.http, key + 'http#');
+        assert.equal(v.security, key + 'security#');
+        assert.equal(v.shapes, key + 'shapes#');
+        assert.equal(v.data, key + 'data#');
+      });
+
+      test('vocabularies cannot be changed', () => {
+        window.ApiElements.Amf.ns.raml.vocabularies = 'test';
+        assert.typeOf(window.ApiElements.Amf.ns.raml.vocabularies, 'object');
+      });
+
+      test('w3 properties are set', () => {
+        const r = ApiElements.Amf.ns.w3;
+        assert.equal(r.name, 'http://www.w3.org/');
+        assert.typeOf(r.hydra, 'object');
+        assert.typeOf(r.shacl, 'object');
+        assert.equal(r.xmlSchema, 'http://www.w3.org/2001/XMLSchema#');
+      });
+
+      test('w3 cannot be changed', () => {
+        window.ApiElements.Amf.ns.w3 = 'test';
+        assert.typeOf(window.ApiElements.Amf.ns.w3, 'object');
+      });
+
+      test('hydra properties are set', () => {
+        const h = ApiElements.Amf.ns.w3.hydra;
+        const key = 'http://www.w3.org/ns/hydra/';
+        assert.equal(h.name, key);
+        assert.equal(h.core, key + 'core#');
+        assert.equal(h.supportedOperation, key + 'core#supportedOperation');
+      });
+
+      test('hydra cannot be changed', () => {
+        window.ApiElements.Amf.ns.w3.hydra = 'test';
+        assert.typeOf(window.ApiElements.Amf.ns.w3.hydra, 'object');
+      });
+
+      test('shacl properties are set', () => {
+        const s = ApiElements.Amf.ns.w3.shacl;
+        const key = 'http://www.w3.org/ns/shacl#';
+        assert.equal(s.name, key);
+        [
+          'in', 'defaultValueStr', 'pattern', 'minInclusive', 'maxInclusive',
+          'multipleOf', 'minLength', 'maxLength', 'fileType'
+        ]
+        .forEach((name) => {
+          assert.equal(s[name], key + name);
+        });
+        assert.equal(s.shape, key + 'Shape');
+      });
+
+      test('shacl cannot be changed', () => {
+        window.ApiElements.Amf.ns.w3.shacl = 'test';
+        assert.typeOf(window.ApiElements.Amf.ns.w3.shacl, 'object');
+      });
+
+      test('schema properties are set', () => {
+        const s = ApiElements.Amf.ns.schema;
+        const key = 'http://schema.org/';
+        assert.equal(s.name, key);
+        assert.equal(s.schemaName, key + 'name');
+        assert.equal(s.desc, key + 'description');
+        assert.equal(s.doc, key + 'documentation');
+        assert.equal(s.webApi, key + 'WebAPI');
+        assert.equal(s.creativeWork, key + 'CreativeWork');
+        [
+          'displayName', 'title'
+        ]
+        .forEach((name) => {
+          assert.equal(s[name], key + name);
+        });
+      });
+
+      test('schema cannot be changed', () => {
+        window.ApiElements.Amf.ns.schema = 'test';
+        assert.typeOf(window.ApiElements.Amf.ns.schema, 'object');
+      });
+
+      test('Global object is also accessible via element API', () => {
+        element = fixture('Basic');
+        assert.isTrue(element.ns === window.ApiElements.Amf.ns);
+      });
     });
 
     suite('_getValue()', () => {
@@ -563,7 +682,7 @@
       test('Returns object for endpoint', () => {
         const result = element._computeEndpointModel(webApi, 'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Fchanges%2Fwatch');
         assert.typeOf(result, 'object');
-        assert.equal(result['@type'][0], 'http://raml.org/vocabularies/http#EndPoint');
+        assert.equal(result['@type'][0], 'http://a.ml/vocabularies/http#EndPoint');
       });
     });
 
@@ -623,13 +742,13 @@
       });
 
       test('Returns type in declarations', () => {
-        const result = element._computeType(declares, undefined, 'file://test/demo-api/types/app-person.raml/type');
+        const result = element._computeType(declares, undefined, 'file://test/demo-api/types/app-person.raml#/type');
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
       });
 
       test('Returns type in references (library)', () => {
-        const result = element._computeType(declares, references, 'file://test/demo-api/library.raml#/declarations/TypeFromLibray');
+        const result = element._computeType(declares, references, 'file://test/demo-api/library.raml#/declarations/types/TypeFromLibray');
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
       });
