@@ -278,6 +278,15 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       return this._computePropertyArray(shape, ns.w3.hydra.core + 'response');
     }
 
+    _computeApiVersion(amfModel) {
+      // http://schema.org/version
+      const api = this._computeWebApi(amfModel);
+      if (!api) {
+        return;
+      }
+      return this._getValue(api, ns.schema.name + 'version');
+    }
+
     /**
      * Computes value for `serverVariables` property.
      *
@@ -419,16 +428,21 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @param {Object} server Server model of AMF API.
      * @param {Object} endpoint Endpoint model
      * @param {?String} baseUri Current value of `baseUri` property
+     * @param {?String} version API current version
      * @return {String} Endpoint's URI
      */
-    _computeEndpointUri(server, endpoint, baseUri) {
+    _computeEndpointUri(server, endpoint, baseUri, version) {
       let base = this._getBaseUri(baseUri, server) || '';
       if (base && base[base.length - 1] === '/') {
         base = base.substr(0, base.length - 1);
       }
       base = this._ensureUrlScheme(base);
       const path = this._getValue(endpoint, ns.raml.vocabularies.http + 'path');
-      return base + (path || '');
+      let result = base + (path || '');
+      if (version && result) {
+        result = result.replace('{version}', version);
+      }
+      return result;
     }
     /**
      * Computes base URI value from either `baseUri`, `iron-meta` with
