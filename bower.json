@@ -1,7 +1,7 @@
 {
   "name": "amf-helper-mixin",
   "description": "A mixin with common functions user by most AMF components to compyte AMF values",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "license": "Apache-2.0",
   "main": "amf-helper-mixin.html",
   "keywords": [
