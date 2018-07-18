@@ -30,9 +30,13 @@ types:
   Resource: !include types/resource.raml
   AppPerson: !include types/app-person.raml
   Product: !include types/product.raml
+  Dimension: !include types/dimensions.raml
+  SchemaPerson:
+    type: !include schemas/person.json
+    example: !include examples/person.json
   Picture:
     displayName: Pic
-    type: object
+    type: Resource
     required: false
     description: The user's profile picture.
     properties:
@@ -40,6 +44,11 @@ types:
         type: string
         required: false
         description: A URL that points to a profile picture of this user.
+      dimension: Dimension
+  ComplexInclusion:
+    type: Product
+    properties:
+      dimension: !include types/dimensions.raml
   Property:
     type: object
     required: false
@@ -364,3 +373,8 @@ types:
       type: myLib.TypeFromLibray
     responses:
       200:
+/referenceId:
+  post:
+    body:
+      application/json:
+        type: SchemaPerson

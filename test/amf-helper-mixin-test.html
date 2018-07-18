@@ -547,7 +547,7 @@
 
       test('Returns all items in the array', () => {
         const result = element._computeDeclares(model);
-        assert.lengthOf(result, 11);
+        assert.lengthOf(result, 16);
       });
     });
 
@@ -571,7 +571,7 @@
 
       test('Returns all items in the array', () => {
         const result = element._computeReferences(model);
-        assert.lengthOf(result, 5);
+        assert.lengthOf(result, 8);
       });
     });
 
@@ -751,6 +751,63 @@
         const result = element._computeType(declares, references, 'file://test/demo-api/library.raml#/declarations/types/TypeFromLibray');
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
+      });
+    });
+
+    suite('_getLinkTarget()', () => {
+      // let webApi;
+      suiteSetup(() => {
+        element = fixture('Basic');
+        element.amfModel = model;
+        // webApi = element._computeWebApi(model);
+      });
+
+      test('Computes reference', () => {
+        const result = element._getLinkTarget(model, 'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        assert.typeOf(result, 'object');
+      });
+
+      test('Reference is resolved', () => {
+        const result = element._getLinkTarget(model, 'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        assert.typeOf(result['http://a.ml/vocabularies/document#raw'], 'array');
+      });
+
+      test('Deep reference is resolved', () => {
+        const result = element._getLinkTarget(model, 'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        const example = result['http://a.ml/vocabularies/document#examples'][0];
+        assert.typeOf(example['http://a.ml/vocabularies/document#structuredValue'], 'array');
+      });
+    });
+
+    suite('_getReferenceId()', () => {
+      suiteSetup(() => {
+        element = fixture('Basic');
+        element.amfModel = model;
+      });
+
+      test('Computes reference', () => {
+        const result = element._getReferenceId(model, 'file://test/demo-api/schemas/person.json#/external');
+        assert.typeOf(result, 'object');
+      });
+    });
+
+    suite('_resolve()', () => {
+      let webApi;
+      suiteSetup(() => {
+        element = fixture('Basic');
+        element.amfModel = model;
+        webApi = element._computeWebApi(model);
+      });
+
+      test('Resolves link target', () => {
+        const endpoint = element._computeEndpointModel(webApi, 'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FreferenceId');
+        const op = endpoint['http://www.w3.org/ns/hydra/core#supportedOperation'][0];
+        const expects = op['http://www.w3.org/ns/hydra/core#expects'][0];
+        const payload = expects['http://a.ml/vocabularies/http#payload'][0];
+        const schema = payload['http://a.ml/vocabularies/http#schema'][0];
+        const result = element._resolve(schema);
+        assert.typeOf(result['http://www.w3.org/ns/shacl#name'], 'array');
+        assert.typeOf(result['http://a.ml/vocabularies/document#raw'], 'array');
       });
     });
   });
