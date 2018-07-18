@@ -1,3 +1,29 @@
+<a name="2.0.3"></a>
+## [2.0.3](https://github.com/advanced-rest-client/amf-helper-mixin/compare/2.0.0-preview...2.0.3) (2018-07-18)
+
+
+### Breaking
+
+* Updated component to use new model of AMF ([0195ce945533723ff305172914571f0d2e2be904](https://github.com/advanced-rest-client/amf-helper-mixin/commit/0195ce945533723ff305172914571f0d2e2be904))
+
+### Docs
+
+* Updating documentation. ([98ed3934231261c60303d1660747b7336aa19b30](https://github.com/advanced-rest-client/amf-helper-mixin/commit/98ed3934231261c60303d1660747b7336aa19b30))
+
+### Fix
+
+* Fixing sauce browsers configuration ([340860d6891aced12015b4565a316c49b6c2854b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/340860d6891aced12015b4565a316c49b6c2854b))
+
+### New
+
+* Adding support for version computation for URL ([ff77ea5792fa83765da2dd1694488a9e63943e20](https://github.com/advanced-rest-client/amf-helper-mixin/commit/ff77ea5792fa83765da2dd1694488a9e63943e20))
+
+### Update
+
+* Updating the library to work with new AMF model. ([4bb9664cda4f32bea5907ba007750d8d87ec0f7e](https://github.com/advanced-rest-client/amf-helper-mixin/commit/4bb9664cda4f32bea5907ba007750d8d87ec0f7e))
+
+
+
 <a name="2.0.2"></a>
 ## [2.0.2](https://github.com/advanced-rest-client/amf-helper-mixin/compare/2.0.0-preview...2.0.2) (2018-07-11)
 

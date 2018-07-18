@@ -28,7 +28,8 @@ declare namespace ApiElements {
    *
    * To update base URI value either update `baseUri` property or use
    * `iron-meta` with key `ApiBaseUri`. First method is easier but the second
-   * gives much more flexibility since it use a [monostate pattern](http://wiki.c2.com/?MonostatePattern)
+   * gives much more flexibility since it use a
+   * [monostate pattern](http://wiki.c2.com/?MonostatePattern)
    * to manage base URI property.
    *
    * When the component constructs the funal URI for the endpoint it does the following:
@@ -56,6 +57,11 @@ declare namespace ApiElements {
      * It is only usefult for the element to resolve references.
      */
     amfModel: object|any[]|null;
+
+    /**
+     * A namespace for AMF model
+     */
+    readonly ns: object|null|undefined;
 
     /**
      * Ensures that the model is AMF object.
@@ -141,6 +147,7 @@ declare namespace ApiElements {
     _computeHeaders(shape: any): any;
     _computeQueryParameters(shape: any): any;
     _computeResponses(shape: any): any;
+    _computeApiVersion(amfModel: any): any;
 
     /**
      * Computes value for `serverVariables` property.
@@ -233,9 +240,10 @@ declare namespace ApiElements {
      * @param server Server model of AMF API.
      * @param endpoint Endpoint model
      * @param baseUri Current value of `baseUri` property
+     * @param version API current version
      * @returns Endpoint's URI
      */
-    _computeEndpointUri(server: object|null, endpoint: object|null, baseUri: String|null): String|null;
+    _computeEndpointUri(server: object|null, endpoint: object|null, baseUri: String|null, version: String|null): String|null;
 
     /**
      * Computes base URI value from either `baseUri`, `iron-meta` with
@@ -348,6 +356,9 @@ declare namespace ApiElements {
      * @returns Resolved shape.
      */
     _resolve(shape: object|null): object|null;
+    _getLinkTarget(amf: any, id: any): any;
+    _getReferenceId(amf: any, id: any): any;
+    _resolveRecursive(shape: any): void;
 
     /**
      * Gets string value for an example data model.

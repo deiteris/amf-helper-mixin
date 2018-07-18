@@ -672,30 +672,26 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      */
     _resolve(shape) {
       const amf = this.amfModel;
-      if (!shape || !amf || shape.__apicResolved) {
+      if (typeof shape !== 'object' || shape instanceof Array || !amf || shape.__apicResolved) {
         return shape;
       }
-      if (!(ns.raml.vocabularies.document + 'reference-id' in shape)) {
+      let refKey = ns.raml.vocabularies.document + 'link-target';
+      let refValue = shape[refKey];
+      let refData;
+      if (refValue) {
+        refData = this._getLinkTarget(amf, refValue[0]['@id']);
+      } else {
+        refKey = ns.raml.vocabularies.document + 'reference-id';
+        refValue = shape[refKey];
+        if (refValue) {
+          refData = this._getReferenceId(amf, refValue[0]['@id']);
+        }
+      }
+      if (!refData) {
         shape.__apicResolved = true;
         return shape;
       }
-      const refs = this._computeReferences(amf);
-      if (!refs) {
-        return shape;
-      }
-      let id = shape[ns.raml.vocabularies.document + 'reference-id'][0]['@id'];
-      const ref = refs.find((item) => {
-        if (!this._hasType(item, ns.raml.vocabularies.document + 'Fragment')) {
-          return false;
-        }
-        const enc = item[ns.raml.vocabularies.document + 'encodes'][0];
-        return enc['@id'] === id;
-      });
-      if (!ref) {
-        return shape;
-      }
-      const data = ref[ns.raml.vocabularies.document + 'encodes'][0];
-      const copy = Object.assign({}, data);
+      const copy = Object.assign({}, refData);
       delete copy['@id'];
       const types = copy['@type'];
       if (types) {
@@ -708,7 +704,73 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       }
       Object.assign(shape, copy);
       shape.__apicResolved = true;
+      this._resolveRecursive(shape);
       return shape;
+    }
+
+    _getLinkTarget(amf, id) {
+      if (!amf || !id) {
+        return;
+      }
+      const declares = this._computeDeclares(amf);
+      if (!declares) {
+        return;
+      }
+      let target;
+      for (var i = 0; i < declares.length; i++) {
+        const _ref = declares[i];
+        if (_ref && _ref['@id'] === id) {
+          target = _ref;
+          break;
+        }
+      }
+      if (!target) {
+        return;
+      }
+      // Declaration may contain references
+      target = this._resolve(target);
+      return target;
+    }
+
+    _getReferenceId(amf, id) {
+      if (!amf || !id) {
+        return;
+      }
+      const refs = this._computeReferences(amf);
+      if (!refs) {
+        return;
+      }
+      const referenceId = id.substr(0, id.lastIndexOf('#/'));
+      let target;
+      for (var i = 0; i < refs.length; i++) {
+        const _ref = refs[i];
+        if (_ref && _ref['@id'] === referenceId) {
+          const enc = this._computeEncodes(_ref);
+          if (enc) {
+            for (let j = 0, encLen = enc.length; j < encLen; j++) {
+              if (enc[j] && enc[j]['@id'] === id) {
+                target = enc[j];
+                break;
+              }
+            }
+          }
+          break;
+        }
+      }
+      return target;
+    }
+
+    _resolveRecursive(shape) {
+      Object.keys(shape).forEach((key) => {
+        const currentShape = shape[key];
+        if (currentShape instanceof Array) {
+          for (let i = 0, len = currentShape.length; i < len; i++) {
+            currentShape[i] = this._resolve(currentShape[i]);
+          }
+        } else if (typeof currentShape === 'object') {
+          shape[key] = this._resolve(currentShape);
+        }
+      });
     }
     /**
      * Gets string value for an example data model.
