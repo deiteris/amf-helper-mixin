@@ -688,6 +688,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
         }
       }
       if (!refData) {
+        this._resolveRecursive(shape);
         shape.__apicResolved = true;
         return shape;
       }
