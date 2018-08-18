@@ -1,7 +1,7 @@
 {
   "name": "@api-components/amf-helper-mixin",
   "description": "A mixin with common functions user by most AMF components to compyte AMF values",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "license": "Apache-2.0",
   "main": "amf-helper-mixin.html",
   "authors": [
@@ -10,8 +10,9 @@
   ],
   "devDependencies": {
     "@polymer/gen-typescript-declarations": "^1.1.1",
-    "amf-client-js": "^1.7.0",
-    "fs-extra": "^5.0.0"
+    "amf-client-js": "^1.7.2",
+    "fs-extra": "^5.0.0",
+    "jsonld": "^1.0.3"
   },
   "private": false,
   "scripts": {

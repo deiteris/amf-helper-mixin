@@ -140,6 +140,33 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       };
     }
     /**
+     * Returns compact model key for given value.
+     * @param {String} property AMF orioginal property
+     * @return {String} Compact model property name or the same value if
+     * value not found in the context.
+     */
+    _getAmfKey(property) {
+      let amf = this.amfModel;
+      if (!amf) {
+        return property;
+      }
+      if (amf instanceof Array) {
+        amf = amf[0];
+      }
+      const ctx = amf['@context'];
+      if (!ctx || !property) {
+        return property;
+      }
+      for (let k in ctx) {
+        if (ctx.hasOwnProperty(k)) {
+          if (ctx[k] === property) {
+            return k;
+          }
+        }
+      }
+      return property;
+    }
+    /**
      * Ensures that the model is AMF object.
      *
      * @param {Object|Array} amf AMF json/ld model
@@ -157,15 +184,37 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       }
     }
     /**
+     * Ensures that the value is an array.
+     * It returns undefined when there's no value.
+     * It returns the same array if the value is already an array.
+     * It returns new array of the item is not an array.
+     *
+     * @param {Array|any} value An item to test
+     * @return {Array|undefined}
+     */
+    _ensureArray(value) {
+      if (!value) {
+        return;
+      }
+      if (value instanceof Array) {
+        return value;
+      }
+      return [value];
+    }
+    /**
      * Gets a signle scalar value from a model.
      * @param {Object} model Amf model to extract the value from.
      * @param {String} key Model key to search for the value
      * @return {any} Value for key
      */
     _getValue(model, key) {
+      key = this._getAmfKey(key);
       let data = (model && model[key]);
-      if (!data || !(data instanceof Array)) {
+      if (!data) {
         return;
+      }
+      if (!(data instanceof Array)) {
+        return data;
       }
       data = data[0];
       if (!data) {
@@ -180,11 +229,12 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Array<any>} Value for key
      */
     _getValueArray(model, key) {
-      let data = (model && model[key]);
+      key = this._getAmfKey(key);
+      let data = (model && this._ensureArray(model[key]));
       if (!data || !(data instanceof Array)) {
         return;
       }
-      return data.map((item) => item['@value']);
+      return data.map((item) => item['@value'] || item);
     }
     /**
      * Checks if a model has a type.
@@ -193,9 +243,10 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Boolean} True if model has a type.
      */
     _hasType(model, type) {
-      let types = model && model['@type'] || [];
+      const types = model && model['@type'] || [];
+      const key = this._getAmfKey(type);
       for (let i = 0; i < types.length; i++) {
-        if (types[i] === type) {
+        if (types[i] === key) {
           return true;
         }
       }
@@ -207,8 +258,9 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @param {?String} key Property name to test
      * @return {Boolean}
      */
-    _hasProperty(model, key) {
-      return !!(model && key && (key in model));
+    _hasProperty(shape, key) {
+      key = this._getAmfKey(key);
+      return !!(shape && key && (key in shape));
     }
     /**
      * Computes array value of a property in a model (shape).
@@ -221,6 +273,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!shape) {
         return;
       }
+      key = this._getAmfKey(key);
       let data = (shape && shape[key]);
       if (!data || !(data instanceof Array)) {
         return;
@@ -236,6 +289,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {any|undefined}
      */
     _computePropertyObject(shape, key) {
+      key = this._getAmfKey(key);
       const data = this._computePropertyArray(shape, key);
       return data && data[0];
     }
@@ -354,8 +408,11 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (model instanceof Array) {
         model = model[0];
       }
-      const data = model[ns.raml.vocabularies.document + 'encodes'];
-      return data instanceof Array ? data : undefined;
+      const key = this._getAmfKey(ns.raml.vocabularies.document + 'encodes');
+      const data = model[key];
+      if (data) {
+        return data instanceof Array ? data[0] : data;
+      }
     }
     /**
      * Computes list of declarations in the AMF api model.
@@ -373,7 +430,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!model) {
         return;
       }
-      const data = model[ns.raml.vocabularies.document + 'declares'];
+      const key = this._getAmfKey(ns.raml.vocabularies.document + 'declares');
+      const data = this._ensureArray(model[key]);
       return data instanceof Array ? data : undefined;
     }
     /**
@@ -392,7 +450,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!model) {
         return;
       }
-      const data = model[ns.raml.vocabularies.document + 'references'];
+      const key = this._getAmfKey(ns.raml.vocabularies.document + 'references');
+      const data = this._ensureArray(model[key]);
       return data instanceof Array ? data : undefined;
     }
     /**
@@ -406,7 +465,9 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!enc) {
         return;
       }
-      return enc.find((item) => this._hasType(item, ns.schema.webApi));
+      if (this._hasType(enc, ns.schema.webApi)) {
+        return enc;
+      }
     }
     /**
      * Computes value for `server` property that is later used with other computations.
@@ -419,7 +480,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!api) {
         return;
       }
-      const srv = api[ns.raml.vocabularies.http + 'server'];
+      const key = this._getAmfKey(ns.raml.vocabularies.http + 'server');
+      const srv = this._ensureArray(api[key]);
       return srv ? srv[0] : undefined;
     }
     /**
@@ -516,11 +578,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!api) {
         return;
       }
-      const scheme = api[ns.raml.vocabularies.http + 'scheme'];
-      if (!(scheme instanceof Array)) {
-        return;
-      }
-      return scheme.map((item) => item['@value']);
+      return this._getValueArray(api, ns.raml.vocabularies.http + 'scheme');
     }
     /**
      * Computes value for the `expects` property.
@@ -530,9 +588,10 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      */
     _computeExpects(method) {
       if (this._hasType(method, ns.w3.hydra.core + 'Operation')) {
-        const expects = method[ns.w3.hydra.core + 'expects'];
+        const key = this._getAmfKey(ns.w3.hydra.core + 'expects');
+        const expects = this._ensureArray(method[key]);
         if (expects) {
-          return expects[0];
+          return expects instanceof Array ? expects[0] : expects;
         }
       }
     }
@@ -544,16 +603,17 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {String|undefined}
      */
     _computePropertyValue(item) {
-      let schema = item && item[ns.raml.vocabularies.http + 'schema'];
+      const key = this._getAmfKey(ns.raml.vocabularies.http + 'schema');
+      let schema = item && item[key];
       if (!schema) {
         return;
       }
-      schema = schema[0];
+      schema = schema instanceof Array ? schema[0] : schema;
       const defValKey = ns.w3.shacl.name + 'defaultValue';
       let value = this._getValue(item, defValKey);
       if (!value) {
-        const examplesKey = ns.raml.vocabularies.document + 'examples';
-        let example = item[examplesKey];
+        const examplesKey = this._getAmfKey(ns.raml.vocabularies.document + 'examples');
+        let example = this._ensureArray(item[examplesKey]);
         if (example) {
           example = example[0];
           value = this._getValue(item, ns.raml.vocabularies.document + 'value');
@@ -572,7 +632,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!webApi || !selected) {
         return;
       }
-      const endpoints = webApi[ns.raml.vocabularies.http + 'endpoint'];
+      const key = this._getAmfKey(ns.raml.vocabularies.http + 'endpoint');
+      const endpoints = this._ensureArray(webApi[key]);
       return endpoints.find((item) => item['@id'] === selected);
     }
     /**
@@ -589,20 +650,53 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       }
       return methods.find((item) => item['@id'] === selected);
     }
-    __computeMethodsListForMethod(webApi, selected) {
-      if (!webApi || !selected) {
+    /**
+     * Computes an endpoint for a method.
+     * @param {Object} webApi The WebApi AMF model
+     * @param {String} methodId Method id
+     * @return {Object|undefined} An endpoint model of undefined.
+     */
+    _computeMethodEndpoint(webApi, methodId) {
+      if (!webApi || !methodId) {
         return;
       }
-      const endpointId = selected.substr(0, selected.lastIndexOf('/'));
-      const endpoint = this._computeEndpointModel(webApi, endpointId);
+      const key = this._getAmfKey(ns.raml.vocabularies.http + 'endpoint');
+      const endpoints = this._ensureArray(webApi[key]);
+      if (!endpoints) {
+        return;
+      }
+      const opKey = this._getAmfKey(ns.w3.hydra.supportedOperation);
+      for (let i = 0, len = endpoints.length; i < len; i++) {
+        const endpoint = endpoints[i];
+        let methods = endpoint[opKey];
+        if (!methods) {
+          continue;
+        }
+        if (!(methods instanceof Array)) {
+          methods = [methods];
+        }
+        for (let j = 0, jLen = methods.length; j < jLen; j++) {
+          if (methods[j]['@id'] === methodId) {
+            return endpoint;
+          }
+        }
+      }
+    }
+    /**
+     * Computes a list of methods for an endpoint that contains a method with
+     * given id.
+     *
+     * @param {Object} webApi WebApi model
+     * @param {String} methodId Method id.
+     * @return {Array<Object>|undefined} A list of sibling methods or undefined.
+     */
+    __computeMethodsListForMethod(webApi, methodId) {
+      const endpoint = this._computeMethodEndpoint(webApi, methodId);
       if (!endpoint) {
         return;
       }
-      const methods = endpoint[ns.w3.hydra.supportedOperation];
-      if (!(methods instanceof Array)) {
-        return;
-      }
-      return methods;
+      const opKey = this._getAmfKey(ns.w3.hydra.supportedOperation);
+      return this._ensureArray(endpoint[opKey]);
     }
     /**
      * Computes a type documentation model.
@@ -661,7 +755,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!webApi || !selected) {
         return;
       }
-      const docs = webApi[ns.schema.doc];
+      const key = this._getAmfKey(ns.schema.doc);
+      const docs = this._ensureArray(webApi[key]);
       return docs && docs.find((item) => item['@id'] === selected);
     }
     /**
@@ -675,14 +770,14 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (typeof shape !== 'object' || shape instanceof Array || !amf || shape.__apicResolved) {
         return shape;
       }
-      let refKey = ns.raml.vocabularies.document + 'link-target';
-      let refValue = shape[refKey];
+      let refKey = this._getAmfKey(ns.raml.vocabularies.document + 'link-target');
+      let refValue = this._ensureArray(shape[refKey]);
       let refData;
       if (refValue) {
         refData = this._getLinkTarget(amf, refValue[0]['@id']);
       } else {
-        refKey = ns.raml.vocabularies.document + 'reference-id';
-        refValue = shape[refKey];
+        refKey = this._getAmfKey(ns.raml.vocabularies.document + 'reference-id');
+        refValue = this._ensureArray(shape[refKey]);
         if (refValue) {
           refData = this._getReferenceId(amf, refValue[0]['@id']);
         }
@@ -718,7 +813,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
         return;
       }
       let target;
-      for (var i = 0; i < declares.length; i++) {
+      for (let i = 0; i < declares.length; i++) {
         const _ref = declares[i];
         if (_ref && _ref['@id'] === id) {
           target = _ref;
@@ -741,21 +836,14 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!refs) {
         return;
       }
-      const referenceId = id.substr(0, id.lastIndexOf('#/'));
       let target;
-      for (var i = 0; i < refs.length; i++) {
+      for (let i = 0; i < refs.length; i++) {
         const _ref = refs[i];
-        if (_ref && _ref['@id'] === referenceId) {
-          const enc = this._computeEncodes(_ref);
-          if (enc) {
-            for (let j = 0, encLen = enc.length; j < encLen; j++) {
-              if (enc[j] && enc[j]['@id'] === id) {
-                target = enc[j];
-                break;
-              }
-            }
+        const enc = this._computeEncodes(_ref);
+        if (enc) {
+          if (enc['@id'] === id) {
+            return enc;
           }
-          break;
         }
       }
       return target;
@@ -786,7 +874,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       let data = this._getValue(item, ns.w3.shacl.name + 'raw');
       // This suppose to be a JSON data so lets test it.
       if (!data || (isJson && !(data[0] === '{' || data[0] === '['))) {
-        const structured = item[ns.raml.vocabularies.document + 'structuredValue'];
+        const key = this._getAmfKey(ns.raml.vocabularies.document + 'structuredValue');
+        const structured = this._ensureArray(item[key]);
         if (structured) {
           data = this._computeExampleFromStructuredValue(structured[0]);
           data = JSON.stringify(data, null, 2);
@@ -835,7 +924,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
         return model;
       }
       if (this._hasType(model, ns.raml.vocabularies.data + 'Scalar')) {
-        const mValue = model[ns.raml.vocabularies.data + 'value'][0];
+        const key = this._getAmfKey(ns.raml.vocabularies.data + 'value');
+        const mValue = this._ensureArray(model[key])[0];
         const type = mValue['@type'];
         const value = mValue['@value'];
         switch (type) {

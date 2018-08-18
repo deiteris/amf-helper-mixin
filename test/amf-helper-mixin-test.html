@@ -518,12 +518,7 @@
 
       test('Returns an array from AMF model', () => {
         const result = element._computeEncodes(model);
-        assert.typeOf(result, 'array');
-      });
-
-      test('Returns single item in the array', () => {
-        const result = element._computeEncodes(model);
-        assert.lengthOf(result, 1);
+        assert.typeOf(result, 'object');
       });
     });
 
@@ -547,7 +542,7 @@
 
       test('Returns all items in the array', () => {
         const result = element._computeDeclares(model);
-        assert.lengthOf(result, 16);
+        assert.lengthOf(result, 17);
       });
     });
 
@@ -680,7 +675,8 @@
       });
 
       test('Returns object for endpoint', () => {
-        const result = element._computeEndpointModel(webApi, 'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Fchanges%2Fwatch');
+        const result = element._computeEndpointModel(webApi,
+          'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Fchanges%2Fwatch');
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://a.ml/vocabularies/http#EndPoint');
       });
@@ -710,7 +706,8 @@
       });
 
       test('Returns object for method', () => {
-        const result = element._computeMethodModel(webApi, 'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FpermissionIds%2F%7Bemail%7D/get');
+        const result = element._computeMethodModel(webApi,
+        'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FpermissionIds%2F%7Bemail%7D/get');
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/hydra/core#Operation');
       });
@@ -742,13 +739,15 @@
       });
 
       test('Returns type in declarations', () => {
-        const result = element._computeType(declares, undefined, 'file://test/demo-api/types/app-person.raml#/type');
+        const result = element._computeType(declares, undefined,
+          'file://test/demo-api/types/app-person.raml#/type');
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
       });
 
       test('Returns type in references (library)', () => {
-        const result = element._computeType(declares, references, 'file://test/demo-api/library.raml#/declarations/types/TypeFromLibray');
+        const result = element._computeType(declares, references,
+          'file://test/demo-api/library.raml#/declarations/types/TypeFromLibray');
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
       });
@@ -763,17 +762,20 @@
       });
 
       test('Computes reference', () => {
-        const result = element._getLinkTarget(model, 'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        const result = element._getLinkTarget(model,
+          'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
         assert.typeOf(result, 'object');
       });
 
       test('Reference is resolved', () => {
-        const result = element._getLinkTarget(model, 'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        const result = element._getLinkTarget(model,
+          'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
         assert.typeOf(result['http://a.ml/vocabularies/document#raw'], 'array');
       });
 
       test('Deep reference is resolved', () => {
-        const result = element._getLinkTarget(model, 'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        const result = element._getLinkTarget(model,
+          'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
         const example = result['http://a.ml/vocabularies/document#examples'][0];
         assert.typeOf(example['http://a.ml/vocabularies/document#structuredValue'], 'array');
       });
@@ -786,7 +788,8 @@
       });
 
       test('Computes reference', () => {
-        const result = element._getReferenceId(model, 'file://test/demo-api/schemas/person.json#/external');
+        const result = element._getReferenceId(model,
+          'file://test/demo-api/schemas/person.json#/external');
         assert.typeOf(result, 'object');
       });
     });
@@ -800,7 +803,8 @@
       });
 
       test('Resolves link target', () => {
-        const endpoint = element._computeEndpointModel(webApi, 'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FreferenceId');
+        const endpoint = element._computeEndpointModel(webApi,
+          'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FreferenceId');
         const op = endpoint['http://www.w3.org/ns/hydra/core#supportedOperation'][0];
         const expects = op['http://www.w3.org/ns/hydra/core#expects'][0];
         const payload = expects['http://a.ml/vocabularies/http#payload'][0];

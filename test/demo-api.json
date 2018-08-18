@@ -31,6 +31,51 @@
               {
                 "@value": "https://api.mulesoft.com/{version}"
               }
+            ],
+            "http://a.ml/vocabularies/http#variable": [
+              {
+                "@id": "file://test/demo-api/demo-api.raml#/web-api/https%3A%2F%2Fapi.mulesoft.com%2F%7Bversion%7D/parameter/version",
+                "@type": [
+                  "http://a.ml/vocabularies/http#Parameter",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://schema.org/name": [
+                  {
+                    "@value": "version"
+                  }
+                ],
+                "http://www.w3.org/ns/hydra/core#required": [
+                  {
+                    "@value": true
+                  }
+                ],
+                "http://a.ml/vocabularies/http#binding": [
+                  {
+                    "@value": "path"
+                  }
+                ],
+                "http://a.ml/vocabularies/http#schema": [
+                  {
+                    "@id": "file://test/demo-api/demo-api.raml#/web-api/https%3A%2F%2Fapi.mulesoft.com%2F%7Bversion%7D/parameter/version/scalar/version",
+                    "@type": [
+                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://www.w3.org/ns/shacl#datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "version"
+                      }
+                    ]
+                  }
+                ]
+              }
             ]
           }
         ],
@@ -145,7 +190,7 @@
                   {
                     "@id": "file://test/demo-api/demo-api.raml#/web-api/end-points/%2Ffiles/get/basic",
                     "@type": [
-                      "http://a.ml/vocabularies/security#SecurityScheme",
+                      "http://a.ml/vocabularies/security#ParametrizedSecurityScheme",
                       "http://a.ml/vocabularies/document#DomainElement"
                     ],
                     "http://a.ml/vocabularies/security#name": [
@@ -153,14 +198,28 @@
                         "@value": "basic"
                       }
                     ],
-                    "http://a.ml/vocabularies/security#type": [
+                    "http://a.ml/vocabularies/security#scheme": [
                       {
-                        "@value": "Basic Authentication"
-                      }
-                    ],
-                    "http://schema.org/description": [
-                      {
-                        "@value": "Test basic auth method\n"
+                        "@id": "file://test/demo-api/demo-api.raml#/declarations/securitySchemes/basic",
+                        "@type": [
+                          "http://a.ml/vocabularies/security#SecurityScheme",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://a.ml/vocabularies/security#name": [
+                          {
+                            "@value": "basic"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/security#type": [
+                          {
+                            "@value": "Basic Authentication"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "Test basic auth method\n"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -5716,53 +5775,20 @@
                 ],
                 "http://a.ml/vocabularies/shapes#range": [
                   {
-                    "@id": "file://test/demo-api/types/app-person.raml#/type/property/nillable/union/default-union",
+                    "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/union/default-union/linked_1",
                     "@type": [
                       "http://a.ml/vocabularies/shapes#UnionShape",
                       "http://www.w3.org/ns/shacl#Shape",
                       "http://a.ml/vocabularies/shapes#Shape"
                     ],
-                    "http://a.ml/vocabularies/shapes#anyOf": [
+                    "http://a.ml/vocabularies/document#link-target": [
                       {
-                        "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/scalar/scalar-expression-0",
-                        "@type": [
-                          "http://a.ml/vocabularies/shapes#ScalarShape",
-                          "http://www.w3.org/ns/shacl#Shape",
-                          "http://a.ml/vocabularies/shapes#Shape",
-                          "http://a.ml/vocabularies/document#DomainElement"
-                        ],
-                        "http://www.w3.org/ns/shacl#datatype": [
-                          {
-                            "@id": "http://www.w3.org/2001/XMLSchema#string"
-                          }
-                        ]
-                      },
-                      {
-                        "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/nil/scalar-expression-2",
-                        "@type": [
-                          "http://a.ml/vocabularies/shapes#NilShape",
-                          "http://www.w3.org/ns/shacl#Shape",
-                          "http://a.ml/vocabularies/shapes#Shape"
-                        ]
+                        "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/union/default-union"
                       }
                     ],
-                    "http://www.w3.org/ns/shacl#defaultValue": [
+                    "http://a.ml/vocabularies/document#link-label": [
                       {
-                        "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/scalar_1",
-                        "@type": [
-                          "http://a.ml/vocabularies/data#Scalar"
-                        ],
-                        "http://a.ml/vocabularies/data#value": [
-                          {
-                            "@value": "null",
-                            "@type": "http://www.w3.org/2001/XMLSchema#nil"
-                          }
-                        ]
-                      }
-                    ],
-                    "http://www.w3.org/ns/shacl#defaultValueStr": [
-                      {
-                        "@value": "null"
+                        "@value": "amf_inline_type_1"
                       }
                     ]
                   }
@@ -6659,21 +6685,403 @@
         ],
         "http://a.ml/vocabularies/shapes#items": [
           {
-            "@id": "file://test/demo-api/demo-api.raml#/declarations/types/Picture/linked_1",
+            "@id": "file://test/demo-api/demo-api.raml#/declarations/types/Picture",
             "@type": [
               "http://www.w3.org/ns/shacl#NodeShape",
               "http://www.w3.org/ns/shacl#Shape",
               "http://a.ml/vocabularies/shapes#Shape",
               "http://a.ml/vocabularies/document#DomainElement"
             ],
-            "http://a.ml/vocabularies/document#link-target": [
+            "http://www.w3.org/ns/shacl#closed": [
               {
-                "@id": "file://test/demo-api/demo-api.raml#/declarations/types/Picture"
+                "@value": false
               }
             ],
-            "http://a.ml/vocabularies/document#link-label": [
+            "http://www.w3.org/ns/shacl#property": [
+              {
+                "@id": "file://test/demo-api/types/resource.raml#/type/property/etag",
+                "@type": [
+                  "http://www.w3.org/ns/shacl#PropertyShape",
+                  "http://www.w3.org/ns/shacl#Shape",
+                  "http://a.ml/vocabularies/shapes#Shape"
+                ],
+                "http://www.w3.org/ns/shacl#path": [
+                  {
+                    "@id": "http://a.ml/vocabularies/data#etag"
+                  }
+                ],
+                "http://a.ml/vocabularies/shapes#range": [
+                  {
+                    "@id": "file://test/demo-api/types/resource.raml#/type/property/etag/scalar/etag",
+                    "@type": [
+                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://www.w3.org/ns/shacl#datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "etag"
+                      }
+                    ],
+                    "http://schema.org/description": [
+                      {
+                        "@value": "ETag of this resource for caching purposes.\n__This property will be ignored when creating an object.__\n"
+                      }
+                    ]
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#minCount": [
+                  {
+                    "@value": 1
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#name": [
+                  {
+                    "@value": "etag"
+                  }
+                ]
+              },
+              {
+                "@id": "file://test/demo-api/demo-api.raml#/declarations/types/Picture/property/url",
+                "@type": [
+                  "http://www.w3.org/ns/shacl#PropertyShape",
+                  "http://www.w3.org/ns/shacl#Shape",
+                  "http://a.ml/vocabularies/shapes#Shape"
+                ],
+                "http://www.w3.org/ns/shacl#path": [
+                  {
+                    "@id": "http://a.ml/vocabularies/data#url"
+                  }
+                ],
+                "http://a.ml/vocabularies/shapes#range": [
+                  {
+                    "@id": "file://test/demo-api/demo-api.raml#/declarations/types/Picture/property/url/scalar/url",
+                    "@type": [
+                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://www.w3.org/ns/shacl#datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "url"
+                      }
+                    ],
+                    "http://schema.org/description": [
+                      {
+                        "@value": "A URL that points to a profile picture of this user."
+                      }
+                    ]
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#minCount": [
+                  {
+                    "@value": 0
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#name": [
+                  {
+                    "@value": "url"
+                  }
+                ]
+              },
+              {
+                "@id": "file://test/demo-api/demo-api.raml#/declarations/types/Picture/property/dimension",
+                "@type": [
+                  "http://www.w3.org/ns/shacl#PropertyShape",
+                  "http://www.w3.org/ns/shacl#Shape",
+                  "http://a.ml/vocabularies/shapes#Shape"
+                ],
+                "http://www.w3.org/ns/shacl#path": [
+                  {
+                    "@id": "http://a.ml/vocabularies/data#dimension"
+                  }
+                ],
+                "http://a.ml/vocabularies/shapes#range": [
+                  {
+                    "@id": "file://test/demo-api/types/dimensions.raml#/type",
+                    "@type": [
+                      "http://www.w3.org/ns/shacl#NodeShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://www.w3.org/ns/shacl#closed": [
+                      {
+                        "@value": false
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#property": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/width",
+                        "@type": [
+                          "http://www.w3.org/ns/shacl#PropertyShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape"
+                        ],
+                        "http://www.w3.org/ns/shacl#path": [
+                          {
+                            "@id": "http://a.ml/vocabularies/data#width"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/shapes#range": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/type/property/width/scalar/width",
+                            "@type": [
+                              "http://a.ml/vocabularies/shapes#ScalarShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://a.ml/vocabularies/shapes#Shape",
+                              "http://a.ml/vocabularies/document#DomainElement"
+                            ],
+                            "http://www.w3.org/ns/shacl#datatype": [
+                              {
+                                "@id": "http://a.ml/vocabularies/shapes#number"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "width"
+                              }
+                            ],
+                            "http://schema.org/description": [
+                              {
+                                "@value": "Width of the shape.\n"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#minCount": [
+                          {
+                            "@value": 1
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "width"
+                          }
+                        ]
+                      },
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/height",
+                        "@type": [
+                          "http://www.w3.org/ns/shacl#PropertyShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape"
+                        ],
+                        "http://www.w3.org/ns/shacl#path": [
+                          {
+                            "@id": "http://a.ml/vocabularies/data#height"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/shapes#range": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/type/property/height/scalar/height",
+                            "@type": [
+                              "http://a.ml/vocabularies/shapes#ScalarShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://a.ml/vocabularies/shapes#Shape",
+                              "http://a.ml/vocabularies/document#DomainElement"
+                            ],
+                            "http://www.w3.org/ns/shacl#datatype": [
+                              {
+                                "@id": "http://a.ml/vocabularies/shapes#number"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "height"
+                              }
+                            ],
+                            "http://schema.org/description": [
+                              {
+                                "@value": "Height of the shape.\n"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#minCount": [
+                          {
+                            "@value": 1
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "height"
+                          }
+                        ]
+                      },
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/unit",
+                        "@type": [
+                          "http://www.w3.org/ns/shacl#PropertyShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape"
+                        ],
+                        "http://www.w3.org/ns/shacl#path": [
+                          {
+                            "@id": "http://a.ml/vocabularies/data#unit"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/shapes#range": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/type/property/unit/scalar/unit%3F",
+                            "@type": [
+                              "http://a.ml/vocabularies/shapes#ScalarShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://a.ml/vocabularies/shapes#Shape",
+                              "http://a.ml/vocabularies/document#DomainElement"
+                            ],
+                            "http://www.w3.org/ns/shacl#datatype": [
+                              {
+                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "unit?"
+                              }
+                            ],
+                            "http://schema.org/description": [
+                              {
+                                "@value": "A unit that describes the dimension. It can be, for example, `px` for\npixels, `pt` for points, `%` for percentage.\n"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#defaultValue": [
+                              {
+                                "@id": "file://test/demo-api/types/dimensions.raml#/shape/property/unit%3F/scalar/unit%3F/scalar_1",
+                                "@type": [
+                                  "http://a.ml/vocabularies/data#Scalar"
+                                ],
+                                "http://a.ml/vocabularies/data#value": [
+                                  {
+                                    "@value": "px",
+                                    "@type": "http://www.w3.org/2001/XMLSchema#string"
+                                  }
+                                ]
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#defaultValueStr": [
+                              {
+                                "@value": "px"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#minCount": [
+                          {
+                            "@value": 0
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "unit"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "Dimension"
+                      }
+                    ],
+                    "http://schema.org/description": [
+                      {
+                        "@value": "A dimmensions of an object like image.\n"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/document#examples": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example",
+                        "@type": [
+                          "http://a.ml/vocabularies/document#Example",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://a.ml/vocabularies/document#strict": [
+                          {
+                            "@value": true
+                          }
+                        ],
+                        "http://a.ml/vocabularies/document#structuredValue": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Object"
+                            ],
+                            "http://a.ml/vocabularies/data#height": [
+                              {
+                                "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1/scalar_3",
+                                "@type": [
+                                  "http://a.ml/vocabularies/data#Scalar"
+                                ],
+                                "http://a.ml/vocabularies/data#value": [
+                                  {
+                                    "@value": "160",
+                                    "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                                  }
+                                ]
+                              }
+                            ],
+                            "http://a.ml/vocabularies/data#width": [
+                              {
+                                "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1/scalar_2",
+                                "@type": [
+                                  "http://a.ml/vocabularies/data#Scalar"
+                                ],
+                                "http://a.ml/vocabularies/data#value": [
+                                  {
+                                    "@value": "200",
+                                    "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#raw": [
+                          {
+                            "@value": "  width: 200\n  height: 160\n"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#minCount": [
+                  {
+                    "@value": 1
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#name": [
+                  {
+                    "@value": "dimension"
+                  }
+                ]
+              }
+            ],
+            "http://www.w3.org/ns/shacl#name": [
               {
                 "@value": "Picture"
+              }
+            ],
+            "http://schema.org/name": [
+              {
+                "@value": "Pic"
+              }
+            ],
+            "http://schema.org/description": [
+              {
+                "@value": "The user's profile picture."
               }
             ]
           }
@@ -7451,7 +7859,7 @@
             ],
             "http://a.ml/vocabularies/shapes#range": [
               {
-                "@id": "file://test/demo-api/types/app-person.raml#/type/property/nillable/union/default-union",
+                "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/union/default-union",
                 "@type": [
                   "http://a.ml/vocabularies/shapes#UnionShape",
                   "http://www.w3.org/ns/shacl#Shape",
@@ -7481,23 +7889,9 @@
                     ]
                   }
                 ],
-                "http://www.w3.org/ns/shacl#defaultValue": [
+                "http://www.w3.org/ns/shacl#name": [
                   {
-                    "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/scalar_1",
-                    "@type": [
-                      "http://a.ml/vocabularies/data#Scalar"
-                    ],
-                    "http://a.ml/vocabularies/data#value": [
-                      {
-                        "@value": "null",
-                        "@type": "http://www.w3.org/2001/XMLSchema#nil"
-                      }
-                    ]
-                  }
-                ],
-                "http://www.w3.org/ns/shacl#defaultValueStr": [
-                  {
-                    "@value": "null"
+                    "@value": "amf_inline_type_1"
                   }
                 ]
               }
@@ -7576,21 +7970,186 @@
             ],
             "http://a.ml/vocabularies/shapes#range": [
               {
-                "@id": "file://test/demo-api/types/image.raml#/type/linked_2",
+                "@id": "file://test/demo-api/types/image.raml#/type",
                 "@type": [
                   "http://www.w3.org/ns/shacl#NodeShape",
                   "http://www.w3.org/ns/shacl#Shape",
                   "http://a.ml/vocabularies/shapes#Shape",
                   "http://a.ml/vocabularies/document#DomainElement"
                 ],
-                "http://a.ml/vocabularies/document#link-target": [
+                "http://www.w3.org/ns/shacl#closed": [
                   {
-                    "@id": "file://test/demo-api/types/image.raml#/type"
+                    "@value": false
                   }
                 ],
-                "http://a.ml/vocabularies/document#link-label": [
+                "http://www.w3.org/ns/shacl#property": [
+                  {
+                    "@id": "file://test/demo-api/types/image.raml#/type/property/url",
+                    "@type": [
+                      "http://www.w3.org/ns/shacl#PropertyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape"
+                    ],
+                    "http://www.w3.org/ns/shacl#path": [
+                      {
+                        "@id": "http://a.ml/vocabularies/data#url"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/shapes#range": [
+                      {
+                        "@id": "file://test/demo-api/types/image.raml#/type/property/url/scalar/url",
+                        "@type": [
+                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://www.w3.org/ns/shacl#datatype": [
+                          {
+                            "@id": "http://www.w3.org/2001/XMLSchema#string"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "url"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "The URL of the image.\nTo resize the image and crop it to a square, append the query string **?sz=x**, where x is the dimension in pixels of each side.\n"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#minCount": [
+                      {
+                        "@value": 1
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "url"
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "file://test/demo-api/types/image.raml#/type/property/thumb",
+                    "@type": [
+                      "http://www.w3.org/ns/shacl#PropertyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape"
+                    ],
+                    "http://www.w3.org/ns/shacl#path": [
+                      {
+                        "@id": "http://a.ml/vocabularies/data#thumb"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/shapes#range": [
+                      {
+                        "@id": "file://test/demo-api/types/image.raml#/type/property/thumb/scalar/thumb",
+                        "@type": [
+                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://www.w3.org/ns/shacl#datatype": [
+                          {
+                            "@id": "http://www.w3.org/2001/XMLSchema#string"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "thumb"
+                          }
+                        ],
+                        "http://schema.org/name": [
+                          {
+                            "@value": "Thumbnail"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "An URL to the thumbnail of the image. Thumbnails are 60x60px cropped images of the original image.\n"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#minCount": [
+                      {
+                        "@value": 1
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "thumb"
+                      }
+                    ]
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#name": [
                   {
                     "@value": "image"
+                  }
+                ],
+                "http://schema.org/description": [
+                  {
+                    "@value": "An image object representing an image object strored in the file store.\nThe image can be only included in the response. It has no effect if the Image appear in the\nrequest. Endpoint handles image creation on it's own and clients can't process images\nexcept of sending image data.\n"
+                  }
+                ],
+                "http://a.ml/vocabularies/document#examples": [
+                  {
+                    "@id": "file://test/demo-api/types/image.raml#/shape/example/default-example",
+                    "@type": [
+                      "http://a.ml/vocabularies/document#Example",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://a.ml/vocabularies/document#strict": [
+                      {
+                        "@value": true
+                      }
+                    ],
+                    "http://a.ml/vocabularies/document#structuredValue": [
+                      {
+                        "@id": "file://test/demo-api/types/image.raml#/shape/example/default-example/object_1",
+                        "@type": [
+                          "http://a.ml/vocabularies/data#Object"
+                        ],
+                        "http://a.ml/vocabularies/data#thumb": [
+                          {
+                            "@id": "file://test/demo-api/types/image.raml#/shape/example/default-example/object_1/scalar_3",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "https://domain.com/profile/pawel.psztyc/image/thumb",
+                                "@type": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://a.ml/vocabularies/data#url": [
+                          {
+                            "@id": "file://test/demo-api/types/image.raml#/shape/example/default-example/object_1/scalar_2",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "https://domain.com/profile/pawel.psztyc/image",
+                                "@type": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#raw": [
+                      {
+                        "@value": "  url: https://domain.com/profile/pawel.psztyc/image\n  thumb: https://domain.com/profile/pawel.psztyc/image/thumb\n"
+                      }
+                    ]
                   }
                 ]
               }
@@ -8266,21 +8825,249 @@
             ],
             "http://a.ml/vocabularies/shapes#range": [
               {
-                "@id": "file://test/demo-api/types/dimensions.raml#/type/linked_1",
+                "@id": "file://test/demo-api/types/dimensions.raml#/type",
                 "@type": [
                   "http://www.w3.org/ns/shacl#NodeShape",
                   "http://www.w3.org/ns/shacl#Shape",
                   "http://a.ml/vocabularies/shapes#Shape",
                   "http://a.ml/vocabularies/document#DomainElement"
                 ],
-                "http://a.ml/vocabularies/document#link-target": [
+                "http://www.w3.org/ns/shacl#closed": [
                   {
-                    "@id": "file://test/demo-api/types/dimensions.raml#/type"
+                    "@value": false
                   }
                 ],
-                "http://a.ml/vocabularies/document#link-label": [
+                "http://www.w3.org/ns/shacl#property": [
+                  {
+                    "@id": "file://test/demo-api/types/dimensions.raml#/type/property/width",
+                    "@type": [
+                      "http://www.w3.org/ns/shacl#PropertyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape"
+                    ],
+                    "http://www.w3.org/ns/shacl#path": [
+                      {
+                        "@id": "http://a.ml/vocabularies/data#width"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/shapes#range": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/width/scalar/width",
+                        "@type": [
+                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://www.w3.org/ns/shacl#datatype": [
+                          {
+                            "@id": "http://a.ml/vocabularies/shapes#number"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "width"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "Width of the shape.\n"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#minCount": [
+                      {
+                        "@value": 1
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "width"
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "file://test/demo-api/types/dimensions.raml#/type/property/height",
+                    "@type": [
+                      "http://www.w3.org/ns/shacl#PropertyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape"
+                    ],
+                    "http://www.w3.org/ns/shacl#path": [
+                      {
+                        "@id": "http://a.ml/vocabularies/data#height"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/shapes#range": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/height/scalar/height",
+                        "@type": [
+                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://www.w3.org/ns/shacl#datatype": [
+                          {
+                            "@id": "http://a.ml/vocabularies/shapes#number"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "height"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "Height of the shape.\n"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#minCount": [
+                      {
+                        "@value": 1
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "height"
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "file://test/demo-api/types/dimensions.raml#/type/property/unit",
+                    "@type": [
+                      "http://www.w3.org/ns/shacl#PropertyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape"
+                    ],
+                    "http://www.w3.org/ns/shacl#path": [
+                      {
+                        "@id": "http://a.ml/vocabularies/data#unit"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/shapes#range": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/unit/scalar/unit%3F",
+                        "@type": [
+                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://www.w3.org/ns/shacl#datatype": [
+                          {
+                            "@id": "http://www.w3.org/2001/XMLSchema#string"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "unit?"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "A unit that describes the dimension. It can be, for example, `px` for\npixels, `pt` for points, `%` for percentage.\n"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#defaultValue": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/shape/property/unit%3F/scalar/unit%3F/scalar_1",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "px",
+                                "@type": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#defaultValueStr": [
+                          {
+                            "@value": "px"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#minCount": [
+                      {
+                        "@value": 0
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "unit"
+                      }
+                    ]
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#name": [
                   {
                     "@value": "Dimension"
+                  }
+                ],
+                "http://schema.org/description": [
+                  {
+                    "@value": "A dimmensions of an object like image.\n"
+                  }
+                ],
+                "http://a.ml/vocabularies/document#examples": [
+                  {
+                    "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example",
+                    "@type": [
+                      "http://a.ml/vocabularies/document#Example",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://a.ml/vocabularies/document#strict": [
+                      {
+                        "@value": true
+                      }
+                    ],
+                    "http://a.ml/vocabularies/document#structuredValue": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1",
+                        "@type": [
+                          "http://a.ml/vocabularies/data#Object"
+                        ],
+                        "http://a.ml/vocabularies/data#height": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1/scalar_3",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "160",
+                                "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://a.ml/vocabularies/data#width": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1/scalar_2",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "200",
+                                "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#raw": [
+                      {
+                        "@value": "  width: 200\n  height: 160\n"
+                      }
+                    ]
                   }
                 ]
               }
@@ -9804,21 +10591,249 @@
                 ],
                 "http://a.ml/vocabularies/shapes#range": [
                   {
-                    "@id": "file://test/demo-api/types/dimensions.raml#/type/linked_1",
+                    "@id": "file://test/demo-api/types/dimensions.raml#/type",
                     "@type": [
                       "http://www.w3.org/ns/shacl#NodeShape",
                       "http://www.w3.org/ns/shacl#Shape",
                       "http://a.ml/vocabularies/shapes#Shape",
                       "http://a.ml/vocabularies/document#DomainElement"
                     ],
-                    "http://a.ml/vocabularies/document#link-target": [
+                    "http://www.w3.org/ns/shacl#closed": [
                       {
-                        "@id": "file://test/demo-api/types/dimensions.raml#/type"
+                        "@value": false
                       }
                     ],
-                    "http://a.ml/vocabularies/document#link-label": [
+                    "http://www.w3.org/ns/shacl#property": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/width",
+                        "@type": [
+                          "http://www.w3.org/ns/shacl#PropertyShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape"
+                        ],
+                        "http://www.w3.org/ns/shacl#path": [
+                          {
+                            "@id": "http://a.ml/vocabularies/data#width"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/shapes#range": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/type/property/width/scalar/width",
+                            "@type": [
+                              "http://a.ml/vocabularies/shapes#ScalarShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://a.ml/vocabularies/shapes#Shape",
+                              "http://a.ml/vocabularies/document#DomainElement"
+                            ],
+                            "http://www.w3.org/ns/shacl#datatype": [
+                              {
+                                "@id": "http://a.ml/vocabularies/shapes#number"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "width"
+                              }
+                            ],
+                            "http://schema.org/description": [
+                              {
+                                "@value": "Width of the shape.\n"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#minCount": [
+                          {
+                            "@value": 1
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "width"
+                          }
+                        ]
+                      },
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/height",
+                        "@type": [
+                          "http://www.w3.org/ns/shacl#PropertyShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape"
+                        ],
+                        "http://www.w3.org/ns/shacl#path": [
+                          {
+                            "@id": "http://a.ml/vocabularies/data#height"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/shapes#range": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/type/property/height/scalar/height",
+                            "@type": [
+                              "http://a.ml/vocabularies/shapes#ScalarShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://a.ml/vocabularies/shapes#Shape",
+                              "http://a.ml/vocabularies/document#DomainElement"
+                            ],
+                            "http://www.w3.org/ns/shacl#datatype": [
+                              {
+                                "@id": "http://a.ml/vocabularies/shapes#number"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "height"
+                              }
+                            ],
+                            "http://schema.org/description": [
+                              {
+                                "@value": "Height of the shape.\n"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#minCount": [
+                          {
+                            "@value": 1
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "height"
+                          }
+                        ]
+                      },
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/unit",
+                        "@type": [
+                          "http://www.w3.org/ns/shacl#PropertyShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape"
+                        ],
+                        "http://www.w3.org/ns/shacl#path": [
+                          {
+                            "@id": "http://a.ml/vocabularies/data#unit"
+                          }
+                        ],
+                        "http://a.ml/vocabularies/shapes#range": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/type/property/unit/scalar/unit%3F",
+                            "@type": [
+                              "http://a.ml/vocabularies/shapes#ScalarShape",
+                              "http://www.w3.org/ns/shacl#Shape",
+                              "http://a.ml/vocabularies/shapes#Shape",
+                              "http://a.ml/vocabularies/document#DomainElement"
+                            ],
+                            "http://www.w3.org/ns/shacl#datatype": [
+                              {
+                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#name": [
+                              {
+                                "@value": "unit?"
+                              }
+                            ],
+                            "http://schema.org/description": [
+                              {
+                                "@value": "A unit that describes the dimension. It can be, for example, `px` for\npixels, `pt` for points, `%` for percentage.\n"
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#defaultValue": [
+                              {
+                                "@id": "file://test/demo-api/types/dimensions.raml#/shape/property/unit%3F/scalar/unit%3F/scalar_1",
+                                "@type": [
+                                  "http://a.ml/vocabularies/data#Scalar"
+                                ],
+                                "http://a.ml/vocabularies/data#value": [
+                                  {
+                                    "@value": "px",
+                                    "@type": "http://www.w3.org/2001/XMLSchema#string"
+                                  }
+                                ]
+                              }
+                            ],
+                            "http://www.w3.org/ns/shacl#defaultValueStr": [
+                              {
+                                "@value": "px"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#minCount": [
+                          {
+                            "@value": 0
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "unit"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
                       {
                         "@value": "Dimension"
+                      }
+                    ],
+                    "http://schema.org/description": [
+                      {
+                        "@value": "A dimmensions of an object like image.\n"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/document#examples": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example",
+                        "@type": [
+                          "http://a.ml/vocabularies/document#Example",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://a.ml/vocabularies/document#strict": [
+                          {
+                            "@value": true
+                          }
+                        ],
+                        "http://a.ml/vocabularies/document#structuredValue": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Object"
+                            ],
+                            "http://a.ml/vocabularies/data#height": [
+                              {
+                                "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1/scalar_3",
+                                "@type": [
+                                  "http://a.ml/vocabularies/data#Scalar"
+                                ],
+                                "http://a.ml/vocabularies/data#value": [
+                                  {
+                                    "@value": "160",
+                                    "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                                  }
+                                ]
+                              }
+                            ],
+                            "http://a.ml/vocabularies/data#width": [
+                              {
+                                "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1/scalar_2",
+                                "@type": [
+                                  "http://a.ml/vocabularies/data#Scalar"
+                                ],
+                                "http://a.ml/vocabularies/data#value": [
+                                  {
+                                    "@value": "200",
+                                    "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#raw": [
+                          {
+                            "@value": "  width: 200\n  height: 160\n"
+                          }
+                        ]
                       }
                     ]
                   }
@@ -11294,21 +12309,249 @@
             ],
             "http://a.ml/vocabularies/shapes#range": [
               {
-                "@id": "file://test/demo-api/types/dimensions.raml#/type/linked_1",
+                "@id": "file://test/demo-api/types/dimensions.raml#/type",
                 "@type": [
                   "http://www.w3.org/ns/shacl#NodeShape",
                   "http://www.w3.org/ns/shacl#Shape",
                   "http://a.ml/vocabularies/shapes#Shape",
                   "http://a.ml/vocabularies/document#DomainElement"
                 ],
-                "http://a.ml/vocabularies/document#link-target": [
+                "http://www.w3.org/ns/shacl#closed": [
                   {
-                    "@id": "file://test/demo-api/types/dimensions.raml#/type"
+                    "@value": false
                   }
                 ],
-                "http://a.ml/vocabularies/document#link-label": [
+                "http://www.w3.org/ns/shacl#property": [
+                  {
+                    "@id": "file://test/demo-api/types/dimensions.raml#/type/property/width",
+                    "@type": [
+                      "http://www.w3.org/ns/shacl#PropertyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape"
+                    ],
+                    "http://www.w3.org/ns/shacl#path": [
+                      {
+                        "@id": "http://a.ml/vocabularies/data#width"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/shapes#range": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/width/scalar/width",
+                        "@type": [
+                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://www.w3.org/ns/shacl#datatype": [
+                          {
+                            "@id": "http://a.ml/vocabularies/shapes#number"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "width"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "Width of the shape.\n"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#minCount": [
+                      {
+                        "@value": 1
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "width"
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "file://test/demo-api/types/dimensions.raml#/type/property/height",
+                    "@type": [
+                      "http://www.w3.org/ns/shacl#PropertyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape"
+                    ],
+                    "http://www.w3.org/ns/shacl#path": [
+                      {
+                        "@id": "http://a.ml/vocabularies/data#height"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/shapes#range": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/height/scalar/height",
+                        "@type": [
+                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://www.w3.org/ns/shacl#datatype": [
+                          {
+                            "@id": "http://a.ml/vocabularies/shapes#number"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "height"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "Height of the shape.\n"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#minCount": [
+                      {
+                        "@value": 1
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "height"
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "file://test/demo-api/types/dimensions.raml#/type/property/unit",
+                    "@type": [
+                      "http://www.w3.org/ns/shacl#PropertyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape"
+                    ],
+                    "http://www.w3.org/ns/shacl#path": [
+                      {
+                        "@id": "http://a.ml/vocabularies/data#unit"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/shapes#range": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/type/property/unit/scalar/unit%3F",
+                        "@type": [
+                          "http://a.ml/vocabularies/shapes#ScalarShape",
+                          "http://www.w3.org/ns/shacl#Shape",
+                          "http://a.ml/vocabularies/shapes#Shape",
+                          "http://a.ml/vocabularies/document#DomainElement"
+                        ],
+                        "http://www.w3.org/ns/shacl#datatype": [
+                          {
+                            "@id": "http://www.w3.org/2001/XMLSchema#string"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#name": [
+                          {
+                            "@value": "unit?"
+                          }
+                        ],
+                        "http://schema.org/description": [
+                          {
+                            "@value": "A unit that describes the dimension. It can be, for example, `px` for\npixels, `pt` for points, `%` for percentage.\n"
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#defaultValue": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/shape/property/unit%3F/scalar/unit%3F/scalar_1",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "px",
+                                "@type": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://www.w3.org/ns/shacl#defaultValueStr": [
+                          {
+                            "@value": "px"
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#minCount": [
+                      {
+                        "@value": 0
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "unit"
+                      }
+                    ]
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#name": [
                   {
                     "@value": "Dimension"
+                  }
+                ],
+                "http://schema.org/description": [
+                  {
+                    "@value": "A dimmensions of an object like image.\n"
+                  }
+                ],
+                "http://a.ml/vocabularies/document#examples": [
+                  {
+                    "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example",
+                    "@type": [
+                      "http://a.ml/vocabularies/document#Example",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://a.ml/vocabularies/document#strict": [
+                      {
+                        "@value": true
+                      }
+                    ],
+                    "http://a.ml/vocabularies/document#structuredValue": [
+                      {
+                        "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1",
+                        "@type": [
+                          "http://a.ml/vocabularies/data#Object"
+                        ],
+                        "http://a.ml/vocabularies/data#height": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1/scalar_3",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "160",
+                                "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                              }
+                            ]
+                          }
+                        ],
+                        "http://a.ml/vocabularies/data#width": [
+                          {
+                            "@id": "file://test/demo-api/types/dimensions.raml#/shape/example/default-example/object_1/scalar_2",
+                            "@type": [
+                              "http://a.ml/vocabularies/data#Scalar"
+                            ],
+                            "http://a.ml/vocabularies/data#value": [
+                              {
+                                "@value": "200",
+                                "@type": "http://www.w3.org/2001/XMLSchema#integer"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#raw": [
+                      {
+                        "@value": "  width: 200\n  height: 160\n"
+                      }
+                    ]
                   }
                 ]
               }
@@ -11792,6 +13035,43 @@
         "http://www.w3.org/ns/shacl#name": [
           {
             "@value": "TypeFromLibray"
+          }
+        ]
+      },
+      {
+        "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/union/default-union",
+        "@type": [
+          "http://a.ml/vocabularies/shapes#UnionShape",
+          "http://www.w3.org/ns/shacl#Shape",
+          "http://a.ml/vocabularies/shapes#Shape"
+        ],
+        "http://a.ml/vocabularies/shapes#anyOf": [
+          {
+            "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/scalar/scalar-expression-0",
+            "@type": [
+              "http://a.ml/vocabularies/shapes#ScalarShape",
+              "http://www.w3.org/ns/shacl#Shape",
+              "http://a.ml/vocabularies/shapes#Shape",
+              "http://a.ml/vocabularies/document#DomainElement"
+            ],
+            "http://www.w3.org/ns/shacl#datatype": [
+              {
+                "@id": "http://www.w3.org/2001/XMLSchema#string"
+              }
+            ]
+          },
+          {
+            "@id": "file://test/demo-api/types/app-person.raml#/shape/property/nillable/union/default-union/nil/scalar-expression-2",
+            "@type": [
+              "http://a.ml/vocabularies/shapes#NilShape",
+              "http://www.w3.org/ns/shacl#Shape",
+              "http://a.ml/vocabularies/shapes#Shape"
+            ]
+          }
+        ],
+        "http://www.w3.org/ns/shacl#name": [
+          {
+            "@value": "amf_inline_type_1"
           }
         ]
       },
