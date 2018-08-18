@@ -4,8 +4,11 @@
 
 # amf-helper-mixin
 
-A mixin with common functions user by most AMF components to compyte AMF values
+A mixin with common functions used by most API components to compute AMF values.
+
+It is important to set `amfModel` property on the element that applies this mixin
+to properly resolve links, references, and compact mod
 
 ### API components
 
-This components is a part of API components ecosystem: https://elements.advancedrestclient.com/
+This components is a part of [API components ecosystem](https://elements.advancedrestclient.com/)
