@@ -774,12 +774,24 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       let refValue = this._ensureArray(shape[refKey]);
       let refData;
       if (refValue) {
-        refData = this._getLinkTarget(amf, refValue[0]['@id']);
+        const refKey = refValue[0]['@id'];
+        if (refKey === shape['@id']) {
+          // recursive shape.
+          shape.__apicResolved = true;
+          return shape;
+        }
+        refData = this._getLinkTarget(amf, refKey);
       } else {
         refKey = this._getAmfKey(ns.raml.vocabularies.document + 'reference-id');
         refValue = this._ensureArray(shape[refKey]);
         if (refValue) {
-          refData = this._getReferenceId(amf, refValue[0]['@id']);
+          const refKey = refValue[0]['@id'];
+          if (refKey === shape['@id']) {
+            // recursive shape.
+            shape.__apicResolved = true;
+            return shape;
+          }
+          refData = this._getReferenceId(amf, refKey);
         }
       }
       if (!refData) {
