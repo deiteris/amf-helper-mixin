@@ -126,7 +126,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
          *
          * @type {Object|Array}
          */
-        amfModel: Object,
+        amfModel: {type: Object},
         /**
          * A namespace for AMF model
          */
@@ -146,8 +146,11 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * value not found in the context.
      */
     _getAmfKey(property) {
+      if (!property) {
+        return;
+      }
       let amf = this.amfModel;
-      if (!amf) {
+      if (!amf || !property) {
         return property;
       }
       if (amf instanceof Array) {
@@ -157,10 +160,19 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!ctx || !property) {
         return property;
       }
+      property = String(property);
+      const hashIndex = property.indexOf('#');
+      const hashProperty = property.substr(0, hashIndex + 1);
       for (let k in ctx) {
         if (ctx.hasOwnProperty(k)) {
           if (ctx[k] === property) {
             return k;
+          } else if (hashIndex === -1 && property.indexOf(ctx[k]) === 0) {
+            const result = property.replace(ctx[k], k + ':');
+            return result;
+          } else if (ctx[k] === hashProperty) {
+            const result = k + ':' + property.substr(hashIndex + 1);
+            return result;
           }
         }
       }
@@ -657,6 +669,20 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
         return;
       }
       return methods.find((item) => item['@id'] === selected);
+    }
+    /**
+     * Computes list of operations in an endpoint
+     * @param {Object} webApi The WebApi AMF model
+     * @param {String} id Endpoint ID
+     * @return {Array<Object>} List of SupportedOperation objects
+     */
+    _computeOperations(webApi, id) {
+      const endpoint = this._computeEndpointModel(webApi, id);
+      if (!endpoint) {
+        return [];
+      }
+      const opKey = this._getAmfKey(ns.w3.hydra.supportedOperation);
+      return this._ensureArray(endpoint[opKey]);
     }
     /**
      * Computes an endpoint for a method.
