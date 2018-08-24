@@ -622,19 +622,27 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       return value;
     }
     /**
+     * Computes list of endpoints from a WebApi model.
+     * @param {Object} webApi
+     * @return {Array} Always returns an array of endpoints.
+     */
+    _computeEndpoints(webApi) {
+      if (!webApi) {
+        return [];
+      }
+      const key = this._getAmfKey(ns.raml.vocabularies.http + 'endpoint');
+      return this._ensureArray(webApi[key]);
+    }
+    /**
      * Computes model for an endpoint documentation.
      *
      * @param {Object} webApi Current value of `webApi` property
-     * @param {String} selected Selected shape ID
+     * @param {String} id Selected shape ID
      * @return {Object} An endponit definition
      */
-    _computeEndpointModel(webApi, selected) {
-      if (!webApi || !selected) {
-        return;
-      }
-      const key = this._getAmfKey(ns.raml.vocabularies.http + 'endpoint');
-      const endpoints = this._ensureArray(webApi[key]);
-      return endpoints.find((item) => item['@id'] === selected);
+    _computeEndpointModel(webApi, id) {
+      const endpoints = this._computeEndpoints(webApi);
+      return endpoints.find((item) => item['@id'] === id);
     }
     /**
      * Computes method for the method documentation.
@@ -660,11 +668,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!webApi || !methodId) {
         return;
       }
-      const key = this._getAmfKey(ns.raml.vocabularies.http + 'endpoint');
-      const endpoints = this._ensureArray(webApi[key]);
-      if (!endpoints) {
-        return;
-      }
+      const endpoints = this._computeEndpoints(webApi);
       const opKey = this._getAmfKey(ns.w3.hydra.supportedOperation);
       for (let i = 0, len = endpoints.length; i < len; i++) {
         const endpoint = endpoints[i];
