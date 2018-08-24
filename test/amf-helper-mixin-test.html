@@ -624,17 +624,61 @@
       });
     });
 
+    suite('_computeEndpointByPath()', () => {
+      // let webApi;
+      suiteSetup(() => {
+        element = fixture('Basic');
+        // webApi = element._computeWebApi(model);
+      });
+
+      test('Returns undefined if no model argument', () => {
+        const result = element._computeEndpointByPath(undefined, '/test');
+        assert.isUndefined(result);
+      });
+
+      test('Returns undefined if no path argument', () => {
+        const webApi = element._computeWebApi(model);
+        const result = element._computeEndpointByPath(webApi);
+        assert.isUndefined(result);
+      });
+
+      test('Returns undefined if path not found', () => {
+        const webApi = element._computeWebApi(model);
+        const result = element._computeEndpointByPath(webApi, '/test');
+        assert.isUndefined(result);
+      });
+
+      test('Returns a model for an endpoint', () => {
+        const webApi = element._computeWebApi(model);
+        const result = element._computeEndpointByPath(webApi, '/changes');
+        assert.typeOf(result, 'object');
+      });
+    });
+
+    suite('_computeEndpoints()', () => {
+      let webApi;
+      suiteSetup(() => {
+        element = fixture('Basic');
+        webApi = element._computeWebApi(model);
+      });
+
+      test('Returns a loist of endpoints', () => {
+        const result = element._computeEndpoints(webApi);
+        assert.typeOf(result, 'array');
+        assert.lengthOf(result, 34);
+      });
+    });
+
     suite('_computeExpects()', () => {
       let operation;
       let noExpectsOperation;
       suiteSetup(() => {
         element = fixture('Basic');
-        const endpoint = element._computeEndpointModel(
-          element._computeWebApi(model),
-          'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Fchanges%2Fwatch'
-        );
-        operation = endpoint['http://www.w3.org/ns/hydra/core#supportedOperation'][0];
-        noExpectsOperation = endpoint['http://www.w3.org/ns/hydra/core#supportedOperation'][1];
+        const webApi = element._computeWebApi(model);
+        const endpoint = element._computeEndpointByPath(webApi, '/changes/watch');
+        const key = element._getAmfKey(ApiElements.Amf.ns.w3.hydra.supportedOperation);
+        operation = endpoint[key][0];
+        noExpectsOperation = endpoint[key][1];
       });
 
       test('Returns undefined if no argument', () => {
@@ -675,8 +719,9 @@
       });
 
       test('Returns object for endpoint', () => {
-        const result = element._computeEndpointModel(webApi,
-          'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Fchanges%2Fwatch');
+        const endpoint = element._computeEndpointByPath(webApi, '/changes/watch');
+        const id = endpoint['@id'];
+        const result = element._computeEndpointModel(webApi,id);
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://a.ml/vocabularies/http#EndPoint');
       });
@@ -706,8 +751,12 @@
       });
 
       test('Returns object for method', () => {
-        const result = element._computeMethodModel(webApi,
-        'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FpermissionIds%2F%7Bemail%7D/get');
+        const endpoint = element._computeEndpointByPath(webApi, '/permissionIds/{email}');
+        let op = element._computeOperations(webApi, endpoint['@id']);
+        if (op instanceof Array) {
+          op = op[0];
+        }
+        const result = element._computeMethodModel(webApi, op['@id']);
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/hydra/core#Operation');
       });
@@ -718,6 +767,7 @@
       let declares;
       suiteSetup(() => {
         element = fixture('Basic');
+        element.amfModel = model;
         declares = element._computeDeclares(model);
         references = element._computeReferences(model);
       });
@@ -739,58 +789,60 @@
       });
 
       test('Returns type in declarations', () => {
-        const result = element._computeType(declares, undefined,
-          'file://test/demo-api/types/app-person.raml#/type');
+        const id = declares[1]['@id']; // Node shape.
+        const result = element._computeType(declares, undefined, id);
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
       });
 
       test('Returns type in references (library)', () => {
-        const result = element._computeType(declares, references,
-          'file://test/demo-api/library.raml#/declarations/types/TypeFromLibray');
+        const id = references[7]['http://a.ml/vocabularies/document#declares'][0]['@id'];
+        const result = element._computeType(declares, references, id);
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
       });
     });
 
     suite('_getLinkTarget()', () => {
-      // let webApi;
+      let schemaId;
       suiteSetup(() => {
         element = fixture('Basic');
         element.amfModel = model;
-        // webApi = element._computeWebApi(model);
+        const declares = element._computeDeclares(model);
+        schemaId = declares[3]['@id'];
       });
 
       test('Computes reference', () => {
-        const result = element._getLinkTarget(model,
-          'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        const result = element._getLinkTarget(model, schemaId);
         assert.typeOf(result, 'object');
       });
 
       test('Reference is resolved', () => {
-        const result = element._getLinkTarget(model,
-          'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        const result = element._getLinkTarget(model, schemaId);
         assert.typeOf(result['http://a.ml/vocabularies/document#raw'], 'array');
       });
 
       test('Deep reference is resolved', () => {
-        const result = element._getLinkTarget(model,
-          'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        const result = element._getLinkTarget(model, schemaId);
         const example = result['http://a.ml/vocabularies/document#examples'][0];
         assert.typeOf(example['http://a.ml/vocabularies/document#structuredValue'], 'array');
       });
     });
 
     suite('_getReferenceId()', () => {
+      let refId;
       suiteSetup(() => {
         element = fixture('Basic');
         element.amfModel = model;
+        const ref = element._computeReferences(model)[1];
+        const enc = element._computeEncodes(ref);
+        refId = enc['@id'];
       });
 
       test('Computes reference', () => {
-        const result = element._getReferenceId(model,
-          'file://test/demo-api/schemas/person.json#/external');
+        const result = element._getReferenceId(model, refId);
         assert.typeOf(result, 'object');
+        assert.equal(result['@type'][0], 'http://a.ml/vocabularies/document#ExternalDomainElement');
       });
     });
 
@@ -803,8 +855,7 @@
       });
 
       test('Resolves link target', () => {
-        const endpoint = element._computeEndpointModel(webApi,
-          'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FreferenceId');
+        const endpoint = element._computeEndpointByPath(webApi, '/referenceId');
         const op = endpoint['http://www.w3.org/ns/hydra/core#supportedOperation'][0];
         const expects = op['http://www.w3.org/ns/hydra/core#expects'][0];
         const payload = expects['http://a.ml/vocabularies/http#payload'][0];

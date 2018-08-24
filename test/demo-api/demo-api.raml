@@ -322,7 +322,10 @@ types:
             - **appDataFolder**
             - **photos**
       description: "Watch for all changes to a user's Drive."
-
+      headers:
+        x-test: string
+    get:
+      description: Dummy function
 /permissionIds/{email}:
   uriParameters:
     email:

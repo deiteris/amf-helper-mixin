@@ -39,7 +39,7 @@
       test('Returns a value from context', function() {
         element.amfModel = model;
         const result = element._getAmfKey(key);
-        assert.equal(result, 'desc');
+        assert.equal(result, 'schema-org:description');
       });
 
       test('Returns the key if no AMF', function() {
@@ -74,7 +74,7 @@
         element.amfModel = model;
         const key = 'http://a.ml/vocabularies/http#scheme';
         const result = element._getValue({
-          scheme: [{
+          'raml-http:scheme': [{
             '@value': 'test'
           }]
         }, key);
@@ -84,7 +84,7 @@
       test('Returns undefined if no model', () => {
         const key = 'http://a.ml/vocabularies/http#scheme';
         const result = element._getValue({
-          scheme: [{
+          'raml-http:scheme': [{
             '@value': 'test'
           }]
         }, key);
@@ -101,7 +101,7 @@
         element.amfModel = model;
         const key = 'http://a.ml/vocabularies/http#scheme';
         const result = element._getValueArray({
-          scheme: [{
+          'raml-http:scheme': [{
             '@value': 'test'
           }, {
             '@value': 'test2'
@@ -113,7 +113,7 @@
       test('Returns undefined if no model', () => {
         const key = 'http://a.ml/vocabularies/http#scheme';
         const result = element._getValueArray({
-          scheme: [{
+          'raml-http:scheme': [{
             '@value': 'test'
           }, {
             '@value': 'test2'
@@ -131,7 +131,7 @@
 
       test('Returns true for compact type', () => {
         assert.isTrue(element._hasType({
-          '@type': ['shapesShape']
+          '@type': ['raml-shapes:Shape']
         }, 'http://a.ml/vocabularies/shapes#Shape'));
       });
     });
@@ -147,7 +147,7 @@
         assert.isTrue(element._hasProperty({
           a: 'test',
           b: 'test',
-          items: 'test'
+          'raml-shapes:items': 'test'
         }, prop));
       });
     });
@@ -160,7 +160,7 @@
 
       test('Returns array for an item', () => {
         const result = element._computePropertyArray({
-          references: ['a', 'b', 'c']
+          'doc:references': ['a', 'b', 'c']
         }, 'http://a.ml/vocabularies/document#references');
         assert.deepEqual(result, ['a', 'b', 'c']);
       });
@@ -174,7 +174,7 @@
 
       test('Returns undefined if no description key', () => {
         assert.equal(element._computeDescription({
-          'desc': [{
+          'schema-org:description': [{
             '@value': ['test']
           }]
         }), 'test');
@@ -270,13 +270,11 @@
       suiteSetup(() => {
         element = fixture('Basic');
         element.amfModel = model;
-        const endpoint = element._computeEndpointModel(
-          element._computeWebApi(model),
-          'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Fchanges%2Fwatch'
-        );
-        const opKey = element._getAmfKey('http://www.w3.org/ns/hydra/core#supportedOperation');
-        operation = element._ensureArray(endpoint[opKey])[0];
-        noExpectsOperation = element._ensureArray(endpoint[opKey])[1];
+        const webApi = element._computeWebApi(model);
+        const endpoint = element._computeEndpointByPath(webApi, '/changes/watch');
+        const key = element._getAmfKey(ApiElements.Amf.ns.w3.hydra.supportedOperation);
+        operation = endpoint[key][0];
+        noExpectsOperation = endpoint[key][1];
       });
 
       test('Returns undefined if operation does not have "expects"', () => {
@@ -289,6 +287,21 @@
       });
     });
 
+    suite('_computeEndpoints()', () => {
+      let webApi;
+      suiteSetup(() => {
+        element = fixture('Basic');
+        element.amfModel = model;
+        webApi = element._computeWebApi(model);
+      });
+
+      test('Returns a loist of endpoints', () => {
+        const result = element._computeEndpoints(webApi);
+        assert.typeOf(result, 'array');
+        assert.lengthOf(result, 34);
+      });
+    });
+
     suite('_computeEndpointModel()', () => {
       let webApi;
       suiteSetup(() => {
@@ -298,10 +311,11 @@
       });
 
       test('Returns object for endpoint', () => {
-        const result = element._computeEndpointModel(webApi,
-          'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Fchanges%2Fwatch');
+        const endpoint = element._computeEndpointByPath(webApi, '/changes/watch');
+        const id = endpoint['@id'];
+        const result = element._computeEndpointModel(webApi,id);
         assert.typeOf(result, 'object');
-        assert.equal(result['@type'][0], 'http://a.ml/vocabularies/http#EndPoint');
+        assert.equal(result['@type'][0], 'raml-http:EndPoint');
       });
     });
 
@@ -314,11 +328,14 @@
       });
 
       test('Returns object for method', () => {
-        const result = element._computeMethodModel(webApi,
-        'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FpermissionIds%2F%7Bemail%7D/get');
+        const endpoint = element._computeEndpointByPath(webApi, '/permissionIds/{email}');
+        let op = element._computeOperations(webApi, endpoint['@id']);
+        if (op instanceof Array) {
+          op = op[0];
+        }
+        const result = element._computeMethodModel(webApi, op['@id']);
         assert.typeOf(result, 'object');
-        const key = element._getAmfKey('http://www.w3.org/ns/hydra/core#Operation');
-        assert.equal(result['@type'][0], key);
+        assert.equal(result['@type'][0], 'hydra:Operation');
       });
     });
 
@@ -333,61 +350,60 @@
       });
 
       test('Returns type in declarations', () => {
-        const result = element._computeType(declares, undefined,
-          'file://test/demo-api/types/app-person.raml#/type');
+        const id = declares[1]['@id']; // Node shape.
+        const result = element._computeType(declares, undefined, id);
         assert.typeOf(result, 'object');
-        const key = element._getAmfKey('http://www.w3.org/ns/shacl#NodeShape');
-        assert.equal(result['@type'][0], key);
+        assert.equal(result['@type'][0], 'shacl:NodeShape');
       });
 
       test('Returns type in references (library)', () => {
-        const result = element._computeType(declares, references,
-          'file://test/demo-api/library.raml#/declarations/types/TypeFromLibray');
+        const id = references[7]['doc:declares']['@id'];
+        const result = element._computeType(declares, references, id);
         assert.typeOf(result, 'object');
-        const key = element._getAmfKey('http://www.w3.org/ns/shacl#NodeShape');
-        assert.equal(result['@type'][0], key);
+        assert.equal(result['@type'][0], 'shacl:NodeShape');
       });
     });
 
     suite('_getLinkTarget()', () => {
+      let schemaId;
       suiteSetup(() => {
         element = fixture('Basic');
         element.amfModel = model;
+        const declares = element._computeDeclares(model);
+        schemaId = declares[3]['@id'];
       });
 
       test('Computes reference', () => {
-        const result = element._getLinkTarget(model,
-          'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
+        const result = element._getLinkTarget(model, schemaId);
         assert.typeOf(result, 'object');
       });
 
       test('Reference is resolved', () => {
-        const result = element._getLinkTarget(model,
-          'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
-        const key = element._getAmfKey('http://a.ml/vocabularies/document#raw');
-        assert.ok(result[key]);
+        const result = element._getLinkTarget(model, schemaId);
+        assert.typeOf(result['doc:raw'], 'string');
       });
 
       test('Deep reference is resolved', () => {
-        const result = element._getLinkTarget(model,
-          'file://test/demo-api/demo-api.raml#/declarations/types/SchemaPerson');
-        const exKey = element._getAmfKey('http://a.ml/vocabularies/document#examples');
-        const example = element._ensureArray(result[exKey])[0];
-        const svKey = element._getAmfKey('http://a.ml/vocabularies/document#structuredValue');
-        assert.ok(example[svKey]);
+        const result = element._getLinkTarget(model, schemaId);
+        const example = result['doc:examples'];
+        assert.typeOf(example['doc:structuredValue'], 'object');
       });
     });
 
     suite('_getReferenceId()', () => {
+      let refId;
       suiteSetup(() => {
         element = fixture('Basic');
         element.amfModel = model;
+        const ref = element._computeReferences(model)[1];
+        const enc = element._computeEncodes(ref);
+        refId = enc['@id'];
       });
 
       test('Computes reference', () => {
-        const result = element._getReferenceId(model,
-          'file://test/demo-api/schemas/person.json#/external');
+        const result = element._getReferenceId(model, refId);
         assert.typeOf(result, 'object');
+        assert.equal(result['@type'][0], 'doc:ExternalDomainElement');
       });
     });
 
@@ -400,10 +416,9 @@
       });
 
       test('Resolves link target', () => {
-        const endpoint = element._computeEndpointModel(webApi,
-          'file://test/demo-api/demo-api.raml#/web-api/end-points/%2FreferenceId');
-        const op = element._ensureArray(
-          endpoint[element._getAmfKey('http://www.w3.org/ns/hydra/core#supportedOperation')])[0];
+        const endpoint = element._computeEndpointByPath(webApi, '/referenceId');
+        const soKey = element._getAmfKey(ApiElements.Amf.ns.w3.hydra.supportedOperation);
+        const op = element._ensureArray(endpoint[soKey])[0];
         const expects = element._ensureArray(
           op[element._getAmfKey('http://www.w3.org/ns/hydra/core#expects')])[0];
         const payload = element._ensureArray(

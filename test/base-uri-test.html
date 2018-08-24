@@ -37,10 +37,8 @@
       element = fixture('Basic');
       element.amfModel = model;
       server = element._computeServer(model);
-      endpoint = element._computeEndpointModel(
-        element._computeWebApi(model),
-        'file://test/demo-api/demo-api.raml#/web-api/end-points/%2Ffiles'
-      );
+      const webApi = element._computeWebApi(model);
+      endpoint = element._computeEndpointByPath(webApi, '/files');
     });
 
     teardown(() => {
