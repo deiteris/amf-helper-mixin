@@ -657,6 +657,25 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       return endpoints.find((item) => item['@id'] === id);
     }
     /**
+     * Computes model for an endpoint documentation using it's path.
+     *
+     * @param {Object} webApi Current value of `webApi` property
+     * @param {String} path Endpoint path
+     * @return {Object|undefined} An endponit definition
+     */
+    _computeEndpointByPath(webApi, path) {
+      if (!path || !webApi) {
+        return;
+      }
+      const endpoints = this._computeEndpoints(webApi);
+      for (let i = 0; i < endpoints.length; i++) {
+        const ePath = this._getValue(endpoints[i], this.ns.raml.vocabularies.http + 'path');
+        if (ePath === path) {
+          return endpoints[i];
+        }
+      }
+    }
+    /**
      * Computes method for the method documentation.
      *
      * @param {Object} webApi Current value of `webApi` property
