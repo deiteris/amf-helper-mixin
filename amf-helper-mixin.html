@@ -221,16 +221,19 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      */
     _getValue(model, key) {
       key = this._getAmfKey(key);
-      let data = (model && model[key]);
+      let data = model && model[key];
       if (!data) {
         return;
       }
-      if (!(data instanceof Array)) {
+      if (data instanceof Array) {
+        data = data[0];
+      }
+      if (!data) {
+        return;
+      }
+      const type = typeof data;
+      if (['string', 'number', 'boolean', 'undefined'].indexOf(type) !== -1) {
         return data;
-      }
-      data = data[0];
-      if (!data) {
-        return;
       }
       return data['@value'];
     }
@@ -255,7 +258,10 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Boolean} True if model has a type.
      */
     _hasType(model, type) {
-      const types = model && model['@type'] || [];
+      const types = this._ensureArray(model['@type']);
+      if (!type || !types.length) {
+        return false;
+      }
       const key = this._getAmfKey(type);
       for (let i = 0; i < types.length; i++) {
         if (types[i] === key) {
