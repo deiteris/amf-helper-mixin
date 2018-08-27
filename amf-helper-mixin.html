@@ -286,7 +286,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
         return;
       }
       key = this._getAmfKey(key);
-      let data = (shape && shape[key]);
+      let data = this._ensureArray(shape && shape[key]);
       if (!data || !(data instanceof Array)) {
         return;
       }
