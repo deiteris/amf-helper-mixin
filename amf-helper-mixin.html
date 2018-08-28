@@ -258,8 +258,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Boolean} True if model has a type.
      */
     _hasType(model, type) {
-      const types = this._ensureArray(model['@type']);
-      if (!type || !types.length) {
+      const types = this._ensureArray(model && model['@type']);
+      if (!types || !types.length) {
         return false;
       }
       const key = this._getAmfKey(type);
