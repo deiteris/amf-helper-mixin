@@ -334,13 +334,7 @@
         assert.isUndefined(element._computePropertyArray({}));
       });
 
-      test('Returns undefined if property is not an array', () => {
-        assert.isUndefined(element._computePropertyArray({
-          test: true
-        }, 'test'));
-      });
-
-      test('Returns undefined if property is not an array', () => {
+      test('Returns array', () => {
         assert.deepEqual(element._computePropertyArray({
           test: ['a', 'b', 'c']
         }, 'test'), ['a', 'b', 'c']);
