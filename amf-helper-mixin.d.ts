@@ -64,12 +64,31 @@ declare namespace ApiElements {
     readonly ns: object|null|undefined;
 
     /**
+     * Returns compact model key for given value.
+     *
+     * @param property AMF orioginal property
+     * @returns Compact model property name or the same value if
+     * value not found in the context.
+     */
+    _getAmfKey(property: String|null): String|null;
+
+    /**
      * Ensures that the model is AMF object.
      *
      * @param amf AMF json/ld model
      * @returns API spec
      */
     _ensureAmfModel(amf: object|any[]|null): object|null|undefined;
+
+    /**
+     * Ensures that the value is an array.
+     * It returns undefined when there's no value.
+     * It returns the same array if the value is already an array.
+     * It returns new array of the item is not an array.
+     *
+     * @param value An item to test
+     */
+    _ensureArray(value: any[]|any|null): any[]|null|undefined;
 
     /**
      * Gets a signle scalar value from a model.
@@ -101,9 +120,10 @@ declare namespace ApiElements {
     /**
      * Checks if a shape has a property.
      *
+     * @param shape The shape to test
      * @param key Property name to test
      */
-    _hasProperty(model: any, key: String|null): Boolean|null;
+    _hasProperty(shape: object|null, key: String|null): Boolean|null;
 
     /**
      * Computes array value of a property in a model (shape).
@@ -303,13 +323,29 @@ declare namespace ApiElements {
     _computePropertyValue(item: object|null): String|null|undefined;
 
     /**
+     * Computes list of endpoints from a WebApi model.
+     *
+     * @returns Always returns an array of endpoints.
+     */
+    _computeEndpoints(webApi: object|null): any[]|null;
+
+    /**
      * Computes model for an endpoint documentation.
      *
      * @param webApi Current value of `webApi` property
-     * @param selected Selected shape ID
+     * @param id Selected shape ID
      * @returns An endponit definition
      */
-    _computeEndpointModel(webApi: object|null, selected: String|null): object|null;
+    _computeEndpointModel(webApi: object|null, id: String|null): object|null;
+
+    /**
+     * Computes model for an endpoint documentation using it's path.
+     *
+     * @param webApi Current value of `webApi` property
+     * @param path Endpoint path
+     * @returns An endponit definition
+     */
+    _computeEndpointByPath(webApi: object|null, path: String|null): object|null|undefined;
 
     /**
      * Computes method for the method documentation.
@@ -319,6 +355,24 @@ declare namespace ApiElements {
      * @returns A method definition
      */
     _computeMethodModel(webApi: object|null, selected: String|null): object|null;
+
+    /**
+     * Computes list of operations in an endpoint
+     *
+     * @param webApi The WebApi AMF model
+     * @param id Endpoint ID
+     * @returns List of SupportedOperation objects
+     */
+    _computeOperations(webApi: object|null, id: String|null): Array<object|null>|null;
+
+    /**
+     * Computes an endpoint for a method.
+     *
+     * @param webApi The WebApi AMF model
+     * @param methodId Method id
+     * @returns An endpoint model of undefined.
+     */
+    _computeMethodEndpoint(webApi: object|null, methodId: String|null): object|null|undefined;
 
     /**
      * Computes a type documentation model.

@@ -223,7 +223,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       key = this._getAmfKey(key);
       let data = model && model[key];
       if (!data) {
-        return;
+        // This includes "undefined", "false", "null" and "0"
+        return data;
       }
       if (data instanceof Array) {
         data = data[0];
