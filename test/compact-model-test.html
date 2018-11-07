@@ -145,8 +145,8 @@
       test('Returns true if have a property', () => {
         const prop = 'http://a.ml/vocabularies/shapes#items';
         assert.isTrue(element._hasProperty({
-          a: 'test',
-          b: 'test',
+          'a': 'test',
+          'b': 'test',
           'raml-shapes:items': 'test'
         }, prop));
       });
@@ -206,7 +206,7 @@
 
       test('Returns all items in the array', () => {
         const result = element._computeDeclares(model);
-        assert.lengthOf(result, 17);
+        assert.lengthOf(result, 16);
       });
     });
 
@@ -313,7 +313,7 @@
       test('Returns object for endpoint', () => {
         const endpoint = element._computeEndpointByPath(webApi, '/changes/watch');
         const id = endpoint['@id'];
-        const result = element._computeEndpointModel(webApi,id);
+        const result = element._computeEndpointModel(webApi, id);
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'raml-http:EndPoint');
       });
@@ -357,7 +357,14 @@
       });
 
       test('Returns type in references (library)', () => {
-        const id = references[7]['doc:declares']['@id'];
+        let ref = references[4]['doc:declares'];
+        if (ref instanceof Array) {
+          ref = ref[0];
+        }
+        if (ref instanceof Array) {
+          ref = ref[0];
+        }
+        const id = ref['@id'];
         const result = element._computeType(declares, references, id);
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'shacl:NodeShape');
@@ -365,28 +372,24 @@
     });
 
     suite('_getLinkTarget()', () => {
-      let schemaId;
+      let resolved;
       suiteSetup(() => {
         element = fixture('Basic');
         element.amfModel = model;
         const declares = element._computeDeclares(model);
-        schemaId = declares[3]['@id'];
+        const schemaId = declares[0]['@id'];
+        resolved = element._getLinkTarget(model, schemaId);
       });
 
-      test('Computes reference', () => {
-        const result = element._getLinkTarget(model, schemaId);
-        assert.typeOf(result, 'object');
+      test('Computes the reference', () => {
+        assert.typeOf(resolved, 'object');
       });
 
       test('Reference is resolved', () => {
-        const result = element._getLinkTarget(model, schemaId);
-        assert.typeOf(result['doc:raw'], 'string');
-      });
-
-      test('Deep reference is resolved', () => {
-        const result = element._getLinkTarget(model, schemaId);
-        const example = result['doc:examples'];
-        assert.typeOf(example['doc:structuredValue'], 'object');
+        const itemsKey = element._getAmfKey('http://a.ml/vocabularies/shapes#items');
+        const nameKey = element._getAmfKey('http://schema.org/name');
+        const shape = resolved[itemsKey][0];
+        assert.equal(shape[nameKey][0]['@value'], 'Pic');
       });
     });
 
@@ -426,8 +429,7 @@
         const schema = element._ensureArray(
           payload[element._getAmfKey('http://a.ml/vocabularies/http#schema')])[0];
         const result = element._resolve(schema);
-        assert.ok(result[element._getAmfKey('http://www.w3.org/ns/shacl#name')]);
-        assert.ok(result[element._getAmfKey('http://a.ml/vocabularies/document#raw')]);
+        assert.typeOf(result[element._getAmfKey('http://www.w3.org/ns/shacl#name')], 'array');
       });
     });
   });
