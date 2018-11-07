@@ -536,7 +536,7 @@
 
       test('Returns all items in the array', () => {
         const result = element._computeDeclares(model);
-        assert.lengthOf(result, 17);
+        assert.lengthOf(result, 16);
       });
     });
 
@@ -790,7 +790,11 @@
       });
 
       test('Returns type in references (library)', () => {
-        const id = references[7]['http://a.ml/vocabularies/document#declares'][0]['@id'];
+        let ref = references[4]['http://a.ml/vocabularies/document#declares'][0];
+        if (ref instanceof Array) {
+          ref = ref[0];
+        }
+        const id = ref['@id'];
         const result = element._computeType(declares, references, id);
         assert.typeOf(result, 'object');
         assert.equal(result['@type'][0], 'http://www.w3.org/ns/shacl#NodeShape');
@@ -799,27 +803,24 @@
 
     suite('_getLinkTarget()', () => {
       let schemaId;
+      let resolved;
       suiteSetup(() => {
         element = fixture('Basic');
         element.amfModel = model;
         const declares = element._computeDeclares(model);
-        schemaId = declares[3]['@id'];
+        schemaId = declares[0]['@id'];
+        resolved = element._getLinkTarget(model, schemaId);
       });
 
-      test('Computes reference', () => {
-        const result = element._getLinkTarget(model, schemaId);
-        assert.typeOf(result, 'object');
+      test('Computes the reference', () => {
+        assert.typeOf(resolved, 'object');
       });
 
       test('Reference is resolved', () => {
-        const result = element._getLinkTarget(model, schemaId);
-        assert.typeOf(result['http://a.ml/vocabularies/document#raw'], 'array');
-      });
-
-      test('Deep reference is resolved', () => {
-        const result = element._getLinkTarget(model, schemaId);
-        const example = result['http://a.ml/vocabularies/document#examples'][0];
-        assert.typeOf(example['http://a.ml/vocabularies/document#structuredValue'], 'array');
+        const itemsKey = 'http://a.ml/vocabularies/shapes#items';
+        const nameKey = 'http://schema.org/name';
+        const shape = resolved[itemsKey][0];
+        assert.equal(shape[nameKey][0]['@value'], 'Pic');
       });
     });
 
@@ -856,7 +857,6 @@
         const schema = payload['http://a.ml/vocabularies/http#schema'][0];
         const result = element._resolve(schema);
         assert.typeOf(result['http://www.w3.org/ns/shacl#name'], 'array');
-        assert.typeOf(result['http://a.ml/vocabularies/document#raw'], 'array');
       });
     });
   });

@@ -780,12 +780,27 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       }
       return type;
     }
+    /**
+     * Computes a type model from a reference (library for example).
+     * @param {Object|Array} reference AMF model for a reference to extract the data from
+     * @param {String} selected Node ID to look for
+     * @return {Object|undefined} Type definition or undefined if not found.
+     */
     _computeReferenceType(reference, selected) {
       const declare = this._computeDeclares(reference);
       if (!declare) {
         return;
       }
-      return declare.find((item) => item['@id'] === selected);
+      let result = declare.find((item) => {
+        if (item instanceof Array) {
+          item = item[0];
+        }
+        return item['@id'] === selected;
+      });
+      if (result instanceof Array) {
+        result = result[0];
+      }
+      return this._resolve(result);
     }
     /**
      * Computes model for selected security definition.
