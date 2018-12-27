@@ -196,6 +196,7 @@ types:
           revisionId:
             type: string
             description: The ID of the revision.
+            default: defaultRevision
         get:
 
         put:
@@ -210,6 +211,10 @@ types:
       post:
         description: Creates a new comment on the given file.
       /{commentId}:
+        uriParameters:
+          commentId:
+            type: string
+            example: commant-id
         get:
           description: Gets a comment by ID.
 

@@ -8,6 +8,10 @@
  *   amf-helper-mixin.html
  */
 
+
+// tslint:disable:variable-name Describing an API that's defined elsewhere.
+// tslint:disable:no-any describes the API as best we are able today
+
 /// <reference path="../polymer/types/lib/utils/mixin.d.ts" />
 
 declare namespace ApiElements {
@@ -167,7 +171,6 @@ declare namespace ApiElements {
     _computeHeaders(shape: any): any;
     _computeQueryParameters(shape: any): any;
     _computeResponses(shape: any): any;
-    _computeApiVersion(amfModel: any): any;
 
     /**
      * Computes value for `serverVariables` property.
@@ -213,6 +216,11 @@ declare namespace ApiElements {
      * @param shape AMF `supportedOperation` model
      */
     _computeHasCustomProperties(shape: object|null): Boolean|null;
+
+    /**
+     * Computes API version from the AMF model.
+     */
+    _computeApiVersion(amfModel: object|Array<object|null>|null): String|null|undefined;
 
     /**
      * Computes model's `encodes` property.

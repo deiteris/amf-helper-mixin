@@ -36,6 +36,7 @@ ns.raml.vocabularies.http = ns.raml.vocabularies.name + 'http#';
 ns.raml.vocabularies.security = ns.raml.vocabularies.name + 'security#';
 ns.raml.vocabularies.shapes = ns.raml.vocabularies.name + 'shapes#';
 ns.raml.vocabularies.data = ns.raml.vocabularies.name + 'data#';
+ns.raml.vocabularies.docSourceMaps = ns.raml.vocabularies.name + 'document-source-maps#';
 // W3 namespace
 ns.w3 = {};
 ns.w3.name = 'http://www.w3.org/';
@@ -350,16 +351,6 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
     _computeResponses(shape) {
       return this._computePropertyArray(shape, ns.w3.hydra.core + 'response');
     }
-
-    _computeApiVersion(amfModel) {
-      // http://schema.org/version
-      const api = this._computeWebApi(amfModel);
-      if (!api) {
-        return;
-      }
-      return this._getValue(api, ns.schema.name + 'version');
-    }
-
     /**
      * Computes value for `serverVariables` property.
      *
@@ -376,7 +367,7 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {Array<Object>|undefined} Parameters if defined.
      */
     _computeEndpointVariables(endpoint) {
-      return this._computePropertyArray(endpoint, ns.raml.vocabularies.http + 'parameter');
+      return this._computeQueryParameters(endpoint);
     }
     /**
      * Computes value for the `payload` property
@@ -413,6 +404,19 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      */
     _computeHasCustomProperties(shape) {
       return this._hasProperty(shape, ns.raml.vocabularies.document + 'customDomainProperties');
+    }
+    /**
+     * Computes API version from the AMF model.
+     *
+     * @param {Object|Array<Object>} amfModel
+     * @return {String|undefined}
+     */
+    _computeApiVersion(amfModel) {
+      const api = this._computeWebApi(amfModel);
+      if (!api) {
+        return;
+      }
+      return this._getValue(api, ns.schema.name + 'version');
     }
     /**
      * Computes model's `encodes` property.
@@ -622,20 +626,23 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      * @return {String|undefined}
      */
     _computePropertyValue(item) {
-      const key = this._getAmfKey(ns.raml.vocabularies.http + 'schema');
-      let schema = item && item[key];
+      const skey = this._getAmfKey(ns.raml.vocabularies.http + 'schema');
+      let schema = item && item[skey];
       if (!schema) {
         return;
       }
-      schema = schema instanceof Array ? schema[0] : schema;
-      const defValKey = ns.w3.shacl.name + 'defaultValue';
-      let value = this._getValue(item, defValKey);
+      if (schema instanceof Array) {
+        schema = schema[0];
+      }
+      let value = this._getValue(schema, ns.w3.shacl.name + 'defaultValue');
       if (!value) {
         const examplesKey = this._getAmfKey(ns.raml.vocabularies.document + 'examples');
-        let example = this._ensureArray(item[examplesKey]);
+        let example = schema[examplesKey];
         if (example) {
-          example = example[0];
-          value = this._getValue(item, ns.raml.vocabularies.document + 'value');
+          if (example instanceof Array) {
+            example = example[0];
+          }
+          value = this._getValue(example, ns.w3.shacl.name + 'raw');
         }
       }
       return value;
@@ -919,7 +926,6 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (!refs) {
         return;
       }
-      let target;
       for (let i = 0; i < refs.length; i++) {
         const _ref = refs[i];
         const enc = this._computeEncodes(_ref);
@@ -929,7 +935,6 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
           }
         }
       }
-      return target;
     }
 
     _resolveRecursive(shape) {
