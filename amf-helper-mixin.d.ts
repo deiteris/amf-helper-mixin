@@ -171,7 +171,6 @@ declare namespace ApiElements {
     _computeHeaders(shape: any): any;
     _computeQueryParameters(shape: any): any;
     _computeResponses(shape: any): any;
-    _computeApiVersion(amfModel: any): any;
 
     /**
      * Computes value for `serverVariables` property.
@@ -217,6 +216,11 @@ declare namespace ApiElements {
      * @param shape AMF `supportedOperation` model
      */
     _computeHasCustomProperties(shape: object|null): Boolean|null;
+
+    /**
+     * Computes API version from the AMF model.
+     */
+    _computeApiVersion(amfModel: object|Array<object|null>|null): String|null|undefined;
 
     /**
      * Computes model's `encodes` property.
