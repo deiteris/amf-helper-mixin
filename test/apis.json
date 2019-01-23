@@ -1,0 +1,5 @@
+{
+  "demo-api/demo-api.raml": "RAML 1.0",
+  "src": "test",
+  "dest": "test"
+}
