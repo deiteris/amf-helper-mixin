@@ -668,6 +668,9 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
      */
     _computeEndpointModel(webApi, id) {
       const endpoints = this._computeEndpoints(webApi);
+      if (!endpoints) {
+        return;
+      }
       return endpoints.find((item) => item['@id'] === id);
     }
     /**
@@ -682,6 +685,9 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
         return;
       }
       const endpoints = this._computeEndpoints(webApi);
+      if (!endpoints) {
+        return;
+      }
       for (let i = 0; i < endpoints.length; i++) {
         const ePath = this._getValue(endpoints[i], this.ns.raml.vocabularies.http + 'path');
         if (ePath === path) {
@@ -728,6 +734,9 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
         return;
       }
       const endpoints = this._computeEndpoints(webApi);
+      if (!endpoints) {
+        return;
+      }
       const opKey = this._getAmfKey(ns.w3.hydra.supportedOperation);
       for (let i = 0, len = endpoints.length; i < len; i++) {
         const endpoint = endpoints[i];
