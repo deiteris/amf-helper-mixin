@@ -1,4 +1,4 @@
-<!--
+/**
 @license
 Copyright 2018 The Advanced REST client authors <arc@mulesoft.com>
 Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -10,22 +10,10 @@ distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
 WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
--->
-<link rel="import" href="../polymer/lib/utils/mixin.html">
-<script>
-(function(global) {
-'use strict';
-if (!global.ApiElements) {
-  /**
-   * @namespace ApiElements
-   */
-  global.ApiElements = {};
-}
-
-if (!global.ApiElements.Amf) {
-  global.ApiElements.Amf = {};
-}
-const ns = {};
+*/
+import {dedupingMixin} from '../../@polymer/polymer/lib/utils/mixin.js';
+import {IronMeta} from '../../@polymer/iron-meta/iron-meta.js';
+export const ns = {};
 // RAML namespace
 ns.raml = {};
 ns.raml.name = 'http://a.ml/';
@@ -37,6 +25,8 @@ ns.raml.vocabularies.security = ns.raml.vocabularies.name + 'security#';
 ns.raml.vocabularies.shapes = ns.raml.vocabularies.name + 'shapes#';
 ns.raml.vocabularies.data = ns.raml.vocabularies.name + 'data#';
 ns.raml.vocabularies.docSourceMaps = ns.raml.vocabularies.name + 'document-source-maps#';
+// mapping to aml namespace
+ns.aml = ns.raml;
 // W3 namespace
 ns.w3 = {};
 ns.w3.name = 'http://www.w3.org/';
@@ -72,12 +62,13 @@ ns.schema.title = ns.schema.name + 'title';
 
 Object.freeze(ns.raml);
 Object.freeze(ns.raml.vocabularies);
+Object.freeze(ns.aml.vocabularies);
+Object.freeze(ns.aml);
 Object.freeze(ns.w3);
 Object.freeze(ns.w3.hydra);
 Object.freeze(ns.w3.shacl);
 Object.freeze(ns.schema);
 Object.freeze(ns);
-global.ApiElements.Amf.ns = ns;
 /**
  * Common functions used by AMF components to compute AMF values.
  *
@@ -109,7 +100,7 @@ global.ApiElements.Amf.ns = ns;
  * @mixinFunction
  * @memberof ApiElements
  */
-ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
+export const AmfHelperMixin = dedupingMixin((base) => {
   /**
    * @polymer
    * @mixinClass
@@ -542,8 +533,8 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
       if (baseUri) {
         return baseUri;
       }
-      if (Polymer.IronMeta) {
-        let value = new Polymer.IronMeta({key: 'ApiBaseUri'}).value;
+      if (IronMeta) {
+        let value = new IronMeta({key: 'ApiBaseUri'}).value;
         if (value) {
           return value;
         }
@@ -1043,5 +1034,3 @@ ApiElements.AmfHelperMixin = Polymer.dedupingMixin((base) => {
   }
 return AHmixin;
 });
-})(window);
-</script>
