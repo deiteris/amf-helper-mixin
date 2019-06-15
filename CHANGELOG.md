@@ -414,3 +414,39 @@
 
 
 
+## [3.0.1](https://github.com/advanced-rest-client/amf-helper-mixin/compare/2.0.0-preview...3.0.1) (2019-06-15)
+
+
+### Breaking
+
+* Refactoring `amfModel` to `amf`. Deprecating `amfModel`. ([86f8c2d9e859cd43eb51b992a8a53e5d7766b8b2](https://github.com/advanced-rest-client/amf-helper-mixin/commit/86f8c2d9e859cd43eb51b992a8a53e5d7766b8b2))
+* Updated component to use new model of AMF ([0195ce945533723ff305172914571f0d2e2be904](https://github.com/advanced-rest-client/amf-helper-mixin/commit/0195ce945533723ff305172914571f0d2e2be904))
+
+### Docs
+
+* Updating badge URL in readme file ([94cff4ee58a5aa56019a3fb5954930bc66c27d0c](https://github.com/advanced-rest-client/amf-helper-mixin/commit/94cff4ee58a5aa56019a3fb5954930bc66c27d0c))
+* Updating documentation. ([98ed3934231261c60303d1660747b7336aa19b30](https://github.com/advanced-rest-client/amf-helper-mixin/commit/98ed3934231261c60303d1660747b7336aa19b30))
+
+### Fix
+
+* Adding null check when accessing endpoints array ([260210f8c1c1c15f4d8d234837ab62e32c7e86ea](https://github.com/advanced-rest-client/amf-helper-mixin/commit/260210f8c1c1c15f4d8d234837ab62e32c7e86ea))
+* Adding recursive model resolution when no ref data detected ([bc61bebf84bdd968967d93aa96febd625e012aee](https://github.com/advanced-rest-client/amf-helper-mixin/commit/bc61bebf84bdd968967d93aa96febd625e012aee))
+* Ensuring model is an array when computing array values ([b7baf631ea18c31240468522ecfd692a066d1711](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b7baf631ea18c31240468522ecfd692a066d1711))
+* Fixing array data model missmatch in compact model ([03c936f6794be0c64c1b16229648d087a3e817dd](https://github.com/advanced-rest-client/amf-helper-mixin/commit/03c936f6794be0c64c1b16229648d087a3e817dd))
+* Fixing sauce browsers configuration ([340860d6891aced12015b4565a316c49b6c2854b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/340860d6891aced12015b4565a316c49b6c2854b))
+* Fixing sauce labs browesers configuration ([eaabe0b981249697cbc13e1d9a212fdddb6b21b3](https://github.com/advanced-rest-client/amf-helper-mixin/commit/eaabe0b981249697cbc13e1d9a212fdddb6b21b3))
+* Fixing security vulnerability ([1deea4de90a6bd3d4d25bb8de8e73bc800b7a8f8](https://github.com/advanced-rest-client/amf-helper-mixin/commit/1deea4de90a6bd3d4d25bb8de8e73bc800b7a8f8))
+* Fixing tests and array functions previous fixes ([905f33d1251f9784291f22f413c6df554703a708](https://github.com/advanced-rest-client/amf-helper-mixin/commit/905f33d1251f9784291f22f413c6df554703a708))
+* Updating link target resolving to work with recursive types. ([6256382d9f3f3dbc2edc658ea53cd929d008ac22](https://github.com/advanced-rest-client/amf-helper-mixin/commit/6256382d9f3f3dbc2edc658ea53cd929d008ac22))
+
+### New
+
+* Adding support for version computation for URL ([ff77ea5792fa83765da2dd1694488a9e63943e20](https://github.com/advanced-rest-client/amf-helper-mixin/commit/ff77ea5792fa83765da2dd1694488a9e63943e20))
+
+### Update
+
+* Updating AMF models and tests ([091fa97949b12e773cead36aa087636847c86f06](https://github.com/advanced-rest-client/amf-helper-mixin/commit/091fa97949b12e773cead36aa087636847c86f06))
+* Updating the library to work with new AMF model. ([4bb9664cda4f32bea5907ba007750d8d87ec0f7e](https://github.com/advanced-rest-client/amf-helper-mixin/commit/4bb9664cda4f32bea5907ba007750d8d87ec0f7e))
+
+
+
