@@ -44,7 +44,7 @@ declare namespace ApiElements {
    * - if `baseUri` is set it uses this value as a base uri for the endpoint
    * - else if `iron-meta` with key `ApiBaseUri` exists and contains a value
    * it uses it uses this value as a base uri for the endpoint
-   * - else if `amfModel` is set then it computes base uri value from main
+   * - else if `amf` is set then it computes base uri value from main
    * model document
    * Then it concatenates computed base URI with `endpoint`'s path property.
    */
@@ -55,6 +55,7 @@ declare namespace ApiElements {
   }
 
   interface AmfHelperMixin {
+    amfModel: any;
 
     /**
      * A namespace for AMF model.
@@ -69,7 +70,7 @@ declare namespace ApiElements {
      *
      * It is only usefult for the element to resolve references.
      */
-    amfModel: object|any[]|null;
+    amf: object|any[]|null;
 
     /**
      * Returns compact model key for given value.
@@ -224,7 +225,7 @@ declare namespace ApiElements {
     /**
      * Computes API version from the AMF model.
      */
-    _computeApiVersion(amfModel: object|Array<object|null>|null): String|null|undefined;
+    _computeApiVersion(amf: object|Array<object|null>|null): String|null|undefined;
 
     /**
      * Computes model's `encodes` property.
@@ -267,7 +268,7 @@ declare namespace ApiElements {
     _computeServer(model: any[]|object|null): object|null;
 
     /**
-     * Computes endpoint's URI based on `amfModel` and `endpoint` models.
+     * Computes endpoint's URI based on `amf` and `endpoint` models.
      *
      * @param server Server model of AMF API.
      * @param endpoint Endpoint model
@@ -279,7 +280,7 @@ declare namespace ApiElements {
 
     /**
      * Computes base URI value from either `baseUri`, `iron-meta` with
-     * `ApiBaseUri` key or `amfModel` value (in this order).
+     * `ApiBaseUri` key or `amf` value (in this order).
      *
      * @param baseUri Value of `baseUri` property
      * @param server AMF API model for Server.
@@ -293,7 +294,7 @@ declare namespace ApiElements {
      *
      * @param server AMF API model for Server.
      * @param protocols Listy of supporte dprotocols. If not
-     * provided and required to compute the url it uses `amfModel` to compute
+     * provided and required to compute the url it uses `amf` to compute
      * protocols
      * @returns Base uri value if exists.
      */
@@ -306,7 +307,7 @@ declare namespace ApiElements {
      * @param value A url value
      * @param protocols List of supported by the API protocols
      * An array of string like: `['HTTP', 'HTTPS']`. It lowercase the value.
-     * If not set it tries to read supported protocols value from `amfModel`
+     * If not set it tries to read supported protocols value from `amf`
      * property.
      * @returns Url with scheme.
      */

@@ -26,7 +26,7 @@ describe('AmfHelperMixin', function() {
       describe('_getAmfKey()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined when no argument', () => {
@@ -34,8 +34,8 @@ describe('AmfHelperMixin', function() {
           assert.isUndefined(result);
         });
 
-        it('Returns passed property when no amfModel', () => {
-          element.amfModel = undefined;
+        it('Returns passed property when no amf', () => {
+          element.amf = undefined;
           const result = element._getAmfKey(AmfNamespace.schema.desc);
           assert.equal(result, AmfNamespace.schema.desc);
         });
@@ -50,7 +50,7 @@ describe('AmfHelperMixin', function() {
       describe('_ensureAmfModel()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no argument', () => {
@@ -197,7 +197,7 @@ describe('AmfHelperMixin', function() {
       describe('_getValue()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no arguments', () => {
@@ -243,7 +243,7 @@ describe('AmfHelperMixin', function() {
       describe('_getValueArray()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no arguments', () => {
@@ -291,7 +291,7 @@ describe('AmfHelperMixin', function() {
       describe('_hasType()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns false if no arguments', () => {
@@ -322,7 +322,7 @@ describe('AmfHelperMixin', function() {
       describe('_hasProperty()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns false if no arguments', () => {
@@ -356,7 +356,7 @@ describe('AmfHelperMixin', function() {
       describe('_computePropertyArray()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no arguments', () => {
@@ -381,7 +381,7 @@ describe('AmfHelperMixin', function() {
       describe('_computePropertyObject()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no arguments', () => {
@@ -434,7 +434,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeHasStringValue()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns false if no argument', () => {
@@ -462,7 +462,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeHasStringValue()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns false if no argument', () => {
@@ -490,7 +490,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeHasArrayValue()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns false if no argument', () => {
@@ -513,7 +513,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeDescription()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no argument', () => {
@@ -543,7 +543,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeEncodes()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no argument', () => {
@@ -563,7 +563,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeDeclares()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no argument', () => {
@@ -592,7 +592,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeReferences()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no argument', () => {
@@ -621,7 +621,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeWebApi()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no argument', () => {
@@ -648,7 +648,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeServer()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no argument', () => {
@@ -668,7 +668,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeProtocols()', () => {
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined if no argument', () => {
@@ -686,7 +686,7 @@ describe('AmfHelperMixin', function() {
         // let webApi;
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           // webApi = element._computeWebApi(model);
         });
 
@@ -718,7 +718,7 @@ describe('AmfHelperMixin', function() {
         let webApi;
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           webApi = element._computeWebApi(model);
         });
 
@@ -734,7 +734,7 @@ describe('AmfHelperMixin', function() {
         let noExpectsOperation;
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           const webApi = element._computeWebApi(model);
           const endpoint = element._computeEndpointByPath(webApi, '/changes/watch');
           const key = element._getAmfKey(AmfNamespace.w3.hydra.supportedOperation);
@@ -760,7 +760,7 @@ describe('AmfHelperMixin', function() {
         let webApi;
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           webApi = element._computeWebApi(model);
         });
 
@@ -794,7 +794,7 @@ describe('AmfHelperMixin', function() {
         let webApi;
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           webApi = element._computeWebApi(model);
         });
 
@@ -832,7 +832,7 @@ describe('AmfHelperMixin', function() {
         let declares;
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           declares = element._computeDeclares(model);
           references = element._computeReferences(model);
         });
@@ -880,7 +880,7 @@ describe('AmfHelperMixin', function() {
         let resolved;
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           const declares = element._computeDeclares(model);
           schemaId = declares[0]['@id'];
           resolved = element._getLinkTarget(model, schemaId);
@@ -917,7 +917,7 @@ describe('AmfHelperMixin', function() {
         let refId;
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           const ref = element._computeReferences(model)[1];
           const enc = element._computeEncodes(ref);
           refId = enc['@id'];
@@ -950,7 +950,7 @@ describe('AmfHelperMixin', function() {
         let webApi;
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           webApi = element._computeWebApi(model);
         });
 
@@ -973,7 +973,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeSecurityModel()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined when no declares', () => {
@@ -1001,7 +1001,7 @@ describe('AmfHelperMixin', function() {
         let obj;
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           const key = element._getAmfKey(AmfNamespace.schema.doc);
           obj = {};
           obj[key] = [{
@@ -1038,7 +1038,7 @@ describe('AmfHelperMixin', function() {
       describe('_computePropertyValue()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined when no argument', () => {
@@ -1096,7 +1096,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeHeaders()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1121,7 +1121,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeQueryParameters()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1146,7 +1146,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeResponses()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1171,7 +1171,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeServerVariables()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1196,7 +1196,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeServerVariables()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1221,7 +1221,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeEndpointVariables()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1240,7 +1240,7 @@ describe('AmfHelperMixin', function() {
       describe('_computePayload()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1265,7 +1265,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeReturns()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1290,7 +1290,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeSecurity()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1315,7 +1315,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeHasCustomProperties()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         afterEach(() => {
@@ -1340,7 +1340,7 @@ describe('AmfHelperMixin', function() {
       describe('_computeApiVersion()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Computes version of the API', () => {
@@ -1357,7 +1357,7 @@ describe('AmfHelperMixin', function() {
       describe('_ensureArray()', () => {
         before(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
         });
 
         it('Returns undefined when no argument', () => {
@@ -1383,7 +1383,7 @@ describe('AmfHelperMixin', function() {
         let valueKey;
         beforeEach(async () => {
           element = await basicFixture();
-          element.amfModel = model;
+          element.amf = model;
           const typeKey = element._getAmfKey(AmfNamespace.raml.vocabularies.data + 'Scalar');
           valueKey = element._getAmfKey(AmfNamespace.raml.vocabularies.data + 'value');
           baseObj = {};

@@ -26,7 +26,7 @@ to manage base URI property.
 When the component constructs the final URI for the endpoint it does the following:
 -   if `baseUri` is set it uses this value as a base URI for the endpoint
 -   else if `iron-meta` with key `ApiBaseUri` exists and contains a value it uses it uses this value as a base URI for the endpoint
--   else if `amfModel` is set then it computes base URI value from main model document
+-   else if `amf` is set then it computes base URI value from main model document
 Then it concatenates computed base URI with `endpoint`'s path property.
 
 ### API components

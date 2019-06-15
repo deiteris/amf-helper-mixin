@@ -20,7 +20,7 @@ describe('Base URI test', function() {
 
     beforeEach(async () => {
       element = await basicFixture();
-      element.amfModel = model;
+      element.amf = model;
       server = element._computeServer(model);
       const webApi = element._computeWebApi(model);
       endpoint = element._computeEndpointByPath(webApi, '/files');
@@ -104,7 +104,7 @@ describe('Base URI test', function() {
     });
 
     it('_ensureUrlScheme() adds default scheme', () => {
-      element.amfModel = undefined;
+      element.amf = undefined;
       const result = element._ensureUrlScheme('domain.com');
       assert.equal(result, 'http://domain.com');
     });

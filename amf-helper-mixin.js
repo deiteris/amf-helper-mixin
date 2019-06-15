@@ -92,7 +92,7 @@ Object.freeze(ns);
  * - if `baseUri` is set it uses this value as a base uri for the endpoint
  * - else if `iron-meta` with key `ApiBaseUri` exists and contains a value
  * it uses it uses this value as a base uri for the endpoint
- * - else if `amfModel` is set then it computes base uri value from main
+ * - else if `amf` is set then it computes base uri value from main
  * model document
  * Then it concatenates computed base URI with `endpoint`'s path property.
  *
@@ -118,9 +118,19 @@ export const AmfHelperMixin = dedupingMixin((base) => {
          *
          * @type {Object|Array}
          */
-        amfModel: {type: Object}
+        amf: { type: Object }
       };
     }
+
+    get amfModel() {
+      return this.amf;
+    }
+
+    set amfModel(value) {
+      console.warn(this.nodeName + `: "amfModel" property is deprecated. Use "amf" instead.`);
+      this.amf = value;
+    }
+
     /**
      * A namespace for AMF model.
      * @return {Object}
@@ -138,7 +148,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!property) {
         return;
       }
-      let amf = this.amfModel;
+      let amf = this.amf;
       if (!amf) {
         return property;
       }
@@ -396,11 +406,11 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     /**
      * Computes API version from the AMF model.
      *
-     * @param {Object|Array<Object>} amfModel
+     * @param {Object|Array<Object>} amf
      * @return {String|undefined}
      */
-    _computeApiVersion(amfModel) {
-      const api = this._computeWebApi(amfModel);
+    _computeApiVersion(amf) {
+      const api = this._computeWebApi(amf);
       if (!api) {
         return;
       }
@@ -496,7 +506,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       return srv ? srv[0] : undefined;
     }
     /**
-     * Computes endpoint's URI based on `amfModel` and `endpoint` models.
+     * Computes endpoint's URI based on `amf` and `endpoint` models.
      *
      * @param {Object} server Server model of AMF API.
      * @param {Object} endpoint Endpoint model
@@ -519,7 +529,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     }
     /**
      * Computes base URI value from either `baseUri`, `iron-meta` with
-     * `ApiBaseUri` key or `amfModel` value (in this order).
+     * `ApiBaseUri` key or `amf` value (in this order).
      *
      * @param {String} baseUri Value of `baseUri` property
      * @param {Object} server AMF API model for Server.
@@ -543,7 +553,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      *
      * @param {Object} server AMF API model for Server.
      * @param {?Array<String>} protocols Listy of supporte dprotocols. If not
-     * provided and required to compute the url it uses `amfModel` to compute
+     * provided and required to compute the url it uses `amf` to compute
      * protocols
      * @return {String|undefined} Base uri value if exists.
      */
@@ -559,7 +569,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @param {String} value A url value
      * @param {?Array<String>} protocols List of supported by the API protocols
      * An array of string like: `['HTTP', 'HTTPS']`. It lowercase the value.
-     * If not set it tries to read supported protocols value from `amfModel`
+     * If not set it tries to read supported protocols value from `amf`
      * property.
      * @return {String} Url with scheme.
      */
@@ -567,7 +577,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (value && typeof value === 'string') {
         if (value.indexOf('http') !== 0) {
           if (!protocols || !protocols.length) {
-            protocols = this._computeProtocols(this.amfModel);
+            protocols = this._computeProtocols(this.amf);
           }
           if (protocols && protocols.length) {
             value = protocols[0].toLowerCase() + '://' + value;
@@ -841,7 +851,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Object} Resolved shape.
      */
     _resolve(shape) {
-      const amf = this.amfModel;
+      const amf = this.amf;
       if (typeof shape !== 'object' || shape instanceof Array || !amf || shape.__apicResolved) {
         return shape;
       }
