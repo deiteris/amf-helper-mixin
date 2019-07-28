@@ -2,7 +2,8 @@ export const AmfLoader = {};
 AmfLoader.load = async function(opts) {
   opts = opts || {};
   const file = opts.isCompact ? 'demo-api-compact.json' : 'demo-api.json';
-  const url = location.protocol + '//' + location.host + '/test/'+ file;
+  const url = location.protocol + '//' + location.host + '/base/test/' + file;
+  /* global Promise */
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', (e) => {
@@ -15,8 +16,7 @@ AmfLoader.load = async function(opts) {
       }
       resolve(data);
     });
-    xhr.addEventListener('error',
-      () => reject(new Error('Unable to load model file')));
+    xhr.addEventListener('error', () => reject(new Error('Unable to load model file')));
     xhr.open('GET', url);
     xhr.send();
   });

@@ -5,15 +5,14 @@ const createBaseConfig = require('./karma.conf.js');
 
 module.exports = (config) => {
   const cnf = slSettings();
-  cnf.sauceLabs.testName = 'arc-overlay-mixin';
+  cnf.sauceLabs.testName = 'anypoint-signin';
   cnf.browsers = [
     'SL_Chrome',
     'SL_Chrome-1',
     'SL_Firefox',
     'SL_Firefox-1',
     'SL_Safari',
-    'SL_Safari-1',
-    // 'SL_IE_11',
+    // 'SL_Safari-1',
     'SL_EDGE'
   ];
   if (process.env.TRAVIS) {
@@ -28,9 +27,7 @@ module.exports = (config) => {
     cnf.sauceLabs.tunnelIdentifier = process.env.TRAVIS_JOB_NUMBER;
   }
 
-  config.set(
-    merge(createBaseConfig(config), cnf)
-  );
+  config.set(merge(createBaseConfig(config), cnf));
 
   return config;
 };
