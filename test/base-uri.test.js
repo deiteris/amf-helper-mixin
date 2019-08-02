@@ -5,7 +5,7 @@ import './test-element.js';
 
 describe('Base URI test', function() {
   async function basicFixture() {
-    return (await fixture(`<test-element></test-element>`));
+    return await fixture(`<test-element></test-element>`);
   }
 
   describe('Base URI test', () => {
@@ -27,20 +27,17 @@ describe('Base URI test', function() {
     });
 
     afterEach(() => {
-      new IronMeta({key: 'ApiBaseUri'}).value = undefined;
+      new IronMeta({ key: 'ApiBaseUri' }).value = undefined;
     });
 
-    it('_getAmfBaseUri returns server\'s base uri', () => {
+    it("_getAmfBaseUri returns server's base uri", () => {
       const result = element._getAmfBaseUri(server);
       assert.equal(result, 'https://api.mulesoft.com/{version}');
     });
 
-    const noSchemeServer = {
+    const noSchemeServerV1 = {
       '@id': 'file://test/demo-api/demo-api.raml#/web-api/https%3A%2F%2Fapi.mulesoft.com%2F%7Bversion%7D',
-      '@type': [
-        'http://raml.org/vocabularies/http#Server',
-        'http://raml.org/vocabularies/document#DomainElement'
-      ],
+      '@type': ['http://raml.org/vocabularies/http#Server', 'http://raml.org/vocabularies/document#DomainElement'],
       'http://a.ml/vocabularies/http#url': [
         {
           '@value': 'api.mulesoft.com/test'
@@ -48,13 +45,34 @@ describe('Base URI test', function() {
       ]
     };
 
+    const noSchemeServerV2 = {
+      '@id': 'file://test/demo-api/demo-api.raml#/web-api/https%3A%2F%2Fapi.mulesoft.com%2F%7Bversion%7D',
+      '@type': [
+        'http://raml.org/vocabularies/apiContract#Server',
+        'http://raml.org/vocabularies/document#DomainElement'
+      ],
+      'http://a.ml/vocabularies/core#urlTemplate': [
+        {
+          '@value': 'api.mulesoft.com/test'
+        }
+      ]
+    };
+
+    const noSchemeServer = function(element) {
+      if (element.version === 1) {
+        return noSchemeServerV1;
+      } else {
+        return noSchemeServerV2;
+      }
+    };
+
     it('_getAmfBaseUri uses protocols with the base uri', () => {
-      const result = element._getAmfBaseUri(noSchemeServer, ['http']);
+      const result = element._getAmfBaseUri(noSchemeServer(element), ['http']);
       assert.equal(result, 'http://api.mulesoft.com/test');
     });
 
     it('_getAmfBaseUri uses AMF encoded protocols with the base uri', () => {
-      const result = element._getAmfBaseUri(noSchemeServer);
+      const result = element._getAmfBaseUri(noSchemeServer(element));
       assert.equal(result, 'https://api.mulesoft.com/test');
     });
 
@@ -66,14 +84,14 @@ describe('Base URI test', function() {
 
     it('_getBaseUri() returns baseUri argument IronMeta', () => {
       const value = 'https://meta.com/base';
-      new IronMeta({key: 'ApiBaseUri'}).value = value;
+      new IronMeta({ key: 'ApiBaseUri' }).value = value;
       const result = element._getBaseUri(undefined, server);
       assert.equal(result, value);
     });
 
     it('_getBaseUri() prefers baseUri over IronMeta', () => {
       const value = 'https://api.domain.com';
-      new IronMeta({key: 'ApiBaseUri'}).value = 'https://meta.com/base';
+      new IronMeta({ key: 'ApiBaseUri' }).value = 'https://meta.com/base';
       const result = element._getBaseUri(value, server);
       assert.equal(result, value);
     });
