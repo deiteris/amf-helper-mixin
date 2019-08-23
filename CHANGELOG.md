@@ -476,3 +476,17 @@
 
 
 
+## [3.1.2](https://github.com/advanced-rest-client/amf-helper-mixin/compare/3.0.2...3.1.2) (2019-08-23)
+
+
+### Bug Fixes
+
+* fixing linter error ([73c0cce](https://github.com/advanced-rest-client/amf-helper-mixin/commit/73c0cce))
+
+
+### Features
+
+* adding `__amfChanged` cllaback for amf setter ([e0bf834](https://github.com/advanced-rest-client/amf-helper-mixin/commit/e0bf834))
+
+
+
