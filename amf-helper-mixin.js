@@ -239,16 +239,15 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!model) {
         return 0;
       }
-      const doc = this._ensureAmfModel(model);
-      if (!doc) {
-        return 0;
+      if (model instanceof Array) {
+        model = model[0];
       }
-      const ctx = doc['@context'];
+      const ctx = model['@context'];
       let versionString;
       if (ctx) {
-        versionString = this._getValue(doc, 'doc:version');
+        versionString = this._getValue(model, 'doc:version');
       } else {
-        versionString = this._getValue(doc, 'http://a.ml/vocabularies/document#version');
+        versionString = this._getValue(model, 'http://a.ml/vocabularies/document#version');
       }
       if (versionString) {
         const major = versionString.split('.')[0];
@@ -458,7 +457,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     }
 
     _computeHeaders(shape) {
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         return this._computePropertyArray(shape, this.ns.raml.vocabularies.http + 'header');
       } else {
         return this._computePropertyArray(shape, this.ns.raml.vocabularies.apiContract + 'header');
@@ -466,7 +465,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     }
 
     _computeQueryParameters(shape) {
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         return this._computePropertyArray(shape, this.ns.raml.vocabularies.http + 'parameter');
       } else {
         return this._computePropertyArray(shape, this.ns.raml.vocabularies.apiContract + 'parameter');
@@ -474,7 +473,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     }
 
     _computeResponses(shape) {
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         return this._computePropertyArray(shape, this.ns.w3.hydra.core + 'response');
       } else {
         return this._computePropertyArray(shape, this.ns.raml.vocabularies.apiContract + 'response');
@@ -487,7 +486,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Array<Object>|undefined} Variables if defined.
      */
     _computeServerVariables(server) {
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         return this._computePropertyArray(server, this.ns.raml.vocabularies.http + 'variable');
       } else {
         return this._computePropertyArray(server, this.ns.raml.vocabularies.apiContract + 'variable');
@@ -509,7 +508,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Array<Object>|undefined} Payload model if defined.
      */
     _computePayload(expects) {
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         return this._computePropertyArray(expects, this.ns.raml.vocabularies.http + 'payload');
       } else {
         return this._computePropertyArray(expects, this.ns.raml.vocabularies.apiContract + 'payload');
@@ -522,7 +521,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Array<Object>|undefined}
      */
     _computeReturns(method) {
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         return this._computePropertyArray(method, this.ns.w3.hydra.core + 'returns');
       } else {
         return this._computePropertyArray(method, this.ns.raml.vocabularies.apiContract + 'returns');
@@ -557,7 +556,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!api) {
         return;
       }
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         return this._getValue(api, this.ns.schema.name + 'version');
       } else {
         return this._getValue(api, this.ns.raml.vocabularies.core + 'version');
@@ -649,7 +648,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
         return;
       }
       let key;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         key = this._getAmfKey(this.ns.raml.vocabularies.http + 'server');
       } else {
         key = this._getAmfKey(this.ns.raml.vocabularies.apiContract + 'server');
@@ -673,7 +672,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       }
       base = this._ensureUrlScheme(base);
       let path;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         path = this._getValue(endpoint, this.ns.raml.vocabularies.http + 'path');
       } else {
         path = this._getValue(endpoint, this.ns.raml.vocabularies.apiContract + 'path');
@@ -716,7 +715,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      */
     _getAmfBaseUri(server, protocols) {
       let key;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         key = this.ns.raml.vocabularies.http + 'url';
       } else {
         key = this.ns.raml.vocabularies.core + 'urlTemplate';
@@ -762,7 +761,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!api) {
         return;
       }
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         return this._getValueArray(api, this.ns.raml.vocabularies.http + 'scheme');
       } else {
         return this._getValueArray(api, this.ns.raml.vocabularies.apiContract + 'scheme');
@@ -777,7 +776,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     _computeExpects(method) {
       let operationKey;
       let expectsKey;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         operationKey = this.ns.w3.hydra.core + 'Operation';
         expectsKey = this.ns.w3.hydra.core + 'expects';
       } else {
@@ -801,21 +800,21 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      */
     _computePropertyValue(item) {
       let exKey;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         exKey = this.ns.raml.vocabularies.document + 'examples';
       } else {
         exKey = this.ns.raml.vocabularies.apiContract + 'examples';
       }
 
       let schemaKey;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         schemaKey = this.ns.raml.vocabularies.http + 'schema';
       } else {
         schemaKey = this.ns.raml.vocabularies.shapes + 'schema';
       }
 
       let rawKey;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         rawKey = this.ns.w3.shacl.name + 'raw';
       } else {
         rawKey = this.ns.raml.vocabularies.document + 'raw';
@@ -853,7 +852,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       }
       let endpointKey;
 
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         endpointKey = this.ns.raml.vocabularies.http + 'endpoint';
       } else {
         endpointKey = this.ns.raml.vocabularies.apiContract + 'endpoint';
@@ -893,7 +892,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       }
 
       let pathKey;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         pathKey = this.ns.raml.vocabularies.http + 'path';
       } else {
         pathKey = this.ns.raml.vocabularies.apiContract + 'path';
@@ -933,7 +932,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       }
 
       let supportedOperationKey;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         supportedOperationKey = this.ns.w3.hydra.supportedOperation;
       } else {
         supportedOperationKey = this.ns.apiContract.supportedOperation;
@@ -958,7 +957,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       }
 
       let supportedOperationKey;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         supportedOperationKey = this.ns.w3.hydra.supportedOperation;
       } else {
         supportedOperationKey = this.ns.apiContract.supportedOperation;
@@ -996,7 +995,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       }
 
       let supportedOperationKey;
-      if (this._modelVersion === 1) {
+      if (this._modelVersion !== 2) {
         supportedOperationKey = this.ns.w3.hydra.supportedOperation;
       } else {
         supportedOperationKey = this.ns.apiContract.supportedOperation;

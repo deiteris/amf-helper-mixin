@@ -50,11 +50,6 @@ describe('AmfHelperMixin', function() {
           element.amf = undefined;
           assert.equal(element._modelVersion, 0);
         });
-
-        it('sets version to 0 when no valid model', () => {
-          element.amf = [{}];
-          assert.equal(element._modelVersion, 0);
-        });
       });
 
       describe('ns getter', () => {
