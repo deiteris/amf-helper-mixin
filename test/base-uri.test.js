@@ -59,7 +59,7 @@ describe('Base URI test', function() {
     };
 
     const noSchemeServer = function(element) {
-      if (element.version === 1) {
+      if (element._modelVersion === 1) {
         return noSchemeServerV1;
       } else {
         return noSchemeServerV2;

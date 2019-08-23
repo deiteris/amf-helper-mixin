@@ -41,19 +41,19 @@ describe('AmfHelperMixin', function() {
         it('sets model version', () => {
           const versionNumber = Number(VERSION.substr(1));
           element.amf = model;
-          assert.equal(element.version, versionNumber);
+          assert.equal(element._modelVersion, versionNumber);
         });
 
         it('sets version to 0 when no model', () => {
           element.amf = model;
-          assert.notEqual(element.version, 0);
+          assert.notEqual(element._modelVersion, 0);
           element.amf = undefined;
-          assert.equal(element.version, 0);
+          assert.equal(element._modelVersion, 0);
         });
 
         it('sets version to 0 when no valid model', () => {
           element.amf = [{}];
-          assert.equal(element.version, 0);
+          assert.equal(element._modelVersion, 0);
         });
       });
 
@@ -1240,7 +1240,7 @@ describe('AmfHelperMixin', function() {
         it('Returns default value', () => {
           const ns = element.ns;
           let sKey;
-          if (element.version === 1) {
+          if (element._modelVersion === 1) {
             sKey = element._getAmfKey(ns.raml.vocabularies.http + 'schema');
           } else {
             sKey = element._getAmfKey(ns.raml.vocabularies.shapes + 'schema');
@@ -1258,7 +1258,7 @@ describe('AmfHelperMixin', function() {
         it('Returns default value when schema is array', () => {
           const ns = element.ns;
           let sKey;
-          if (element.version === 1) {
+          if (element._modelVersion === 1) {
             sKey = element._getAmfKey(ns.raml.vocabularies.http + 'schema');
           } else {
             sKey = element._getAmfKey(ns.raml.vocabularies.shapes + 'schema');
@@ -1276,20 +1276,20 @@ describe('AmfHelperMixin', function() {
         it('Returns value from example', () => {
           const ns = element.ns;
           let sKey;
-          if (element.version === 1) {
+          if (element._modelVersion === 1) {
             sKey = element._getAmfKey(ns.raml.vocabularies.http + 'schema');
           } else {
             sKey = element._getAmfKey(ns.raml.vocabularies.shapes + 'schema');
           }
           let exKey;
-          if (element.version === 1) {
+          if (element._modelVersion === 1) {
             exKey = element._getAmfKey(ns.raml.vocabularies.document + 'examples');
           } else {
             exKey = element._getAmfKey(ns.raml.vocabularies.apiContract + 'examples');
           }
 
           let rKey;
-          if (element.version === 1) {
+          if (element._modelVersion === 1) {
             rKey = element._getAmfKey(ns.w3.shacl.name + 'raw');
           } else {
             rKey = element._getAmfKey(ns.raml.vocabularies.document + 'raw');
