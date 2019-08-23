@@ -240,11 +240,11 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * not defined, and `0` when the model is not valid or not set.
      */
     __detectModelVersion(model) {
-      if (!model) {
-        return 0;
-      }
       if (model instanceof Array) {
         model = model[0];
+      }
+      if (!model) {
+        return 0;
       }
       const ctx = model['@context'];
       let versionString;
