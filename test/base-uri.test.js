@@ -30,7 +30,7 @@ describe('Base URI test', function() {
       new IronMeta({ key: 'ApiBaseUri' }).value = undefined;
     });
 
-    it("_getAmfBaseUri returns server's base uri", () => {
+    it('_getAmfBaseUri returns servers base uri', () => {
       const result = element._getAmfBaseUri(server);
       assert.equal(result, 'https://api.mulesoft.com/{version}');
     });

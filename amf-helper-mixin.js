@@ -272,17 +272,17 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       property = String(property);
       const hashIndex = property.indexOf('#');
       const hashProperty = property.substr(0, hashIndex + 1);
-      for (const k in ctx) {
-        if (ctx.hasOwnProperty(k)) {
-          if (ctx[k] === property) {
-            return k;
-          } else if (hashIndex === -1 && property.indexOf(ctx[k]) === 0) {
-            const result = property.replace(ctx[k], k + ':');
-            return result;
-          } else if (ctx[k] === hashProperty) {
-            const result = k + ':' + property.substr(hashIndex + 1);
-            return result;
-          }
+      const keys = Object.keys(ctx);
+      for (let i = 0, len = keys.length; i < len; i++) {
+        const k = keys[i];
+        if (ctx[k] === property) {
+          return k;
+        } else if (hashIndex === -1 && property.indexOf(ctx[k]) === 0) {
+          const result = property.replace(ctx[k], k + ':');
+          return result;
+        } else if (ctx[k] === hashProperty) {
+          const result = k + ':' + property.substr(hashIndex + 1);
+          return result;
         }
       }
       return property;
