@@ -215,11 +215,20 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     set amf(value) {
       this._amf = value;
       this.__modelVersion = this.__detectModelVersion(value);
+      this.__amfChanged(value);
     }
 
     get _modelVersion() {
       return this.__modelVersion;
     }
+    /**
+     * This is an abstract method to be implemented by the components.
+     * If, instead, the component uses `amf` setter you must use `super.amf` to
+     * set the value.
+     * @param {?Array} amf Current AMF model. Can be undefined.
+     * @abstract
+     */
+    __amfChanged() {}
     /**
      * Checks for AMF model version.
      * @param {[type]} model [description]

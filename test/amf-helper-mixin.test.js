@@ -77,6 +77,19 @@ describe('AmfHelperMixin', function() {
         });
       });
 
+      describe('__amfChanged()', () => {
+        let element;
+        beforeEach(async () => {
+          element = await basicFixture();
+        });
+
+        it('calls the function when amf property chnage', () => {
+          const spy = sinon.spy(element, '__amfChanged');
+          element.amf = model;
+          assert.isTrue(spy.args[0][0] === model);
+        });
+      });
+
       describe('_getAmfKey()', () => {
         beforeEach(async () => {
           element = await basicFixture();
