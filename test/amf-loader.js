@@ -1,7 +1,8 @@
 export const AmfLoader = {};
 AmfLoader.load = async function(opts) {
   opts = opts || {};
-  const file = opts.isCompact ? 'demo-api-compact.json' : 'demo-api.json';
+  const fileTemplate = opts.isCompact ? 'demo-api-compact.VERSION.json' : 'demo-api.VERSION.json';
+  const file = fileTemplate.replace('VERSION', opts.version || 'v1');
   const url = location.protocol + '//' + location.host + '/base/test/' + file;
   /* global Promise */
   return new Promise((resolve, reject) => {

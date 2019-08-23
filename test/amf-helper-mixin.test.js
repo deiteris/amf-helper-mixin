@@ -1,25 +1,79 @@
 import { fixture, assert } from '@open-wc/testing';
 import sinon from 'sinon/pkg/sinon-esm.js';
-import { ns as AmfNamespace } from '../amf-helper-mixin.js';
+import { ns1 as AmfNamespace } from '../amf-helper-mixin.js';
 import { AmfLoader } from './amf-loader.js';
 import './test-element.js';
 
 describe('AmfHelperMixin', function() {
   async function basicFixture() {
-    return (await fixture(`<test-element></test-element>`));
+    return await fixture(`<test-element></test-element>`);
   }
 
   [
-    ['Compact model', true],
-    ['Regular model', false]
+    ['Compact model V1', 'v1', true],
+    ['Compact model V2', 'v2', true],
+    ['Regular model V1', 'v1', false],
+    ['Regular model V2', 'v2', false]
   ].forEach((item) => {
     describe(item[0], () => {
       let element;
       let model;
-      const IS_COMPACT = item[1];
+      const VERSION = item[1];
+      const IS_COMPACT = item[2];
       before(async () => {
         model = await AmfLoader.load({
-          isCompact: item[1]
+          isCompact: IS_COMPACT,
+          version: VERSION
+        });
+      });
+
+      describe('amf setter/getter', () => {
+        let element;
+        beforeEach(async () => {
+          element = await basicFixture();
+        });
+
+        it('sets _amf property', () => {
+          element.amf = model;
+          assert.isTrue(element._amf === model);
+        });
+
+        it('sets model version', () => {
+          const versionNumber = Number(VERSION.substr(1));
+          element.amf = model;
+          assert.equal(element.version, versionNumber);
+        });
+
+        it('sets version to 0 when no model', () => {
+          element.amf = model;
+          assert.notEqual(element.version, 0);
+          element.amf = undefined;
+          assert.equal(element.version, 0);
+        });
+
+        it('sets version to 0 when no valid model', () => {
+          element.amf = [{}];
+          assert.equal(element.version, 0);
+        });
+      });
+
+      describe('ns getter', () => {
+        let element;
+        beforeEach(async () => {
+          element = await basicFixture();
+          element.amf = model;
+        });
+
+        it('returns an object', () => {
+          assert.typeOf(element.ns, 'object');
+        });
+
+        it('returns correct namespace', () => {
+          if (VERSION === 'v2') {
+            assert.include(element.ns.raml.vocabularies.apiContract, 'apiContract#');
+          } else {
+            assert.isUndefined(element.ns.raml.vocabularies.apiContract);
+          }
         });
       });
 
@@ -36,14 +90,17 @@ describe('AmfHelperMixin', function() {
 
         it('Returns passed property when no amf', () => {
           element.amf = undefined;
-          const result = element._getAmfKey(AmfNamespace.schema.desc);
+          const result = element._getAmfKey(element.ns.schema.desc);
           assert.equal(result, AmfNamespace.schema.desc);
         });
 
         it('Returns value for property', () => {
-          const result = element._getAmfKey(AmfNamespace.schema.desc);
-          const key = IS_COMPACT ? 'schema-org:description' : AmfNamespace.schema.desc;
-          assert.equal(result, key);
+          const result = element._getAmfKey(element.ns.schema.desc);
+          if (IS_COMPACT) {
+            assert.equal(result.split(':')[1], 'description');
+          } else {
+            assert.equal(result, element.ns.schema.desc);
+          }
         });
       });
 
@@ -150,10 +207,16 @@ describe('AmfHelperMixin', function() {
           const key = 'http://www.w3.org/ns/shacl#';
           assert.equal(s.name, key);
           [
-            'in', 'defaultValueStr', 'pattern', 'minInclusive', 'maxInclusive',
-            'multipleOf', 'minLength', 'maxLength', 'fileType'
-          ]
-          .forEach((name) => {
+            'in',
+            'defaultValueStr',
+            'pattern',
+            'minInclusive',
+            'maxInclusive',
+            'multipleOf',
+            'minLength',
+            'maxLength',
+            'fileType'
+          ].forEach((name) => {
             assert.equal(s[name], key + name);
           });
           assert.equal(s.shape, key + 'Shape');
@@ -174,10 +237,7 @@ describe('AmfHelperMixin', function() {
           assert.equal(s.doc, key + 'documentation');
           assert.equal(s.webApi, key + 'WebAPI');
           assert.equal(s.creativeWork, key + 'CreativeWork');
-          [
-            'displayName', 'title'
-          ]
-          .forEach((name) => {
+          ['displayName', 'title'].forEach((name) => {
             assert.equal(s[name], key + name);
           });
         });
@@ -188,10 +248,12 @@ describe('AmfHelperMixin', function() {
           });
         });
 
+        /*
         it('Global object is also accessible via element API', async () => {
           element = await basicFixture();
           assert.isTrue(element.ns === AmfNamespace);
         });
+         */
       });
 
       describe('_getValue()', () => {
@@ -213,30 +275,54 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns undefined if no key in object', () => {
-          assert.isUndefined(element._getValue({
-            a: [],
-            b: []
-          }, 'c'));
+          assert.isUndefined(
+            element._getValue(
+              {
+                a: [],
+                b: []
+              },
+              'c'
+            )
+          );
         });
 
         it('Returns undefined if no value in value array', () => {
-          assert.isUndefined(element._getValue({
-            a: []
-          }, 'a'));
+          assert.isUndefined(
+            element._getValue(
+              {
+                a: []
+              },
+              'a'
+            )
+          );
         });
 
         it('Returns the value', () => {
-          assert.equal(element._getValue({
-            a: [{
-              '@value': 'test'
-            }]
-          }, 'a'), 'test');
+          assert.equal(
+            element._getValue(
+              {
+                a: [
+                  {
+                    '@value': 'test'
+                  }
+                ]
+              },
+              'a'
+            ),
+            'test'
+          );
         });
 
         it('Returns primitive value from compact model', () => {
-          assert.equal(element._getValue({
-            a: 'test'
-          }, 'a'), 'test');
+          assert.equal(
+            element._getValue(
+              {
+                a: 'test'
+              },
+              'a'
+            ),
+            'test'
+          );
         });
       });
 
@@ -259,32 +345,58 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns undefined if no key in object', () => {
-          assert.isUndefined(element._getValueArray({
-            a: [],
-            b: []
-          }, 'c'));
+          assert.isUndefined(
+            element._getValueArray(
+              {
+                a: [],
+                b: []
+              },
+              'c'
+            )
+          );
         });
 
         it('Returns empty array if no value in value array', () => {
-          assert.deepEqual(element._getValueArray({
-            a: []
-          }, 'a'), []);
+          assert.deepEqual(
+            element._getValueArray(
+              {
+                a: []
+              },
+              'a'
+            ),
+            []
+          );
         });
 
         it('Returns the values', () => {
-          assert.deepEqual(element._getValueArray({
-            a: [{
-              '@value': 'test'
-            }, {
-              '@value': 'test2'
-            }]
-          }, 'a'), ['test', 'test2']);
+          assert.deepEqual(
+            element._getValueArray(
+              {
+                a: [
+                  {
+                    '@value': 'test'
+                  },
+                  {
+                    '@value': 'test2'
+                  }
+                ]
+              },
+              'a'
+            ),
+            ['test', 'test2']
+          );
         });
 
         it('Returns values for non object values', () => {
-          assert.deepEqual(element._getValueArray({
-            a: ['test', 'test2']
-          }, 'a'), ['test', 'test2']);
+          assert.deepEqual(
+            element._getValueArray(
+              {
+                a: ['test', 'test2']
+              },
+              'a'
+            ),
+            ['test', 'test2']
+          );
         });
       });
 
@@ -307,15 +419,25 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns false if type does not match', () => {
-          assert.isFalse(element._hasType({
-            '@type': ['a', 'b']
-          }, 'c'));
+          assert.isFalse(
+            element._hasType(
+              {
+                '@type': ['a', 'b']
+              },
+              'c'
+            )
+          );
         });
 
         it('Returns true if type does match', () => {
-          assert.isTrue(element._hasType({
-            '@type': ['a', 'b', 'c']
-          }, 'c'));
+          assert.isTrue(
+            element._hasType(
+              {
+                '@type': ['a', 'b', 'c']
+              },
+              'c'
+            )
+          );
         });
       });
 
@@ -338,18 +460,28 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns false if type does not have property', () => {
-          assert.isFalse(element._hasProperty({
-            a: 'test',
-            b: 'test'
-          }, 'c'));
+          assert.isFalse(
+            element._hasProperty(
+              {
+                a: 'test',
+                b: 'test'
+              },
+              'c'
+            )
+          );
         });
 
         it('Returns true if have a property', () => {
-          assert.isTrue(element._hasProperty({
-            a: 'test',
-            b: 'test',
-            c: 'test'
-          }, 'c'));
+          assert.isTrue(
+            element._hasProperty(
+              {
+                a: 'test',
+                b: 'test',
+                c: 'test'
+              },
+              'c'
+            )
+          );
         });
       });
 
@@ -372,9 +504,15 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns array', () => {
-          assert.deepEqual(element._computePropertyArray({
-            test: ['a', 'b', 'c']
-          }, 'test'), ['a', 'b', 'c']);
+          assert.deepEqual(
+            element._computePropertyArray(
+              {
+                test: ['a', 'b', 'c']
+              },
+              'test'
+            ),
+            ['a', 'b', 'c']
+          );
         });
       });
 
@@ -397,37 +535,71 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns bolean value', () => {
-          assert.isTrue(element._computePropertyObject({
-            test: [true]
-          }, 'test'));
+          assert.isTrue(
+            element._computePropertyObject(
+              {
+                test: [true]
+              },
+              'test'
+            )
+          );
 
-          assert.isFalse(element._computePropertyObject({
-            test: [false]
-          }, 'test'));
+          assert.isFalse(
+            element._computePropertyObject(
+              {
+                test: [false]
+              },
+              'test'
+            )
+          );
         });
 
         it('Returns null value', () => {
-          assert.equal(element._computePropertyObject({
-            test: [null]
-          }, 'test'), null);
+          assert.equal(
+            element._computePropertyObject(
+              {
+                test: [null]
+              },
+              'test'
+            ),
+            null
+          );
         });
 
         it('Returns string value', () => {
-          assert.equal(element._computePropertyObject({
-            test: ['test-value']
-          }, 'test'), 'test-value');
+          assert.equal(
+            element._computePropertyObject(
+              {
+                test: ['test-value']
+              },
+              'test'
+            ),
+            'test-value'
+          );
         });
 
         it('Returns number value', () => {
-          assert.equal(element._computePropertyObject({
-            test: [123]
-          }, 'test'), 123);
+          assert.equal(
+            element._computePropertyObject(
+              {
+                test: [123]
+              },
+              'test'
+            ),
+            123
+          );
         });
 
         it('Returns 0 value', () => {
-          assert.equal(element._computePropertyObject({
-            test: [0]
-          }, 'test'), 0);
+          assert.equal(
+            element._computePropertyObject(
+              {
+                test: [0]
+              },
+              'test'
+            ),
+            0
+          );
         });
       });
 
@@ -450,7 +622,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns true if an object', () => {
-          assert.isTrue(element._computeHasStringValue({'a': 'b'}));
+          assert.isTrue(element._computeHasStringValue({ a: 'b' }));
         });
 
         it('Returns true if a number', () => {
@@ -478,7 +650,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns true if an object', () => {
-          assert.isTrue(element._computeHasStringValue({'a': 'b'}));
+          assert.isTrue(element._computeHasStringValue({ a: 'b' }));
         });
 
         it('Returns true if a number', () => {
@@ -525,17 +697,21 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns undefined if no description key', () => {
-          assert.isUndefined(element._computeDescription({
-            a: 'test'
-          }));
+          assert.isUndefined(
+            element._computeDescription({
+              a: 'test'
+            })
+          );
         });
 
         it('Returns the description', () => {
           const model = {};
-          const key = element._getAmfKey(AmfNamespace.schema.desc);
-          model[key] = [{
-            '@value': ['test']
-          }];
+          const key = element._getAmfKey(element.ns.schema.desc);
+          model[key] = [
+            {
+              '@value': ['test']
+            }
+          ];
           assert.equal(element._computeDescription(model), 'test');
         });
       });
@@ -585,7 +761,7 @@ describe('AmfHelperMixin', function() {
 
         it('Returns all items in the array', () => {
           const result = element._computeDeclares(model);
-          assert.lengthOf(result, 17);
+          assert.lengthOf(result, 14);
         });
       });
 
@@ -633,7 +809,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns undefined if no WebApi', () => {
-          const key = element._getAmfKey(AmfNamespace.raml.vocabularies.document + 'encodes');
+          const key = element._getAmfKey(element.ns.raml.vocabularies.document + 'encodes');
           const model = {};
           model[key] = {};
           assert.isUndefined(element._computeWebApi(model));
@@ -737,7 +913,7 @@ describe('AmfHelperMixin', function() {
           element.amf = model;
           const webApi = element._computeWebApi(model);
           const endpoint = element._computeEndpointByPath(webApi, '/changes/watch');
-          const key = element._getAmfKey(AmfNamespace.w3.hydra.supportedOperation);
+          const key = element._getAmfKey(element.ns.w3.hydra.supportedOperation);
           operation = endpoint[key][0];
           noExpectsOperation = endpoint[key][1];
         });
@@ -785,7 +961,7 @@ describe('AmfHelperMixin', function() {
           const id = endpoint['@id'];
           const result = element._computeEndpointModel(webApi, id);
           assert.typeOf(result, 'object');
-          const type = element._getAmfKey(AmfNamespace.raml.vocabularies.http + 'EndPoint');
+          const type = element._getAmfKey(element.ns.raml.vocabularies.http + 'EndPoint');
           assert.equal(result['@type'][0], type);
         });
       });
@@ -822,7 +998,7 @@ describe('AmfHelperMixin', function() {
           }
           const result = element._computeMethodModel(webApi, op['@id']);
           assert.typeOf(result, 'object');
-          const type = element._getAmfKey(AmfNamespace.w3.hydra.core + 'Operation');
+          const type = element._getAmfKey(element.ns.w3.hydra.core + 'Operation');
           assert.equal(result['@type'][0], type);
         });
       });
@@ -857,20 +1033,24 @@ describe('AmfHelperMixin', function() {
           const id = declares[1]['@id']; // Node shape.
           const result = element._computeType(declares, undefined, id);
           assert.typeOf(result, 'object');
-          const type = element._getAmfKey(AmfNamespace.w3.shacl.name + 'NodeShape');
+          const type = element._getAmfKey(element.ns.w3.shacl.name + 'NodeShape');
           assert.equal(result['@type'][0], type);
         });
 
         it('Returns type in references (library)', () => {
-          const dKey = element._getAmfKey(AmfNamespace.raml.vocabularies.document + 'declares');
-          let ref = references[4][dKey][0];
+          const dKey = element._getAmfKey(element.ns.raml.vocabularies.document + 'declares');
+          const library = references.find(function(unit) {
+            return unit['@type'].find((t) => t.indexOf('Module') !== -1);
+          });
+          // let ref = references[4][dKey][0];
+          let ref = library[dKey][0];
           if (ref instanceof Array) {
             ref = ref[0];
           }
           const id = ref['@id'];
           const result = element._computeType(declares, references, id);
           assert.typeOf(result, 'object');
-          const type = element._getAmfKey(AmfNamespace.w3.shacl.name + 'NodeShape');
+          const type = element._getAmfKey(element.ns.w3.shacl.name + 'NodeShape');
           assert.equal(result['@type'][0], type);
         });
       });
@@ -891,8 +1071,8 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Reference is resolved', () => {
-          const itemsKey = element._getAmfKey(AmfNamespace.raml.vocabularies.shapes + 'items');
-          const nameKey = element._getAmfKey(AmfNamespace.schema.schemaName);
+          const itemsKey = element._getAmfKey(element.ns.raml.vocabularies.shapes + 'items');
+          const nameKey = element._getAmfKey(element.ns.schema.schemaName);
           const shape = resolved[itemsKey][0];
           assert.equal(shape[nameKey][0]['@value'], 'Pic');
         });
@@ -918,7 +1098,10 @@ describe('AmfHelperMixin', function() {
         before(async () => {
           element = await basicFixture();
           element.amf = model;
-          const ref = element._computeReferences(model)[1];
+          const refs = element._computeReferences(model);
+          const ref = refs.find(function(unit) {
+            return (unit['@type'] || []).find((t) => t.indexOf('ExternalFragment') !== -1);
+          });
           const enc = element._computeEncodes(ref);
           refId = enc['@id'];
         });
@@ -926,7 +1109,7 @@ describe('AmfHelperMixin', function() {
         it('Computes reference', () => {
           const result = element._getReferenceId(model, refId);
           assert.typeOf(result, 'object');
-          const type = element._getAmfKey(AmfNamespace.raml.vocabularies.document + 'ExternalDomainElement');
+          const type = element._getAmfKey(element.ns.raml.vocabularies.document + 'ExternalDomainElement');
           assert.equal(result['@type'][0], type);
         });
 
@@ -956,11 +1139,12 @@ describe('AmfHelperMixin', function() {
 
         it('Resolves link target', () => {
           const endpoint = element._computeEndpointByPath(webApi, '/referenceId');
-          const opKey = element._getAmfKey(AmfNamespace.w3.hydra.supportedOperation);
-          const exKey = element._getAmfKey(AmfNamespace.w3.hydra.core + 'expects');
-          const plKey = element._getAmfKey(AmfNamespace.raml.vocabularies.http + 'payload');
-          const scKey = element._getAmfKey(AmfNamespace.raml.vocabularies.http + 'schema');
-          const nameKey = element._getAmfKey(AmfNamespace.w3.shacl.name + 'name');
+          const opKey = element._getAmfKey(element.ns.w3.hydra.supportedOperation);
+          const exKey = element._getAmfKey(element.ns.w3.hydra.core + 'expects');
+          const plKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'payload');
+          // TODO: important change
+          const scKey = element._getSchemaKey(element);
+          const nameKey = element._getAmfKey(element.ns.w3.shacl.name + 'name');
           const op = element._ensureArray(endpoint[opKey])[0];
           const expects = element._ensureArray(op[exKey])[0];
           const payload = element._ensureArray(expects[plKey])[0];
@@ -987,12 +1171,12 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns undefined when id not found', () => {
-          const result = element._computeSecurityModel([{'@id': 'a'}], 'b');
+          const result = element._computeSecurityModel([{ '@id': 'a' }], 'b');
           assert.isUndefined(result);
         });
 
         it('Returns model for id', () => {
-          const result = element._computeSecurityModel([{'@id': 'a'}], 'a');
+          const result = element._computeSecurityModel([{ '@id': 'a' }], 'a');
           assert.typeOf(result, 'object');
         });
       });
@@ -1002,11 +1186,13 @@ describe('AmfHelperMixin', function() {
         beforeEach(async () => {
           element = await basicFixture();
           element.amf = model;
-          const key = element._getAmfKey(AmfNamespace.schema.doc);
+          const key = element._getAmfKey(element.ns.schema.doc);
           obj = {};
-          obj[key] = [{
-            '@id': 'a'
-          }];
+          obj[key] = [
+            {
+              '@id': 'a'
+            }
+          ];
         });
 
         it('Returns undefined when no webApi', () => {
@@ -1052,8 +1238,13 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns default value', () => {
-          const ns = AmfNamespace;
-          const sKey = element._getAmfKey(ns.raml.vocabularies.http + 'schema');
+          const ns = element.ns;
+          let sKey;
+          if (element.version === 1) {
+            sKey = element._getAmfKey(ns.raml.vocabularies.http + 'schema');
+          } else {
+            sKey = element._getAmfKey(ns.raml.vocabularies.shapes + 'schema');
+          }
           const dvKey = element._getAmfKey(ns.w3.shacl.name + 'defaultValue');
           const obj = {};
           obj[sKey] = {};
@@ -1065,8 +1256,13 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns default value when schema is array', () => {
-          const ns = AmfNamespace;
-          const sKey = element._getAmfKey(ns.raml.vocabularies.http + 'schema');
+          const ns = element.ns;
+          let sKey;
+          if (element.version === 1) {
+            sKey = element._getAmfKey(ns.raml.vocabularies.http + 'schema');
+          } else {
+            sKey = element._getAmfKey(ns.raml.vocabularies.shapes + 'schema');
+          }
           const dvKey = element._getAmfKey(ns.w3.shacl.name + 'defaultValue');
           const obj = {};
           obj[sKey] = [{}];
@@ -1078,16 +1274,34 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns value from example', () => {
-          const ns = AmfNamespace;
-          const sKey = element._getAmfKey(ns.raml.vocabularies.http + 'schema');
-          const exKey = element._getAmfKey(ns.raml.vocabularies.document + 'examples');
-          const rKey = element._getAmfKey(ns.w3.shacl.name + 'raw');
+          const ns = element.ns;
+          let sKey;
+          if (element.version === 1) {
+            sKey = element._getAmfKey(ns.raml.vocabularies.http + 'schema');
+          } else {
+            sKey = element._getAmfKey(ns.raml.vocabularies.shapes + 'schema');
+          }
+          let exKey;
+          if (element.version === 1) {
+            exKey = element._getAmfKey(ns.raml.vocabularies.document + 'examples');
+          } else {
+            exKey = element._getAmfKey(ns.raml.vocabularies.apiContract + 'examples');
+          }
+
+          let rKey;
+          if (element.version === 1) {
+            rKey = element._getAmfKey(ns.w3.shacl.name + 'raw');
+          } else {
+            rKey = element._getAmfKey(ns.raml.vocabularies.document + 'raw');
+          }
           const obj = {};
           obj[sKey] = [{}];
           obj[sKey][0][exKey] = [{}];
-          obj[sKey][0][exKey][0][rKey] = [{
-            '@value': 'test-value'
-          }];
+          obj[sKey][0][exKey][0][rKey] = [
+            {
+              '@value': 'test-value'
+            }
+          ];
           const result = element._computePropertyValue(obj);
           assert.equal(result, 'test-value');
         });
@@ -1114,7 +1328,7 @@ describe('AmfHelperMixin', function() {
         it('Calls _computePropertyArray() with proper key', () => {
           const spy = sinon.spy(element, '_computePropertyArray');
           element._computeHeaders({});
-          assert.equal(spy.args[0][1], AmfNamespace.raml.vocabularies.http + 'header');
+          assert.equal(spy.args[0][1], element.ns.raml.vocabularies.http + 'header');
         });
       });
 
@@ -1139,7 +1353,7 @@ describe('AmfHelperMixin', function() {
         it('Calls _computePropertyArray() with proper key', () => {
           const spy = sinon.spy(element, '_computePropertyArray');
           element._computeQueryParameters({});
-          assert.equal(spy.args[0][1], AmfNamespace.raml.vocabularies.http + 'parameter');
+          assert.equal(spy.args[0][1], element.ns.raml.vocabularies.http + 'parameter');
         });
       });
 
@@ -1164,7 +1378,7 @@ describe('AmfHelperMixin', function() {
         it('Calls _computePropertyArray() with proper key', () => {
           const spy = sinon.spy(element, '_computePropertyArray');
           element._computeResponses({});
-          assert.equal(spy.args[0][1], AmfNamespace.w3.hydra.core + 'response');
+          assert.equal(spy.args[0][1], element.ns.w3.hydra.core + 'response');
         });
       });
 
@@ -1189,7 +1403,7 @@ describe('AmfHelperMixin', function() {
         it('Calls _computePropertyArray() with proper key', () => {
           const spy = sinon.spy(element, '_computePropertyArray');
           element._computeServerVariables({});
-          assert.equal(spy.args[0][1], AmfNamespace.raml.vocabularies.http + 'variable');
+          assert.equal(spy.args[0][1], element.ns.raml.vocabularies.http + 'variable');
         });
       });
 
@@ -1214,7 +1428,7 @@ describe('AmfHelperMixin', function() {
         it('Calls _computePropertyArray() with proper key', () => {
           const spy = sinon.spy(element, '_computePropertyArray');
           element._computeServerVariables({});
-          assert.equal(spy.args[0][1], AmfNamespace.raml.vocabularies.http + 'variable');
+          assert.equal(spy.args[0][1], element.ns.raml.vocabularies.http + 'variable');
         });
       });
 
@@ -1258,7 +1472,7 @@ describe('AmfHelperMixin', function() {
         it('Calls _computePropertyArray() with proper key', () => {
           const spy = sinon.spy(element, '_computePropertyArray');
           element._computePayload({});
-          assert.equal(spy.args[0][1], AmfNamespace.raml.vocabularies.http + 'payload');
+          assert.equal(spy.args[0][1], element.ns.raml.vocabularies.http + 'payload');
         });
       });
 
@@ -1283,7 +1497,7 @@ describe('AmfHelperMixin', function() {
         it('Calls _computePropertyArray() with proper key', () => {
           const spy = sinon.spy(element, '_computePropertyArray');
           element._computeReturns({});
-          assert.equal(spy.args[0][1], AmfNamespace.w3.hydra.core + 'returns');
+          assert.equal(spy.args[0][1], element.ns.w3.hydra.core + 'returns');
         });
       });
 
@@ -1308,7 +1522,7 @@ describe('AmfHelperMixin', function() {
         it('Calls _computePropertyArray() with proper key', () => {
           const spy = sinon.spy(element, '_computePropertyArray');
           element._computeSecurity({});
-          assert.equal(spy.args[0][1], AmfNamespace.raml.vocabularies.security + 'security');
+          assert.equal(spy.args[0][1], element.ns.raml.vocabularies.security + 'security');
         });
       });
 
@@ -1333,7 +1547,7 @@ describe('AmfHelperMixin', function() {
         it('Calls _hasProperty() with proper key', () => {
           const spy = sinon.spy(element, '_hasProperty');
           element._computeHasCustomProperties({});
-          assert.equal(spy.args[0][1], AmfNamespace.raml.vocabularies.document + 'customDomainProperties');
+          assert.equal(spy.args[0][1], element.ns.raml.vocabularies.document + 'customDomainProperties');
         });
       });
 
@@ -1384,14 +1598,16 @@ describe('AmfHelperMixin', function() {
         beforeEach(async () => {
           element = await basicFixture();
           element.amf = model;
-          const typeKey = element._getAmfKey(AmfNamespace.raml.vocabularies.data + 'Scalar');
-          valueKey = element._getAmfKey(AmfNamespace.raml.vocabularies.data + 'value');
+          const typeKey = element._getAmfKey(element.ns.raml.vocabularies.data + 'Scalar');
+          valueKey = element._getAmfKey(element.ns.raml.vocabularies.data + 'value');
           baseObj = {};
           baseObj['@type'] = [typeKey];
-          baseObj[valueKey] = [{
-            '@type': '',
-            '@value': ''
-          }];
+          baseObj[valueKey] = [
+            {
+              '@type': '',
+              '@value': ''
+            }
+          ];
         });
 
         it('Returns undefined when no argument', () => {
@@ -1405,7 +1621,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns boolean value - true (full key)', () => {
-          baseObj[valueKey][0]['@type'] = AmfNamespace.w3.xmlSchema + 'boolean';
+          baseObj[valueKey][0]['@type'] = element.ns.w3.xmlSchema + 'boolean';
           baseObj[valueKey][0]['@value'] = 'true';
           const result = element._computeStructuredExampleValue(baseObj);
           assert.typeOf(result, 'boolean');
@@ -1413,7 +1629,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns boolean value - false (full key)', () => {
-          baseObj[valueKey][0]['@type'] = AmfNamespace.w3.xmlSchema + 'boolean';
+          baseObj[valueKey][0]['@type'] = element.ns.w3.xmlSchema + 'boolean';
           baseObj[valueKey][0]['@value'] = 'false';
           const result = element._computeStructuredExampleValue(baseObj);
           assert.typeOf(result, 'boolean');
@@ -1421,7 +1637,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns numeric value for integer (full key)', () => {
-          baseObj[valueKey][0]['@type'] = AmfNamespace.w3.xmlSchema + 'integer';
+          baseObj[valueKey][0]['@type'] = element.ns.w3.xmlSchema + 'integer';
           baseObj[valueKey][0]['@value'] = '10';
           const result = element._computeStructuredExampleValue(baseObj);
           assert.typeOf(result, 'number');
@@ -1429,7 +1645,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns numeric value for long (full key)', () => {
-          baseObj[valueKey][0]['@type'] = AmfNamespace.w3.xmlSchema + 'long';
+          baseObj[valueKey][0]['@type'] = element.ns.w3.xmlSchema + 'long';
           baseObj[valueKey][0]['@value'] = '1000000000';
           const result = element._computeStructuredExampleValue(baseObj);
           assert.typeOf(result, 'number');
@@ -1437,7 +1653,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns numeric value for double (full key)', () => {
-          baseObj[valueKey][0]['@type'] = AmfNamespace.w3.xmlSchema + 'double';
+          baseObj[valueKey][0]['@type'] = element.ns.w3.xmlSchema + 'double';
           baseObj[valueKey][0]['@value'] = '12.1234';
           const result = element._computeStructuredExampleValue(baseObj);
           assert.typeOf(result, 'number');
@@ -1445,7 +1661,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns numeric value for float (full key)', () => {
-          baseObj[valueKey][0]['@type'] = AmfNamespace.w3.xmlSchema + 'float';
+          baseObj[valueKey][0]['@type'] = element.ns.w3.xmlSchema + 'float';
           baseObj[valueKey][0]['@value'] = '12.1234';
           const result = element._computeStructuredExampleValue(baseObj);
           assert.typeOf(result, 'number');
@@ -1453,7 +1669,7 @@ describe('AmfHelperMixin', function() {
         });
 
         it('Returns string otherwise', () => {
-          baseObj[valueKey][0]['@type'] = AmfNamespace.w3.xmlSchema + 'string';
+          baseObj[valueKey][0]['@type'] = element.ns.w3.xmlSchema + 'string';
           baseObj[valueKey][0]['@value'] = 'test';
           const result = element._computeStructuredExampleValue(baseObj);
           assert.typeOf(result, 'string');
