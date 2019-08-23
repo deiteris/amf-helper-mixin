@@ -454,3 +454,7 @@
 
 
 
+# [3.1.0](https://github.com/advanced-rest-client/amf-helper-mixin/compare/3.0.2...3.1.0) (2019-08-23)
+
+
+
