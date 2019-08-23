@@ -27,6 +27,56 @@ describe('AmfHelperMixin', function() {
         });
       });
 
+      describe('amf setter/getter', () => {
+        let element;
+        beforeEach(async () => {
+          element = await basicFixture();
+        });
+
+        it('sets _amf property', () => {
+          element.amf = model;
+          assert.isTrue(element._amf === model);
+        });
+
+        it('sets model version', () => {
+          const versionNumber = Number(VERSION.substr(1));
+          element.amf = model;
+          assert.equal(element.version, versionNumber);
+        });
+
+        it('sets version to 0 when no model', () => {
+          element.amf = model;
+          assert.notEqual(element.version, 0);
+          element.amf = undefined;
+          assert.equal(element.version, 0);
+        });
+
+        it('sets version to 0 when no valid model', () => {
+          element.amf = [{}];
+          assert.equal(element.version, 0);
+        });
+      });
+
+      describe('ns getter', () => {
+        let element;
+        beforeEach(async () => {
+          element = await basicFixture();
+          element.amf = model;
+        });
+
+        it('returns an object', () => {
+          assert.typeOf(element.ns, 'object');
+        });
+
+        it('returns correct namespace', () => {
+          if (VERSION === 'v2') {
+            assert.include(element.ns.raml.vocabularies.apiContract, 'apiContract#');
+          } else {
+            assert.isUndefined(element.ns.raml.vocabularies.apiContract);
+          }
+        });
+      });
+
       describe('_getAmfKey()', () => {
         beforeEach(async () => {
           element = await basicFixture();

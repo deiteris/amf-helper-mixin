@@ -7,6 +7,9 @@
       "doc:Module",
       "doc:Unit"
     ],
+    "doc:version": [{
+      "@value": "2.0.0"
+    }],
     "doc:encodes": [
       {
         "@id": "#/web-api",
