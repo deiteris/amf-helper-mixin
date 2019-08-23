@@ -6,6 +6,9 @@ module.exports = (config) => {
   config.set(
     merge(createDefaultConfig(config), {
       files: [
+        {
+          pattern: require.resolve('chai/chai.js')
+        },
         // runs all files ending with .test in the test folder,
         // can be overwritten by passing a --grep flag. examples:
         //
@@ -21,7 +24,18 @@ module.exports = (config) => {
       esm: {
         // if you are using 'bare module imports' you will need this option
         nodeResolve: true
-      }
+      },
+
+      coverageIstanbulReporter: {
+        thresholds: {
+          global: {
+            statements: 80,
+            branches: 80,
+            functions: 90,
+            lines: 80
+          }
+        }
+      },
     })
   );
   return config;
