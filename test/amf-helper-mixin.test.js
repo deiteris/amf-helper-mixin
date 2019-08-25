@@ -1,5 +1,5 @@
 import { fixture, assert } from '@open-wc/testing';
-import sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon/pkg/sinon-esm.js';
 import { ns1 as AmfNamespace } from '../amf-helper-mixin.js';
 import { AmfLoader } from './amf-loader.js';
 import './test-element.js';
@@ -82,6 +82,13 @@ describe('AmfHelperMixin', function() {
           const spy = sinon.spy(element, '__amfChanged');
           element.amf = model;
           assert.isTrue(spy.args[0][0] === model);
+        });
+
+        it('calls the function only once', () => {
+          const spy = sinon.spy(element, '__amfChanged');
+          element.amf = model;
+          element.amf = model;
+          assert.equal(spy.callCount, 1);
         });
       });
 

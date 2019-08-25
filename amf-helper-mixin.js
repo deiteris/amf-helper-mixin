@@ -214,6 +214,9 @@ export const AmfHelperMixin = dedupingMixin((base) => {
 
     set amf(value) {
       const old = this._amf;
+      if (old === value) {
+        return;
+      }
       this._amf = value;
       this.__modelVersion = this.__detectModelVersion(value);
       this.__amfChanged(value);
