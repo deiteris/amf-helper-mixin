@@ -1052,6 +1052,18 @@ describe('AmfHelperMixin', function() {
           assert.equal(result['@type'][0], type);
         });
 
+        it('Returns type for non-compact id', () => {
+          if (!IS_COMPACT) {
+            // This only affects compact model.
+            return;
+          }
+          const id = 'amf://id#' + declares[1]['@id'];
+          const result = element._computeType(declares, undefined, id);
+          assert.typeOf(result, 'object');
+          const type = element._getAmfKey(element.ns.w3.shacl.name + 'NodeShape');
+          assert.equal(result['@type'][0], type);
+        });
+
         it('Returns type in references (library)', () => {
           const dKey = element._getAmfKey(element.ns.raml.vocabularies.document + 'declares');
           const library = references.find(function(unit) {

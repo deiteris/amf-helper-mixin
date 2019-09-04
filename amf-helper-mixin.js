@@ -1023,7 +1023,10 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!declares || !selected) {
         return;
       }
-      let type = declares.find((item) => item['@id'] === selected);
+      // In compact model some IDs are presented in long version (in source maps for examples)
+      // This must test for this case as well.
+      const compactId = selected.replace('amf://id#', '');
+      let type = declares.find((item) => item['@id'] === selected || item['@id'] === compactId);
       if (!type && references && references.length) {
         for (let i = 0, len = references.length; i < len; i++) {
           if (!this._hasType(references[i], this.ns.raml.vocabularies.document + 'Module')) {
@@ -1048,11 +1051,14 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!declare) {
         return;
       }
+      // In compact model some IDs are presented in long version (in source maps for examples)
+      // This must test for this case as well.
+      const compactId = selected.replace('amf://id#', '');
       let result = declare.find((item) => {
         if (item instanceof Array) {
           item = item[0];
         }
-        return item['@id'] === selected;
+        return item['@id'] === selected || item['@id'] === compactId;
       });
       if (result instanceof Array) {
         result = result[0];
