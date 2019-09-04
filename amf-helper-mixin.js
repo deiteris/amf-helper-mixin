@@ -1025,7 +1025,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       }
       // In compact model some IDs are presented in long version (in source maps for examples)
       // This must test for this case as well.
-      const compactId = selected.replace('amf://id#', '');
+      const compactId = selected.replace('amf://id', '');
       let type = declares.find((item) => item['@id'] === selected || item['@id'] === compactId);
       if (!type && references && references.length) {
         for (let i = 0, len = references.length; i < len; i++) {

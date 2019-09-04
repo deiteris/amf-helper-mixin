@@ -1057,7 +1057,7 @@ describe('AmfHelperMixin', function() {
             // This only affects compact model.
             return;
           }
-          const id = 'amf://id#' + declares[1]['@id'];
+          const id = 'amf://id' + declares[1]['@id'];
           const result = element._computeType(declares, undefined, id);
           assert.typeOf(result, 'object');
           const type = element._getAmfKey(element.ns.w3.shacl.name + 'NodeShape');
