@@ -536,3 +536,21 @@
 
 
 
+## [3.1.7](https://github.com/advanced-rest-client/amf-helper-mixin/compare/3.0.2...3.1.7) (2019-09-05)
+
+
+### Bug Fixes
+
+* fixes [#1](https://github.com/advanced-rest-client/amf-helper-mixin/issues/1) (SE-12957) ([7eced33](https://github.com/advanced-rest-client/amf-helper-mixin/commit/7eced33))
+* fixing linter error ([73c0cce](https://github.com/advanced-rest-client/amf-helper-mixin/commit/73c0cce))
+* fixing previous fix ¯\_(ツ)_/¯ ([66185a8](https://github.com/advanced-rest-client/amf-helper-mixin/commit/66185a8))
+* fixing type identyfication in compact model ([5d16747](https://github.com/advanced-rest-client/amf-helper-mixin/commit/5d16747))
+
+
+### Features
+
+* adding `__amfChanged` cllaback for amf setter ([e0bf834](https://github.com/advanced-rest-client/amf-helper-mixin/commit/e0bf834))
+* adding guard to call `__amfChanged` only once per model ([db717b3](https://github.com/advanced-rest-client/amf-helper-mixin/commit/db717b3))
+
+
+
