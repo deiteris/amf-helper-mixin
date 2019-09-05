@@ -478,6 +478,31 @@ export const AmfHelperMixin = dedupingMixin((base) => {
         return this._computePropertyArray(shape, this.ns.raml.vocabularies.apiContract + 'parameter');
       }
     }
+    /**
+     * In OAS URI parmaeters can be defined on an operation level under `uriParameter` proeprty.
+     * Normally `_computeQueryParameters()` function would be used to extract parameters from an endpoint.
+     * This is a fallback option to test when an API is OAS.
+     * @param {Object} shape Method or Expects model
+     * @return {Array<Object>}
+     */
+    _computeUriParameters(shape) {
+      if (!shape) {
+        return;
+      }
+      let operationKey;
+      let parameterKey;
+      if (this._modelVersion !== 2) {
+        operationKey = this.ns.w3.hydra.core + 'Operation';
+        parameterKey = this.ns.raml.vocabularies.http + 'uriParameter';
+      } else {
+        operationKey = this.ns.raml.vocabularies.apiContract + 'Operation';
+        parameterKey = this.ns.raml.vocabularies.apiContract + 'uriParameter';
+      }
+      if (this._hasType(shape, operationKey)) {
+        shape = this._computeExpects(shape);
+      }
+      return this._computePropertyArray(shape, parameterKey);
+    }
 
     _computeResponses(shape) {
       if (this._modelVersion !== 2) {
@@ -503,10 +528,16 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * Computes value for `endpointVariables` property.
      *
      * @param {Object} endpoint Endpoint model
+     * @param {?Object} method Optional method to be used to llokup the parameters from
+     * This is used for OAS model which can defined path parameters on a method level.
      * @return {Array<Object>|undefined} Parameters if defined.
      */
-    _computeEndpointVariables(endpoint) {
-      return this._computeQueryParameters(endpoint);
+    _computeEndpointVariables(endpoint, method) {
+      let result = this._computeQueryParameters(endpoint);
+      if (!result && method) {
+        result = this._computeUriParameters(method);
+      }
+      return result;
     }
     /**
      * Computes value for the `payload` property
