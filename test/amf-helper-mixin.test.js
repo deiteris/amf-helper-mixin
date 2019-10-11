@@ -426,10 +426,13 @@ describe('AmfHelperMixin', function() {
 
         [
           ['boolean', key + 'boolean'],
+          ['string', key + 'string'],
+          ['number', key + 'number'],
           ['integer', key + 'integer'],
           ['long', key + 'long'],
           ['double', key + 'double'],
           ['float', key + 'float'],
+          ['nil', key + 'nil'],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.w3.xmlSchema[property];

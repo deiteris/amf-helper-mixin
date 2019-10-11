@@ -157,10 +157,13 @@ ns.w3.xmlSchema = {};
 ns.w3.xmlSchema.key = ns.w3.key + '2001/XMLSchema#';
 ns.w3.xmlSchema.toString = () => ns.w3.xmlSchema.key;
 ns.w3.xmlSchema.boolean = ns.w3.xmlSchema.key + 'boolean';
+ns.w3.xmlSchema.string = ns.w3.xmlSchema.key + 'string';
+ns.w3.xmlSchema.number = ns.w3.xmlSchema.key + 'number';
 ns.w3.xmlSchema.integer = ns.w3.xmlSchema.key + 'integer';
 ns.w3.xmlSchema.long = ns.w3.xmlSchema.key + 'long';
 ns.w3.xmlSchema.double = ns.w3.xmlSchema.key + 'double';
 ns.w3.xmlSchema.float = ns.w3.xmlSchema.key + 'float';
+ns.w3.xmlSchema.nil = ns.w3.xmlSchema.key + 'nil';
 // w3 types
 ns.w3.shacl = {};
 const n2shaclName = ns.w3.shacl.key = ns.w3.key + 'ns/shacl#';
