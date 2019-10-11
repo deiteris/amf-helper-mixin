@@ -14,130 +14,206 @@ the License.
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { IronMeta } from '@polymer/iron-meta/iron-meta.js';
 
-// This URL is common to both models
-// used in the autodetection process
-const webApiDocumentType = 'http://a.ml/vocabularies/document#Document';
-
-// Version 1 of the model: old version
-export const ns1 = {};
+const ns = {};
 // RAML namespace
-ns1.raml = {};
-ns1.raml.name = 'http://a.ml/';
-ns1.raml.vocabularies = {};
-ns1.raml.vocabularies.name = ns1.raml.name + 'vocabularies/';
-ns1.raml.vocabularies.document = ns1.raml.vocabularies.name + 'document#';
-ns1.raml.vocabularies.http = ns1.raml.vocabularies.name + 'http#';
-ns1.raml.vocabularies.security = ns1.raml.vocabularies.name + 'security#';
-ns1.raml.vocabularies.shapes = ns1.raml.vocabularies.name + 'shapes#';
-ns1.raml.vocabularies.data = ns1.raml.vocabularies.name + 'data#';
-ns1.raml.vocabularies.docSourceMaps = ns1.raml.vocabularies.name + 'document-source-maps#';
-// mapping to aml namespace
-ns1.aml = ns1.raml;
+ns.aml = {};
+ns.raml = ns.aml;
+ns.aml.key = 'http://a.ml/';
+ns.aml.vocabularies = {};
+ns.aml.vocabularies.key = ns.aml.key + 'vocabularies/';
+ns.aml.vocabularies.document = {};
+const docKey = ns.aml.vocabularies.document.key = ns.aml.vocabularies.key + 'document#';
+ns.aml.vocabularies.document.toString = () => docKey;
+ns.aml.vocabularies.document.Module = docKey + 'Module';
+ns.aml.vocabularies.document.Document = docKey + 'Document';
+ns.aml.vocabularies.document.SecuritySchemeFragment = docKey + 'SecuritySchemeFragment';
+ns.aml.vocabularies.document.UserDocumentation = docKey + 'UserDocumentation';
+ns.aml.vocabularies.document.DataType = docKey + 'DataType';
+ns.aml.vocabularies.document.Example = docKey + 'Example';
+ns.aml.vocabularies.document.NamedExamples = docKey + 'NamedExamples';
+ns.aml.vocabularies.document.DomainElement = docKey + 'DomainElement';
+ns.aml.vocabularies.document.ParametrizedResourceType = docKey + 'ParametrizedResourceType';
+ns.aml.vocabularies.document.ParametrizedTrait = docKey + 'ParametrizedTrait';
+ns.aml.vocabularies.document.ExternalDomainElement = docKey + 'ExternalDomainElement';
+ns.aml.vocabularies.document.customDomainProperties = docKey + 'customDomainProperties';
+ns.aml.vocabularies.document.encodes = docKey + 'encodes';
+ns.aml.vocabularies.document.declares = docKey + 'declares';
+ns.aml.vocabularies.document.references = docKey + 'references';
+ns.aml.vocabularies.document.examples = docKey + 'examples';
+ns.aml.vocabularies.document.linkTarget = docKey + 'link-target';
+ns.aml.vocabularies.document.referenceId = docKey + 'reference-id';
+ns.aml.vocabularies.document.structuredValue = docKey + 'structuredValue';
+ns.aml.vocabularies.document.raw = docKey + 'raw';
+ns.aml.vocabularies.document.extends = docKey + 'extends';
+ns.aml.vocabularies.document.value = docKey + 'value';
+ns.aml.vocabularies.document.name = docKey + 'name';
+ns.aml.vocabularies.core = {};
+const coreKey = ns.aml.vocabularies.core.key = ns.aml.vocabularies.key + 'core#';
+ns.aml.vocabularies.core.toString = () => coreKey;
+ns.aml.vocabularies.core.CreativeWork = coreKey + 'CreativeWork';
+ns.aml.vocabularies.core.version = coreKey + 'version';
+ns.aml.vocabularies.core.urlTemplate = coreKey + 'urlTemplate';
+ns.aml.vocabularies.core.displayName = coreKey + 'displayName';
+ns.aml.vocabularies.core.title = coreKey + 'title';
+ns.aml.vocabularies.core.name = coreKey + 'name';
+ns.aml.vocabularies.core.description = coreKey + 'description';
+ns.aml.vocabularies.core.documentation = coreKey + 'documentation';
+ns.aml.vocabularies.core.version = coreKey + 'version';
+ns.aml.vocabularies.core.provider = coreKey + 'provider';
+ns.aml.vocabularies.core.email = coreKey + 'email';
+ns.aml.vocabularies.core.url = coreKey + 'url';
+ns.aml.vocabularies.core.termsOfService = coreKey + 'termsOfService';
+ns.aml.vocabularies.core.license = coreKey + 'license';
+ns.aml.vocabularies.security = {};
+const secKey = ns.aml.vocabularies.security.key = ns.aml.vocabularies.key + 'security#';
+ns.aml.vocabularies.security.toString = () => secKey;
+ns.aml.vocabularies.security.ParametrizedSecurityScheme = secKey + 'ParametrizedSecurityScheme';
+ns.aml.vocabularies.security.SecurityScheme = secKey + 'SecurityScheme';
+ns.aml.vocabularies.security.security = secKey + 'security';
+ns.aml.vocabularies.security.scheme = secKey + 'scheme';
+ns.aml.vocabularies.security.settings = secKey + 'settings';
+ns.aml.vocabularies.security.name = secKey + 'name';
+ns.aml.vocabularies.security.type = secKey + 'type';
+ns.aml.vocabularies.apiContract = {};
+ns.aml.vocabularies.http = ns.aml.vocabularies.apiContract;
+const contractKey = ns.aml.vocabularies.apiContract.key = ns.aml.vocabularies.key + 'apiContract#';
+ns.aml.vocabularies.apiContract.toString = () => contractKey;
+ns.aml.vocabularies.apiContract.Payload = contractKey + 'Payload';
+ns.aml.vocabularies.apiContract.Request = contractKey + 'Request';
+ns.aml.vocabularies.apiContract.EndPoint = contractKey + 'EndPoint';
+ns.aml.vocabularies.apiContract.Parameter = contractKey + 'Parameter';
+ns.aml.vocabularies.apiContract.Operation = contractKey + 'Operation';
+ns.aml.vocabularies.apiContract.WebAPI = contractKey + 'WebAPI';
+ns.aml.vocabularies.apiContract.header = contractKey + 'header';
+ns.aml.vocabularies.apiContract.parameter = contractKey + 'parameter';
+ns.aml.vocabularies.apiContract.uriParameter = contractKey + 'uriParameter';
+ns.aml.vocabularies.apiContract.variable = contractKey + 'variable';
+ns.aml.vocabularies.apiContract.payload = contractKey + 'payload';
+ns.aml.vocabularies.apiContract.server = contractKey + 'server';
+ns.aml.vocabularies.apiContract.path = contractKey + 'path';
+ns.aml.vocabularies.apiContract.url = contractKey + 'url';
+ns.aml.vocabularies.apiContract.scheme = contractKey + 'scheme';
+ns.aml.vocabularies.apiContract.endpoint = contractKey + 'endpoint';
+ns.aml.vocabularies.apiContract.queryString = contractKey + 'queryString';
+ns.aml.vocabularies.apiContract.mediaType = contractKey + 'mediaType';
+ns.aml.vocabularies.apiContract.accepts = contractKey + 'accepts';
+ns.aml.vocabularies.apiContract.guiSummary = contractKey + 'guiSummary';
+ns.aml.vocabularies.apiContract.binding = contractKey + 'binding';
+ns.aml.vocabularies.apiContract.response = contractKey + 'response';
+ns.aml.vocabularies.apiContract.returns = contractKey + 'returns';
+ns.aml.vocabularies.apiContract.expects = contractKey + 'expects';
+ns.aml.vocabularies.apiContract.examples = contractKey + 'examples';
+ns.aml.vocabularies.apiContract.supportedOperation = contractKey + 'supportedOperation';
+ns.aml.vocabularies.apiContract.statusCode = contractKey + 'statusCode';
+ns.aml.vocabularies.apiContract.method = contractKey + 'method';
+ns.aml.vocabularies.apiContract.required = contractKey + 'required';
+ns.aml.vocabularies.shapes = {};
+const shapesKey = ns.aml.vocabularies.shapes.key = ns.aml.vocabularies.key + 'shapes#';
+ns.aml.vocabularies.shapes.toString = () => shapesKey;
+ns.aml.vocabularies.shapes.ScalarShape = shapesKey + 'ScalarShape';
+ns.aml.vocabularies.shapes.ArrayShape = shapesKey + 'ArrayShape';
+ns.aml.vocabularies.shapes.UnionShape = shapesKey + 'UnionShape';
+ns.aml.vocabularies.shapes.NilShape = shapesKey + 'NilShape';
+ns.aml.vocabularies.shapes.FileShape = shapesKey + 'FileShape';
+ns.aml.vocabularies.shapes.AnyShape = shapesKey + 'AnyShape';
+ns.aml.vocabularies.shapes.range = shapesKey + 'range';
+ns.aml.vocabularies.shapes.items = shapesKey + 'items';
+ns.aml.vocabularies.shapes.anyOf = shapesKey + 'anyOf';
+ns.aml.vocabularies.shapes.fileType = shapesKey + 'fileType';
+ns.aml.vocabularies.shapes.number = shapesKey + 'number';
+ns.aml.vocabularies.shapes.integer = shapesKey + 'integer';
+ns.aml.vocabularies.shapes.long = shapesKey + 'long';
+ns.aml.vocabularies.shapes.double = shapesKey + 'double';
+ns.aml.vocabularies.shapes.boolean = shapesKey + 'boolean';
+ns.aml.vocabularies.shapes.float = shapesKey + 'float';
+ns.aml.vocabularies.shapes.nil = shapesKey + 'nil';
+ns.aml.vocabularies.shapes.schema = shapesKey + 'schema';
+ns.aml.vocabularies.shapes.xmlSerialization = shapesKey + 'xmlSerialization';
+ns.aml.vocabularies.shapes.xmlName = shapesKey + 'xmlName';
+ns.aml.vocabularies.shapes.xmlAttribute = shapesKey + 'xmlAttribute';
+ns.aml.vocabularies.shapes.xmlWrapped = shapesKey + 'xmlWrapped';
+ns.aml.vocabularies.data = {};
+const dataKey = ns.aml.vocabularies.data.key = ns.aml.vocabularies.key + 'data#';
+ns.aml.vocabularies.data.toString = () => dataKey;
+ns.aml.vocabularies.data.Scalar = dataKey + 'Scalar';
+ns.aml.vocabularies.data.Object = dataKey + 'Object';
+ns.aml.vocabularies.data.Array = dataKey + 'Array';
+ns.aml.vocabularies.data.value = dataKey + 'value';
+
+ns.aml.vocabularies.docSourceMaps = ns.aml.vocabularies.key + 'document-source-maps#';
+
 // W3 namespace
-ns1.w3 = {};
-ns1.w3.name = 'http://www.w3.org/';
-ns1.w3.hydra = {};
-ns1.w3.hydra.name = ns1.w3.name + 'ns/hydra/';
-ns1.w3.hydra.core = ns1.w3.hydra.name + 'core#';
-ns1.w3.xmlSchema = ns1.w3.name + '2001/XMLSchema#';
+ns.w3 = {};
+ns.w3.key = 'http://www.w3.org/';
+ns.w3.rdfSyntax = {};
+ns.w3.rdfSyntax.key = ns.w3.key + '1999/02/22-rdf-syntax-ns#';
+ns.w3.rdfSyntax.toString = () => ns.w3.rdfSyntax.key;
+ns.w3.rdfSyntax.member = ns.w3.rdfSyntax.key + 'member';
+ns.w3.hydra = {};
+ns.w3.hydra.key = ns.w3.key + 'ns/hydra/';
+ns.w3.hydra.toString = () => ns.w3.hydra.key;
+ns.w3.hydra.core = ns.aml.vocabularies.apiContract;
+ns.w3.xmlSchema = {};
+ns.w3.xmlSchema.key = ns.w3.key + '2001/XMLSchema#';
+ns.w3.xmlSchema.toString = () => ns.w3.xmlSchema.key;
+ns.w3.xmlSchema.boolean = ns.w3.xmlSchema.key + 'boolean';
+ns.w3.xmlSchema.integer = ns.w3.xmlSchema.key + 'integer';
+ns.w3.xmlSchema.long = ns.w3.xmlSchema.key + 'long';
+ns.w3.xmlSchema.double = ns.w3.xmlSchema.key + 'double';
+ns.w3.xmlSchema.float = ns.w3.xmlSchema.key + 'float';
 // w3 types
-ns1.w3.shacl = {};
-ns1.w3.shacl.name = ns1.w3.name + 'ns/shacl#';
-ns1.w3.shacl.in = ns1.w3.shacl.name + 'in';
-ns1.w3.shacl.defaultValueStr = ns1.w3.shacl.name + 'defaultValueStr';
-ns1.w3.shacl.pattern = ns1.w3.shacl.name + 'pattern';
-ns1.w3.shacl.minInclusive = ns1.w3.shacl.name + 'minInclusive';
-ns1.w3.shacl.maxInclusive = ns1.w3.shacl.name + 'maxInclusive';
-ns1.w3.shacl.multipleOf = ns1.w3.shacl.name + 'multipleOf';
-ns1.w3.shacl.minLength = ns1.w3.shacl.name + 'minLength';
-ns1.w3.shacl.maxLength = ns1.w3.shacl.name + 'maxLength';
-ns1.w3.shacl.fileType = ns1.w3.shacl.name + 'fileType';
-ns1.w3.shacl.shape = ns1.w3.shacl.name + 'Shape';
+ns.w3.shacl = {};
+const n2shaclName = ns.w3.shacl.key = ns.w3.key + 'ns/shacl#';
+ns.w3.shacl.toString = () => n2shaclName;
+ns.w3.shacl.Shape = n2shaclName + 'Shape';
+ns.w3.shacl.NodeShape = n2shaclName + 'NodeShape';
+ns.w3.shacl.SchemaShape = n2shaclName + 'SchemaShape';
+ns.w3.shacl.PropertyShape = n2shaclName + 'PropertyShape';
+ns.w3.shacl.in = n2shaclName + 'in';
+ns.w3.shacl.defaultValue = n2shaclName + 'defaultValue';
+ns.w3.shacl.defaultValueStr = n2shaclName + 'defaultValueStr';
+ns.w3.shacl.pattern = n2shaclName + 'pattern';
+ns.w3.shacl.minInclusive = n2shaclName + 'minInclusive';
+ns.w3.shacl.maxInclusive = n2shaclName + 'maxInclusive';
+ns.w3.shacl.multipleOf = n2shaclName + 'multipleOf';
+ns.w3.shacl.minLength = n2shaclName + 'minLength';
+ns.w3.shacl.maxLength = n2shaclName + 'maxLength';
+ns.w3.shacl.fileType = n2shaclName + 'fileType';
+ns.w3.shacl.and = n2shaclName + 'and';
+ns.w3.shacl.property = n2shaclName + 'property';
+ns.w3.shacl.name = n2shaclName + 'name';
+ns.w3.shacl.raw = n2shaclName + 'raw';
+ns.w3.shacl.datatype = n2shaclName + 'datatype';
+ns.w3.shacl.minCount = n2shaclName + 'minCount';
 // Hydra shortcuts
-ns1.w3.hydra.supportedOperation = ns1.w3.hydra.core + 'supportedOperation';
+ns.w3.hydra.supportedOperation = contractKey + 'supportedOperation';
 // Schema org namespace
-ns1.schema = {};
-ns1.schema.name = 'http://schema.org/';
-ns1.schema.schemaName = ns1.schema.name + 'name';
-ns1.schema.desc = ns1.schema.name + 'description';
-ns1.schema.doc = ns1.schema.name + 'documentation';
-ns1.schema.webApi = ns1.schema.name + 'WebAPI';
-ns1.schema.creativeWork = ns1.schema.name + 'CreativeWork';
-ns1.schema.displayName = ns1.schema.name + 'displayName';
-ns1.schema.title = ns1.schema.name + 'title';
+ns.schema = {};
+ns.schema.key = coreKey;
+ns.schema.toString = () => coreKey;
+ns.schema.name = ns.schema.key + 'name';
+ns.schema.desc = ns.schema.key + 'description';
+ns.schema.doc = ns.schema.key + 'documentation';
+ns.schema.webApi = contractKey + 'WebAPI';
+ns.schema.creativeWork = coreKey + 'CreativeWork';
+ns.schema.displayName = coreKey + 'displayName';
+ns.schema.title = coreKey + 'title';
 
-Object.freeze(ns1.raml);
-Object.freeze(ns1.raml.vocabularies);
-Object.freeze(ns1.aml.vocabularies);
-Object.freeze(ns1.aml);
-Object.freeze(ns1.w3);
-Object.freeze(ns1.w3.hydra);
-Object.freeze(ns1.w3.shacl);
-Object.freeze(ns1.schema);
-Object.freeze(ns1);
-
-// version 2 of the model: new model
-const ns2 = {};
-// RAML namespace
-ns2.raml = {};
-ns2.raml.name = 'http://a.ml/';
-ns2.raml.vocabularies = {};
-ns2.raml.vocabularies.name = ns2.raml.name + 'vocabularies/';
-ns2.raml.vocabularies.document = ns2.raml.vocabularies.name + 'document#';
-ns2.raml.vocabularies.core = ns2.raml.vocabularies.name + 'core#';
-ns2.raml.vocabularies.apiContract = ns2.raml.vocabularies.name + 'apiContract#';
-ns2.raml.vocabularies.http = ns2.raml.vocabularies.apiContract;
-ns2.raml.vocabularies.security = ns2.raml.vocabularies.name + 'security#';
-ns2.raml.vocabularies.shapes = ns2.raml.vocabularies.name + 'shapes#';
-ns2.raml.vocabularies.data = ns2.raml.vocabularies.name + 'data#';
-ns2.raml.vocabularies.docSourceMaps = ns2.raml.vocabularies.name + 'document-source-maps#';
-// mapping to aml namespace
-ns2.aml = ns2.raml;
-// W3 namespace
-ns2.w3 = {};
-ns2.w3.name = 'http://www.w3.org/';
-ns2.w3.hydra = {};
-ns2.w3.hydra.name = ns2.w3.name + 'ns/hydra/';
-ns2.w3.hydra.core = ns2.raml.vocabularies.apiContract;
-ns2.w3.xmlSchema = ns2.w3.name + '2001/XMLSchema#';
-// w3 types
-ns2.w3.shacl = {};
-ns2.w3.shacl.name = ns2.w3.name + 'ns/shacl#';
-ns2.w3.shacl.in = ns2.w3.shacl.name + 'in';
-ns2.w3.shacl.defaultValueStr = ns2.w3.shacl.name + 'defaultValueStr';
-ns2.w3.shacl.pattern = ns2.w3.shacl.name + 'pattern';
-ns2.w3.shacl.minInclusive = ns2.w3.shacl.name + 'minInclusive';
-ns2.w3.shacl.maxInclusive = ns2.w3.shacl.name + 'maxInclusive';
-ns2.w3.shacl.multipleOf = ns2.w3.shacl.name + 'multipleOf';
-ns2.w3.shacl.minLength = ns2.w3.shacl.name + 'minLength';
-ns2.w3.shacl.maxLength = ns2.w3.shacl.name + 'maxLength';
-ns2.w3.shacl.fileType = ns2.w3.shacl.name + 'fileType';
-ns2.w3.shacl.shape = ns2.w3.shacl.name + 'Shape';
-// ApiContracts
-ns2.apiContract = {};
-ns2.apiContract.supportedOperation = ns2.raml.vocabularies.apiContract + 'supportedOperation';
-// Hydra shortcuts
-ns2.w3.hydra.supportedOperation = ns2.raml.vocabularies.apiContract + 'supportedOperation';
-// Schema org namespace
-ns2.schema = {};
-ns2.schema.name = ns2.raml.vocabularies.core;
-ns2.schema.schemaName = ns2.schema.name + 'name';
-ns2.schema.desc = ns2.schema.name + 'description';
-ns2.schema.doc = ns2.schema.name + 'documentation';
-ns2.schema.webApi = ns2.raml.vocabularies.apiContract + 'WebAPI';
-ns2.schema.creativeWork = ns2.raml.vocabularies.core + 'CreativeWork';
-ns2.schema.displayName = ns2.raml.vocabularies.core + 'displayName';
-ns2.schema.title = ns2.raml.vocabularies.core + 'title';
-
-Object.freeze(ns2.raml);
-Object.freeze(ns2.raml.vocabularies);
-Object.freeze(ns2.aml.vocabularies);
-Object.freeze(ns2.aml);
-Object.freeze(ns2.w3);
-Object.freeze(ns2.w3.hydra);
-Object.freeze(ns2.w3.shacl);
-Object.freeze(ns2.schema);
-Object.freeze(ns2);
+Object.freeze(ns.raml);
+Object.freeze(ns.aml);
+Object.freeze(ns.aml.vocabularies);
+Object.freeze(ns.aml.vocabularies.shapes);
+Object.freeze(ns.aml.vocabularies.data);
+Object.freeze(ns.aml.vocabularies.apiContract);
+Object.freeze(ns.aml.vocabularies.security);
+Object.freeze(ns.aml.vocabularies.core);
+Object.freeze(ns.aml.vocabularies.document);
+Object.freeze(ns.w3);
+Object.freeze(ns.w3.rdfSyntax);
+Object.freeze(ns.w3.hydra);
+Object.freeze(ns.w3.shacl);
+Object.freeze(ns.schema);
+Object.freeze(ns);
 /**
  * Common functions used by AMF components to compute AMF values.
  *
@@ -190,22 +266,12 @@ export const AmfHelperMixin = dedupingMixin((base) => {
         amf: { type: Object }
       };
     }
-
-    get amfModel() {
-      return this.amf;
-    }
-
-    set amfModel(value) {
-      // console.warn(this.nodeName + `: "amfModel" property is deprecated. Use "amf" instead.`);
-      this.amf = value;
-    }
-
     /**
      * A namespace for AMF model.
      * @return {Object}
      */
     get ns() {
-      return this.__modelVersion === 2 ? ns2 : ns1;
+      return ns;
     }
 
     get amf() {
@@ -217,16 +283,14 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (old === value) {
         return;
       }
+      // Cahced keys cannot be static as this element can be using in the sane
+      // document with different AMF models
+      this.__cachedKeys = {};
       this._amf = value;
-      this.__modelVersion = this.__detectModelVersion(value);
       this.__amfChanged(value);
       if (this.requestUpdate) {
         this.requestUpdate('amf', old);
       }
-    }
-
-    get _modelVersion() {
-      return this.__modelVersion;
     }
     /**
      * This is an abstract method to be implemented by the components.
@@ -236,33 +300,6 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @abstract
      */
     __amfChanged() {}
-    /**
-     * Checks for AMF model version.
-     * @param {[type]} model [description]
-     * @return {Number} Model major version when defined, `1` when version is
-     * not defined, and `0` when the model is not valid or not set.
-     */
-    __detectModelVersion(model) {
-      if (model instanceof Array) {
-        model = model[0];
-      }
-      if (!model) {
-        return 0;
-      }
-      const ctx = model['@context'];
-      let versionString;
-      if (ctx) {
-        versionString = this._getValue(model, 'doc:version');
-      } else {
-        versionString = this._getValue(model, 'http://a.ml/vocabularies/document#version');
-      }
-      if (versionString) {
-        const major = versionString.split('.')[0];
-        return major === '2' ? 2 : 1;
-      }
-      return 1;
-    }
-
     /**
      * Returns compact model key for given value.
      * @param {String} property AMF orioginal property
@@ -280,9 +317,16 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (amf instanceof Array) {
         amf = amf[0];
       }
+      if (!this.__cachedKeys) {
+        this.__cachedKeys = {};
+      }
       const ctx = amf['@context'];
       if (!ctx || !property) {
         return property;
+      }
+      const cache = this.__cachedKeys;
+      if (property in cache) {
+        return cache[property];
       }
       property = String(property);
       const hashIndex = property.indexOf('#');
@@ -291,12 +335,15 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       for (let i = 0, len = keys.length; i < len; i++) {
         const k = keys[i];
         if (ctx[k] === property) {
+          cache[property] = ctx[k];
           return k;
         } else if (hashIndex === -1 && property.indexOf(ctx[k]) === 0) {
           const result = property.replace(ctx[k], k + ':');
+          cache[property] = result;
           return result;
         } else if (ctx[k] === hashProperty) {
           const result = k + ':' + property.substr(hashIndex + 1);
+          cache[property] = result;
           return result;
         }
       }
@@ -315,7 +362,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (amf instanceof Array) {
         amf = amf[0];
       }
-      if (this._hasType(amf, webApiDocumentType)) {
+      if (this._hasType(amf, ns.aml.vocabularies.document.Document)) {
         return amf;
       }
     }
@@ -464,19 +511,11 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     }
 
     _computeHeaders(shape) {
-      if (this._modelVersion !== 2) {
-        return this._computePropertyArray(shape, this.ns.raml.vocabularies.http + 'header');
-      } else {
-        return this._computePropertyArray(shape, this.ns.raml.vocabularies.apiContract + 'header');
-      }
+      return this._computePropertyArray(shape, this.ns.aml.vocabularies.apiContract.header);
     }
 
     _computeQueryParameters(shape) {
-      if (this._modelVersion !== 2) {
-        return this._computePropertyArray(shape, this.ns.raml.vocabularies.http + 'parameter');
-      } else {
-        return this._computePropertyArray(shape, this.ns.raml.vocabularies.apiContract + 'parameter');
-      }
+      return this._computePropertyArray(shape, this.ns.aml.vocabularies.apiContract.parameter);
     }
     /**
      * In OAS URI parmaeters can be defined on an operation level under `uriParameter` proeprty.
@@ -489,15 +528,8 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!shape) {
         return;
       }
-      let operationKey;
-      let parameterKey;
-      if (this._modelVersion !== 2) {
-        operationKey = this.ns.w3.hydra.core + 'Operation';
-        parameterKey = this.ns.raml.vocabularies.http + 'uriParameter';
-      } else {
-        operationKey = this.ns.raml.vocabularies.apiContract + 'Operation';
-        parameterKey = this.ns.raml.vocabularies.apiContract + 'uriParameter';
-      }
+      const operationKey = this.ns.aml.vocabularies.apiContract.Operation;
+      const parameterKey = this.ns.aml.vocabularies.apiContract.uriParameter;
       if (this._hasType(shape, operationKey)) {
         shape = this._computeExpects(shape);
       }
@@ -505,11 +537,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     }
 
     _computeResponses(shape) {
-      if (this._modelVersion !== 2) {
-        return this._computePropertyArray(shape, this.ns.w3.hydra.core + 'response');
-      } else {
-        return this._computePropertyArray(shape, this.ns.raml.vocabularies.apiContract + 'response');
-      }
+      return this._computePropertyArray(shape, this.ns.aml.vocabularies.apiContract.response);
     }
     /**
      * Computes value for `serverVariables` property.
@@ -518,11 +546,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Array<Object>|undefined} Variables if defined.
      */
     _computeServerVariables(server) {
-      if (this._modelVersion !== 2) {
-        return this._computePropertyArray(server, this.ns.raml.vocabularies.http + 'variable');
-      } else {
-        return this._computePropertyArray(server, this.ns.raml.vocabularies.apiContract + 'variable');
-      }
+      return this._computePropertyArray(server, this.ns.aml.vocabularies.apiContract.variable);
     }
     /**
      * Computes value for `endpointVariables` property.
@@ -546,11 +570,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Array<Object>|undefined} Payload model if defined.
      */
     _computePayload(expects) {
-      if (this._modelVersion !== 2) {
-        return this._computePropertyArray(expects, this.ns.raml.vocabularies.http + 'payload');
-      } else {
-        return this._computePropertyArray(expects, this.ns.raml.vocabularies.apiContract + 'payload');
-      }
+      return this._computePropertyArray(expects, this.ns.aml.vocabularies.apiContract.payload);
     }
     /**
      * Computes value for `returns` property
@@ -559,11 +579,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Array<Object>|undefined}
      */
     _computeReturns(method) {
-      if (this._modelVersion !== 2) {
-        return this._computePropertyArray(method, this.ns.w3.hydra.core + 'returns');
-      } else {
-        return this._computePropertyArray(method, this.ns.raml.vocabularies.apiContract + 'returns');
-      }
+      return this._computePropertyArray(method, this.ns.aml.vocabularies.apiContract.returns);
     }
     /**
      * Computes value for `security` property
@@ -572,7 +588,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Array<Object>|undefined}
      */
     _computeSecurity(method) {
-      return this._computePropertyArray(method, this.ns.raml.vocabularies.security + 'security');
+      return this._computePropertyArray(method, this.ns.aml.vocabularies.security.security);
     }
     /**
      * Computes value for `hasCustomProperties` property.
@@ -581,7 +597,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Boolean}
      */
     _computeHasCustomProperties(shape) {
-      return this._hasProperty(shape, this.ns.raml.vocabularies.document + 'customDomainProperties');
+      return this._hasProperty(shape, this.ns.aml.vocabularies.document.customDomainProperties);
     }
     /**
      * Computes API version from the AMF model.
@@ -594,11 +610,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!api) {
         return;
       }
-      if (this._modelVersion !== 2) {
-        return this._getValue(api, this.ns.schema.name + 'version');
-      } else {
-        return this._getValue(api, this.ns.raml.vocabularies.core + 'version');
-      }
+      return this._getValue(api, this.ns.aml.vocabularies.core.version);
     }
     /**
      * Computes model's `encodes` property.
@@ -613,7 +625,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (model instanceof Array) {
         model = model[0];
       }
-      const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'encodes');
+      const key = this._getAmfKey(this.ns.aml.vocabularies.document.encodes);
       const data = model[key];
       if (data) {
         return data instanceof Array ? data[0] : data;
@@ -635,7 +647,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!model) {
         return;
       }
-      const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'declares');
+      const key = this._getAmfKey(this.ns.aml.vocabularies.document.declares);
       const data = this._ensureArray(model[key]);
       return data instanceof Array ? data : undefined;
     }
@@ -655,7 +667,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!model) {
         return;
       }
-      const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'references');
+      const key = this._getAmfKey(this.ns.aml.vocabularies.document.references);
       const data = this._ensureArray(model[key]);
       return data instanceof Array ? data : undefined;
     }
@@ -685,12 +697,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!api) {
         return;
       }
-      let key;
-      if (this._modelVersion !== 2) {
-        key = this._getAmfKey(this.ns.raml.vocabularies.http + 'server');
-      } else {
-        key = this._getAmfKey(this.ns.raml.vocabularies.apiContract + 'server');
-      }
+      const key = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
       const srv = this._ensureArray(api[key]);
       return srv ? srv[0] : undefined;
     }
@@ -709,12 +716,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
         base = base.substr(0, base.length - 1);
       }
       base = this._ensureUrlScheme(base);
-      let path;
-      if (this._modelVersion !== 2) {
-        path = this._getValue(endpoint, this.ns.raml.vocabularies.http + 'path');
-      } else {
-        path = this._getValue(endpoint, this.ns.raml.vocabularies.apiContract + 'path');
-      }
+      const path = this._getValue(endpoint, this.ns.aml.vocabularies.apiContract.path);
       let result = base + (path || '');
       if (version && result) {
         result = result.replace('{version}', version);
@@ -752,12 +754,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {String|undefined} Base uri value if exists.
      */
     _getAmfBaseUri(server, protocols) {
-      let key;
-      if (this._modelVersion !== 2) {
-        key = this.ns.raml.vocabularies.http + 'url';
-      } else {
-        key = this.ns.raml.vocabularies.core + 'urlTemplate';
-      }
+      const key = this.ns.aml.vocabularies.core.urlTemplate;
       let value = this._getValue(server, key);
       value = this._ensureUrlScheme(value, protocols);
       return value;
@@ -799,11 +796,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!api) {
         return;
       }
-      if (this._modelVersion !== 2) {
-        return this._getValueArray(api, this.ns.raml.vocabularies.http + 'scheme');
-      } else {
-        return this._getValueArray(api, this.ns.raml.vocabularies.apiContract + 'scheme');
-      }
+      return this._getValueArray(api, this.ns.aml.vocabularies.apiContract.scheme);
     }
     /**
      * Computes value for the `expects` property.
@@ -812,15 +805,8 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {Object}
      */
     _computeExpects(method) {
-      let operationKey;
-      let expectsKey;
-      if (this._modelVersion !== 2) {
-        operationKey = this.ns.w3.hydra.core + 'Operation';
-        expectsKey = this.ns.w3.hydra.core + 'expects';
-      } else {
-        operationKey = this.ns.raml.vocabularies.apiContract + 'Operation';
-        expectsKey = this.ns.raml.vocabularies.apiContract + 'expects';
-      }
+      const operationKey = this.ns.aml.vocabularies.apiContract.Operation;
+      const expectsKey = this.ns.aml.vocabularies.apiContract.expects;
       if (this._hasType(method, operationKey)) {
         const key = this._getAmfKey(expectsKey);
         const expects = this._ensureArray(method[key]);
@@ -837,27 +823,9 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @return {String|undefined}
      */
     _computePropertyValue(item) {
-      let exKey;
-      if (this._modelVersion !== 2) {
-        exKey = this.ns.raml.vocabularies.document + 'examples';
-      } else {
-        exKey = this.ns.raml.vocabularies.apiContract + 'examples';
-      }
-
-      let schemaKey;
-      if (this._modelVersion !== 2) {
-        schemaKey = this.ns.raml.vocabularies.http + 'schema';
-      } else {
-        schemaKey = this.ns.raml.vocabularies.shapes + 'schema';
-      }
-
-      let rawKey;
-      if (this._modelVersion !== 2) {
-        rawKey = this.ns.w3.shacl.name + 'raw';
-      } else {
-        rawKey = this.ns.raml.vocabularies.document + 'raw';
-      }
-
+      const exKey = this.ns.aml.vocabularies.apiContract.examples;
+      const schemaKey = this.ns.aml.vocabularies.shapes.schema;
+      const rawKey = this.ns.aml.vocabularies.document.raw;
       const skey = this._getAmfKey(schemaKey);
       let schema = item && item[skey];
       if (!schema) {
@@ -866,7 +834,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (schema instanceof Array) {
         schema = schema[0];
       }
-      let value = this._getValue(schema, this.ns.w3.shacl.name + 'defaultValue');
+      let value = this._getValue(schema, this.ns.w3.shacl.defaultValue);
       if (!value) {
         const examplesKey = this._getAmfKey(exKey);
         let example = schema[examplesKey];
@@ -888,14 +856,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!webApi) {
         return [];
       }
-      let endpointKey;
-
-      if (this._modelVersion !== 2) {
-        endpointKey = this.ns.raml.vocabularies.http + 'endpoint';
-      } else {
-        endpointKey = this.ns.raml.vocabularies.apiContract + 'endpoint';
-      }
-
+      const endpointKey = this.ns.aml.vocabularies.apiContract.endpoint;
       const key = this._getAmfKey(endpointKey);
       return this._ensureArray(webApi[key]);
     }
@@ -928,14 +889,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!endpoints) {
         return;
       }
-
-      let pathKey;
-      if (this._modelVersion !== 2) {
-        pathKey = this.ns.raml.vocabularies.http + 'path';
-      } else {
-        pathKey = this.ns.raml.vocabularies.apiContract + 'path';
-      }
-
+      const pathKey = this.ns.aml.vocabularies.apiContract.path;
       for (let i = 0; i < endpoints.length; i++) {
         const ePath = this._getValue(endpoints[i], pathKey);
         if (ePath === path) {
@@ -968,15 +922,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!endpoint) {
         return [];
       }
-
-      let supportedOperationKey;
-      if (this._modelVersion !== 2) {
-        supportedOperationKey = this.ns.w3.hydra.supportedOperation;
-      } else {
-        supportedOperationKey = this.ns.apiContract.supportedOperation;
-      }
-
-      const opKey = this._getAmfKey(supportedOperationKey);
+      const opKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.supportedOperation);
       return this._ensureArray(endpoint[opKey]);
     }
     /**
@@ -993,15 +939,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!endpoints) {
         return;
       }
-
-      let supportedOperationKey;
-      if (this._modelVersion !== 2) {
-        supportedOperationKey = this.ns.w3.hydra.supportedOperation;
-      } else {
-        supportedOperationKey = this.ns.apiContract.supportedOperation;
-      }
-
-      const opKey = this._getAmfKey(supportedOperationKey);
+      const opKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.supportedOperation);
       for (let i = 0, len = endpoints.length; i < len; i++) {
         const endpoint = endpoints[i];
         let methods = endpoint[opKey];
@@ -1031,15 +969,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!endpoint) {
         return;
       }
-
-      let supportedOperationKey;
-      if (this._modelVersion !== 2) {
-        supportedOperationKey = this.ns.w3.hydra.supportedOperation;
-      } else {
-        supportedOperationKey = this.ns.apiContract.supportedOperation;
-      }
-
-      const opKey = this._getAmfKey(supportedOperationKey);
+      const opKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.supportedOperation);
       return this._ensureArray(endpoint[opKey]);
     }
     /**
@@ -1060,7 +990,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       let type = declares.find((item) => item['@id'] === selected || item['@id'] === compactId);
       if (!type && references && references.length) {
         for (let i = 0, len = references.length; i < len; i++) {
-          if (!this._hasType(references[i], this.ns.raml.vocabularies.document + 'Module')) {
+          if (!this._hasType(references[i], this.ns.aml.vocabularies.document.Module)) {
             continue;
           }
           type = this._computeReferenceType(references[i], selected);
@@ -1135,7 +1065,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (typeof shape !== 'object' || shape instanceof Array || !amf || shape.__apicResolved) {
         return shape;
       }
-      let refKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'link-target');
+      let refKey = this._getAmfKey(this.ns.aml.vocabularies.document.linkTarget);
       let refValue = this._ensureArray(shape[refKey]);
       let refData;
       if (refValue) {
@@ -1147,7 +1077,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
         }
         refData = this._getLinkTarget(amf, refKey);
       } else {
-        refKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'reference-id');
+        refKey = this._getAmfKey(this.ns.aml.vocabularies.document.referenceId);
         refValue = this._ensureArray(shape[refKey]);
         if (refValue) {
           const refKey = refValue[0]['@id'];
@@ -1205,14 +1135,6 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       return target;
     }
 
-    _getSchemaKey(element) {
-      if (element._modelVersion === 1) {
-        return element._getAmfKey(element.ns.raml.vocabularies.http + 'schema');
-      } else {
-        return element._getAmfKey(element.ns.raml.vocabularies.shapes + 'schema');
-      }
-    }
-
     _getReferenceId(amf, id) {
       if (!amf || !id) {
         return;
@@ -1243,90 +1165,6 @@ export const AmfHelperMixin = dedupingMixin((base) => {
           shape[key] = this._resolve(currentShape);
         }
       });
-    }
-    /**
-     * Gets string value for an example data model.
-     *
-     * @param {Object} item Example item model
-     * @param {Boolean} isJson If set it checks if the `raw` value is valid JSON.
-     * If it isn't then it parses structured value.
-     * @return {String}
-     * @deprecated Use `amf-excample-generator` for examples generation.
-     */
-    _getExampleValue(item, isJson) {
-      item = this._resolve(item);
-      let data = this._getValue(item, this.ns.w3.shacl.name + 'raw');
-      // This suppose to be a JSON data so lets test it.
-      if (!data || (isJson && !(data[0] === '{' || data[0] === '['))) {
-        const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'structuredValue');
-        const structured = this._ensureArray(item[key]);
-        if (structured) {
-          data = this._computeExampleFromStructuredValue(structured[0]);
-          data = JSON.stringify(data, null, 2);
-        }
-      }
-      return data;
-    }
-    /**
-     * Computes an example from example structured value.
-     *
-     * @param {Object} model `structuredValue` item model.
-     * @return {Object|Array} Javascript object or array with structured value.
-     * @deprecated Use `amf-excample-generator` for examples generation.
-     */
-    _computeExampleFromStructuredValue(model) {
-      if (this._hasType(model, this.ns.raml.vocabularies.data + 'Scalar')) {
-        return this._computeStructuredExampleValue(this._getValue(model, this.ns.raml.vocabularies.data + 'value'));
-      }
-      const isObject = this._hasType(model, this.ns.raml.vocabularies.data + 'Object');
-      const result = isObject ? {} : [];
-      const modelKeys = ['@id', '@type'];
-      Object.keys(model).forEach((key) => {
-        if (modelKeys.indexOf(key) !== -1) {
-          return;
-        }
-        const value = this._computeStructuredExampleValue(model[key][0]);
-        if (isObject) {
-          const name = key.substr(key.indexOf('#') + 1);
-          result[name] = value;
-        } else {
-          result.push(value);
-        }
-      });
-      return result;
-    }
-    /**
-     * Computes value with propert data type for a structured example.
-     * @param {Object} model Structured example item model.
-     * @return {String|Boolean|Number} Value for the example.
-     * @deprecated Use `amf-excample-generator` for examples generation.
-     */
-    _computeStructuredExampleValue(model) {
-      if (!model) {
-        return;
-      }
-      if (typeof model === 'string') {
-        return model;
-      }
-      if (this._hasType(model, this.ns.raml.vocabularies.data + 'Scalar')) {
-        const key = this._getAmfKey(this.ns.raml.vocabularies.data + 'value');
-        const mValue = this._ensureArray(model[key])[0];
-        const type = mValue['@type'];
-        const value = mValue['@value'];
-        switch (type) {
-          case this.ns.w3.xmlSchema + 'boolean':
-            return value === 'true' ? true : false;
-          case this.ns.w3.xmlSchema + 'integer':
-          case this.ns.w3.xmlSchema + 'long':
-          case this.ns.w3.xmlSchema + 'double':
-          case this.ns.w3.xmlSchema + 'float':
-          case this.ns.raml.vocabularies.shapes + 'number':
-            return Number(value);
-          default:
-            return value;
-        }
-      }
-      return this._computeExampleFromStructuredValue(model);
     }
   }
   return AHmixin;
