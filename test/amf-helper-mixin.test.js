@@ -301,7 +301,7 @@ describe('AmfHelperMixin', function() {
           // ['SecuritySchemeFragment', key + 'SecuritySchemeFragment'],
           // ['UserDocumentation', key + 'UserDocumentation'],
           // ['DataType', key + 'DataType'],
-          ['Example', key + 'Example'],
+          // ['Example', key + 'Example'],
           ['NamedExamples', key + 'NamedExamples'],
           ['DomainElement', key + 'DomainElement'],
           ['ParametrizedResourceType', key + 'ParametrizedResourceType'],
