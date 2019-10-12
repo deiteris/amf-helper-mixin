@@ -20,4 +20,3 @@ ns2.w3.hydra.core => ns2.aml.vocabularies.apiContract;
 ./api-endpoint-documentation/api-endpoint-documentation.js:      const method = this._getValue(op, this.ns.w3.hydra.core + 'method');
 ./api-endpoint-documentation/api-endpoint-documentation.js:    if (this._hasType(payload, this.ns.w3.hydra.core + 'Operation')) {
 ./api-endpoint-documentation/api-endpoint-documentation.js:    let name = this._getValue(method, this.ns.w3.hydra.core + 'method');
-./api-view-model-transformer/api-view-model-transformer.js:    const key = this.ns.w3.hydra.core + 'required';

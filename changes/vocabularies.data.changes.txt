@@ -4,11 +4,3 @@ ns2.aml.vocabularies.data
 ./auth-methods/auth-method-oauth2.js:    const d = this.ns.raml.vocabularies.data;
 ./auth-methods/auth-method-oauth2.js:    const d = this.ns.raml.vocabularies.data;
 ./api-type-document/property-range-document.js:      let result = this._getValue(value, this.ns.raml.vocabularies.data + 'value');
-./api-view-model-transformer/api-view-model-transformer.js:      if (this._hasType(items, this.ns.raml.vocabularies.data + 'Object')) {
-./api-view-model-transformer/api-view-model-transformer.js:    const dataKey = this._getAmfKey(this.ns.raml.vocabularies.data);
-./api-view-model-transformer/api-view-model-transformer.js:    const dPrefix = this.ns.raml.vocabularies.data;
-./api-view-model-transformer/api-view-model-transformer.js:      const dKey = this._getAmfKey(this.ns.raml.vocabularies.data);
-./api-view-model-transformer/api-view-model-transformer.js:      case this._getAmfKey(this.ns.raml.vocabularies.data + 'Scalar'):
-./api-view-model-transformer/api-view-model-transformer.js:      case this._getAmfKey(this.ns.raml.vocabularies.data + 'Array'):
-./api-view-model-transformer/api-view-model-transformer.js:    const valueKey = this._getAmfKey(this.ns.raml.vocabularies.data + 'value');
-./api-view-model-transformer/api-view-model-transformer.js:      const vKey = this._getAmfKey(this.ns.raml.vocabularies.data + 'value');

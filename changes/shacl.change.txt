@@ -46,10 +46,3 @@
 ./api-method-documentation/coverage/api-method-documentation.js.html:    let value = this._getValue(schema, this.ns.w3.shacl.name + 'defaultValue');
 ./api-endpoint-documentation/api-endpoint-documentation.js:    let value = this._getValue(item, this.ns.w3.shacl.name + 'defaultValue');
 ./api-endpoint-documentation/coverage/api-endpoint-documentation.js.html:    let value = this._getValue(item, this.ns.w3.shacl.name + 'defaultValue');
-./api-view-model-transformer/api-view-model-transformer.js:    if (this._hasType(amfItem, this.ns.w3.shacl.name + 'PropertyShape')) {
-./api-view-model-transformer/api-view-model-transformer.js:      const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
-./api-view-model-transformer/api-view-model-transformer.js:    const key = this.ns.w3.shacl.name + 'minCount';
-./api-view-model-transformer/api-view-model-transformer.js:    const key = this.ns.w3.shacl.name + String(property);
-./api-view-model-transformer/api-view-model-transformer.js:    const valueKey = this._getAmfKey(this.ns.w3.shacl.name + 'defaultValueStr');
-./api-view-model-transformer/api-view-model-transformer.js:      const dtKey = this._getAmfKey(this.ns.w3.shacl.name + 'datatype');
-./api-view-model-transformer/api-view-model-transformer.js:      const valueKey = this._getAmfKey(this.ns.w3.shacl.name + 'defaultValue');

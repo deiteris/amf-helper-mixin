@@ -24,14 +24,6 @@ ns.aml.vocabularies.apiContract;
 ./amf-helper-mixin/test/amf-helper-mixin.test.js:          assert.equal(spy.args[0][1], element.ns.raml.vocabularies.http + 'payload');
 ./api-request-editor/src/ApiRequestEditor.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.http + 'header');
 ./api-request-editor/src/ApiRequestEditor.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.http + 'payload');
-./api-view-model-transformer/api-view-model-transformer.js:    if (this._hasType(amfItem, this.ns.raml.vocabularies.http + 'Parameter')) {
-./api-view-model-transformer/api-view-model-transformer.js:    const sKey = this._getAmfKey(this.ns.raml.vocabularies.http + 'schema');
-./api-view-model-transformer/api-view-model-transformer.js:    const key = this.ns.raml.vocabularies.http + 'binding';
-./api-view-model-transformer/test/amf-model.test.js:    const hKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'header');
-./api-view-model-transformer/test/amf-model.test.js:            const pKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'parameter');
-./api-view-model-transformer/test/amf-model.test.js:            const pKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'parameter');
-./api-view-model-transformer/test/amf-model.test.js:            const pKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'parameter');
-./api-view-model-transformer/test/apic-168.test.js:    const qKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'queryString');
 ./api-documentation/api-documentation.js:      name = this._getValue(item, this.ns.raml.vocabularies.http + 'path');
 ./api-documentation/api-documentation.js:    if (this._hasType(model, this.ns.raml.vocabularies.http + 'EndPoint')) {
 ./api-documentation/api-documentation.js:    const ekey = this._getAmfKey(this.ns.raml.vocabularies.http + 'endpoint');

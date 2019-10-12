@@ -29,5 +29,3 @@ schema => aml.vocabularies.core
 ./api-endpoint-documentation/api-endpoint-documentation.js:      const name = this._getValue(op, this.ns.schema.schemaName);
 ./api-endpoint-documentation/api-endpoint-documentation.js:      const desc = this._getValue(op, this.ns.schema.desc);
 ./api-endpoint-documentation/api-endpoint-documentation.js:        const name = this._getValue(item, this.ns.schema.schemaName);
-./api-view-model-transformer/api-view-model-transformer.js:    const key = this.ns.schema.schemaName;
-./api-view-model-transformer/api-view-model-transformer.js:    const result = this._getValue(def, this.ns.schema.schemaName);
