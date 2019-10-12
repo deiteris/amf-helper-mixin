@@ -90,6 +90,7 @@ ns.aml.vocabularies.apiContract.UserDocumentationFragment = contractKey + 'UserD
 ns.aml.vocabularies.apiContract.Example = contractKey + 'Example';
 ns.aml.vocabularies.apiContract.header = contractKey + 'header';
 ns.aml.vocabularies.apiContract.parameter = contractKey + 'parameter';
+ns.aml.vocabularies.apiContract.paramName = contractKey + 'paramName';
 ns.aml.vocabularies.apiContract.uriParameter = contractKey + 'uriParameter';
 ns.aml.vocabularies.apiContract.variable = contractKey + 'variable';
 ns.aml.vocabularies.apiContract.payload = contractKey + 'payload';
@@ -123,6 +124,7 @@ ns.aml.vocabularies.shapes.AnyShape = shapesKey + 'AnyShape';
 ns.aml.vocabularies.shapes.MatrixShape = shapesKey + 'MatrixShape';
 ns.aml.vocabularies.shapes.TupleShape = shapesKey + 'TupleShape';
 ns.aml.vocabularies.shapes.DataTypeFragment = shapesKey + 'DataTypeFragment';
+ns.aml.vocabularies.shapes.RecursiveShape = shapesKey + 'RecursiveShape';
 ns.aml.vocabularies.shapes.range = shapesKey + 'range';
 ns.aml.vocabularies.shapes.items = shapesKey + 'items';
 ns.aml.vocabularies.shapes.anyOf = shapesKey + 'anyOf';
@@ -165,7 +167,15 @@ ns.aml.vocabularies.data.format = dataKey + 'format';
 ns.aml.vocabularies.data.example = dataKey + 'example';
 ns.aml.vocabularies.data.examples = dataKey + 'examples';
 
-ns.aml.vocabularies.docSourceMaps = ns.aml.vocabularies.key + 'document-source-maps#';
+ns.aml.vocabularies.docSourceMaps = {};
+const dsmKey = ns.aml.vocabularies.docSourceMaps.key = ns.aml.vocabularies.key + 'document-source-maps#';
+ns.aml.vocabularies.docSourceMaps.toString = () => dsmKey;
+ns.aml.vocabularies.docSourceMaps.sources = dsmKey + 'sources';
+ns.aml.vocabularies.docSourceMaps.element = dsmKey + 'element';
+ns.aml.vocabularies.docSourceMaps.value = dsmKey + 'value';
+ns.aml.vocabularies.docSourceMaps.declaredElement = dsmKey + 'declared-element';
+ns.aml.vocabularies.docSourceMaps.trackedElement = dsmKey + 'tracked-element';
+ns.aml.vocabularies.docSourceMaps.parsedJsonSchema = dsmKey + 'parsed-json-schema';
 
 // W3 namespace
 ns.w3 = {};

@@ -401,6 +401,7 @@ describe('AmfHelperMixin', function() {
           ['UserDocumentationFragment', key + 'UserDocumentationFragment'],
           ['header', key + 'header'],
           ['parameter', key + 'parameter'],
+          ['paramName', key + 'paramName'],
           ['uriParameter', key + 'uriParameter'],
           ['variable', key + 'variable'],
           ['payload', key + 'payload'],
@@ -446,6 +447,7 @@ describe('AmfHelperMixin', function() {
           ['MatrixShape', key + 'MatrixShape'],
           ['TupleShape', key + 'TupleShape'],
           ['DataTypeFragment', key + 'DataTypeFragment'],
+          ['RecursiveShape', key + 'RecursiveShape'],
           ['range', key + 'range'],
           ['items', key + 'items'],
           ['anyOf', key + 'anyOf'],
@@ -502,6 +504,28 @@ describe('AmfHelperMixin', function() {
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.data[property];
+            assert.equal(result, value);
+          });
+        });
+      });
+
+      describe('vocabularies.docSourceMaps namespace', () => {
+        let element;
+        const key = 'http://a.ml/vocabularies/document-source-maps#';
+        beforeEach(async () => {
+          element = await modelFixture(model);
+        });
+
+        [
+          ['sources', key + 'sources'],
+          ['element', key + 'element'],
+          ['value', key + 'value'],
+          ['declaredElement', key + 'declared-element'],
+          ['trackedElement', key + 'tracked-element'],
+          ['parsedJsonSchema', key + 'parsed-json-schema'],
+        ].forEach(([property, value]) => {
+          it(`has value for ${property}`, () => {
+            const result = element.ns.aml.vocabularies.docSourceMaps[property];
             assert.equal(result, value);
           });
         });
