@@ -26,7 +26,7 @@ const docKey = ns.aml.vocabularies.document.key = ns.aml.vocabularies.key + 'doc
 ns.aml.vocabularies.document.toString = () => docKey;
 ns.aml.vocabularies.document.Module = docKey + 'Module';
 ns.aml.vocabularies.document.Document = docKey + 'Document';
-ns.aml.vocabularies.document.SecuritySchemeFragment = docKey + 'SecuritySchemeFragment';
+// ns.aml.vocabularies.document.SecuritySchemeFragment = docKey + 'SecuritySchemeFragment';
 ns.aml.vocabularies.document.UserDocumentation = docKey + 'UserDocumentation';
 ns.aml.vocabularies.document.DataType = docKey + 'DataType';
 ns.aml.vocabularies.document.Example = docKey + 'Example';
@@ -68,6 +68,7 @@ ns.aml.vocabularies.security = {};
 const secKey = ns.aml.vocabularies.security.key = ns.aml.vocabularies.key + 'security#';
 ns.aml.vocabularies.security.toString = () => secKey;
 ns.aml.vocabularies.security.ParametrizedSecurityScheme = secKey + 'ParametrizedSecurityScheme';
+ns.aml.vocabularies.security.SecuritySchemeFragment = secKey + 'SecuritySchemeFragment';
 ns.aml.vocabularies.security.SecurityScheme = secKey + 'SecurityScheme';
 ns.aml.vocabularies.security.security = secKey + 'security';
 ns.aml.vocabularies.security.scheme = secKey + 'scheme';

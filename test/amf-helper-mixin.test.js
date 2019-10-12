@@ -295,7 +295,7 @@ describe('AmfHelperMixin', function() {
         [
           ['Module', key + 'Module'],
           ['Document', key + 'Document'],
-          ['SecuritySchemeFragment', key + 'SecuritySchemeFragment'],
+          // ['SecuritySchemeFragment', key + 'SecuritySchemeFragment'],
           ['UserDocumentation', key + 'UserDocumentation'],
           ['DataType', key + 'DataType'],
           ['Example', key + 'Example'],
@@ -318,6 +318,30 @@ describe('AmfHelperMixin', function() {
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.document[property];
+            assert.equal(result, value);
+          });
+        });
+      });
+
+      describe('vocabularies.security namespace', () => {
+        let element;
+        const key = 'http://a.ml/vocabularies/security#';
+        beforeEach(async () => {
+          element = await modelFixture(model);
+        });
+
+        [
+          ['ParametrizedSecurityScheme', key + 'ParametrizedSecurityScheme'],
+          ['SecuritySchemeFragment', key + 'SecuritySchemeFragment'],
+          ['SecurityScheme', key + 'SecurityScheme'],
+          ['security', key + 'security'],
+          ['scheme', key + 'scheme'],
+          ['settings', key + 'settings'],
+          ['name', key + 'name'],
+          ['type', key + 'type'],
+        ].forEach(([property, value]) => {
+          it(`has value for ${property}`, () => {
+            const result = element.ns.aml.vocabularies.security[property];
             assert.equal(result, value);
           });
         });
