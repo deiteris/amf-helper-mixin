@@ -168,6 +168,9 @@ describe('AmfHelperMixin', function() {
           assert.typeOf(v.document, 'object', 'document is set');
           assert.equal(v.document.toString(), key + 'document#', 'document namespace as string is the key');
           assert.equal(v.document.key, key + 'document#', 'document key is set');
+          assert.typeOf(v.core, 'object', 'core is set');
+          assert.equal(v.core.toString(), key + 'core#', 'core namespace as string is the key');
+          assert.equal(v.core.key, key + 'core#', 'core key is set');
           assert.typeOf(v.apiContract, 'object', 'apiContract is set');
           assert.equal(v.apiContract.toString(), key + 'apiContract#', 'apiContract namespace as string is the key');
           assert.equal(v.apiContract.key, key + 'apiContract#', 'apiContract.key is set');
@@ -347,6 +350,37 @@ describe('AmfHelperMixin', function() {
         });
       });
 
+      describe('vocabularies.core namespace', () => {
+        let element;
+        const key = 'http://a.ml/vocabularies/core#';
+        beforeEach(async () => {
+          element = await modelFixture(model);
+        });
+
+        [
+          ['CreativeWork', key + 'CreativeWork'],
+          ['version', key + 'version'],
+          ['urlTemplate', key + 'urlTemplate'],
+          ['displayName', key + 'displayName'],
+          ['title', key + 'title'],
+          ['name', key + 'name'],
+          ['description', key + 'description'],
+          ['documentation', key + 'documentation'],
+          ['version', key + 'version'],
+          ['provider', key + 'provider'],
+          ['email', key + 'email'],
+          ['url', key + 'url'],
+          ['termsOfService', key + 'termsOfService'],
+          ['license', key + 'license'],
+          ['mediaType', key + 'mediaType'],
+        ].forEach(([property, value]) => {
+          it(`has value for ${property}`, () => {
+            const result = element.ns.aml.vocabularies.core[property];
+            assert.equal(result, value);
+          });
+        });
+      });
+
       describe('vocabularies.apiContract namespace', () => {
         let element;
         const key = 'http://a.ml/vocabularies/apiContract#';
@@ -372,7 +406,7 @@ describe('AmfHelperMixin', function() {
           ['scheme', key + 'scheme'],
           ['endpoint', key + 'endpoint'],
           ['queryString', key + 'queryString'],
-          ['mediaType', key + 'mediaType'],
+          // ['mediaType', key + 'mediaType'],
           ['accepts', key + 'accepts'],
           ['guiSummary', key + 'guiSummary'],
           ['binding', key + 'binding'],
