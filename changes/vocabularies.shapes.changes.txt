@@ -4,41 +4,6 @@ ns2.aml.vocabularies.shapes
 
 ./api-body-editor/api-body-editor-amf-overlay.js:    if (this._hasType(schema, this.ns.raml.vocabularies.shapes + 'UnionShape')) {
 ./api-body-editor/api-body-editor-amf-overlay.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'anyOf');
-./api-example-generator/api-example-generator.js:    if (this._hasType(schema, this.ns.raml.vocabularies.shapes + 'ArrayShape')) {
-./api-example-generator/api-example-generator.js:    if (this._hasType(schema, this.ns.raml.vocabularies.shapes + 'UnionShape')) {
-./api-example-generator/api-example-generator.js:    if (this._hasType(schema, this.ns.raml.vocabularies.shapes + 'ScalarShape')) {
-./api-example-generator/api-example-generator.js:    const iKey = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'items');
-./api-example-generator/api-example-generator.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'anyOf');
-./api-example-generator/api-example-generator.js:    const shapeindex = id.indexOf(this.ns.raml.vocabularies.shapes);
-./api-example-generator/api-example-generator.js:      id = id.substr(this.ns.raml.vocabularies.shapes.length);
-./api-example-generator/api-example-generator.js:      const rKey = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'range');
-./api-example-generator/api-example-generator.js:    if (this._hasType(range, this.ns.raml.vocabularies.shapes + 'ScalarShape')) {
-./api-example-generator/api-example-generator.js:    if (this._hasType(range, this.ns.raml.vocabularies.shapes + 'UnionShape')) {
-./api-example-generator/api-example-generator.js:    if (this._hasType(range, this.ns.raml.vocabularies.shapes + 'ArrayShape')) {
-./api-example-generator/api-example-generator.js:    if (this._hasType(range, this.ns.raml.vocabularies.shapes + 'NilShape')) {
-./api-example-generator/api-example-generator.js:    let ramlPrefix = this._getAmfKey(this.ns.raml.vocabularies.shapes);
-./api-example-generator/api-example-generator.js:    if (ramlPrefix !== this.ns.raml.vocabularies.shapes) {
-./api-example-generator/api-example-generator.js:      case this.ns.raml.vocabularies.shapes + 'boolean':
-./api-example-generator/api-example-generator.js:      case this.ns.raml.vocabularies.shapes + 'nil':
-./api-example-generator/api-example-generator.js:      case this.ns.raml.vocabularies.shapes + 'integer':
-./api-example-generator/api-example-generator.js:      case this.ns.raml.vocabularies.shapes + 'number':
-./api-example-generator/api-example-generator.js:      case this.ns.raml.vocabularies.shapes + 'long':
-./api-example-generator/api-example-generator.js:      case this.ns.raml.vocabularies.shapes + 'double':
-./api-example-generator/api-example-generator.js:      case this.ns.raml.vocabularies.shapes + 'float':
-./api-example-generator/api-example-generator.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'anyOf');
-./api-example-generator/api-example-generator.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'items');
-./api-example-generator/api-example-generator.js:    const rKey = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'range');
-./api-example-generator/api-example-generator.js:    const sKey = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'xmlSerialization');
-./api-example-generator/api-example-generator.js:      let name = this._getValue(serialization, this.ns.raml.vocabularies.shapes + 'xmlName');
-./api-example-generator/api-example-generator.js:    if (this._hasType(range, this.ns.raml.vocabularies.shapes + 'UnionShape')) {
-./api-example-generator/api-example-generator.js:      const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'anyOf');
-./api-example-generator/api-example-generator.js:      if (this._hasType(shape, this.ns.raml.vocabularies.shapes + 'ScalarShape')) {
-./api-example-generator/api-example-generator.js:      const isAtribute = this._getValue(serialization, this.ns.raml.vocabularies.shapes + 'xmlAttribute');
-./api-example-generator/api-example-generator.js:      isWrapped = this._getValue(serialization, this.ns.raml.vocabularies.shapes + 'xmlWrapped');
-./api-example-generator/api-example-generator.js:    if (this._hasType(range, this.ns.raml.vocabularies.shapes + 'ArrayShape')) {
-./api-example-generator/api-example-generator.js:    let name = this._getValue(serialization, this.ns.raml.vocabularies.shapes + 'xmlName');
-./api-example-generator/api-example-generator.js:    const pKey = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'items');
-./api-example-generator/api-example-generator.js:        case this.ns.raml.vocabularies.shapes + 'number':
 ./api-type-document/property-document-mixin.js:    const rs = this.ns.raml.vocabularies.shapes;
 ./api-type-document/property-document-mixin.js:    if (this._hasType(shape, this.ns.raml.vocabularies.shapes + 'ScalarShape')) {
 ./api-type-document/property-document-mixin.js:      const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'range');

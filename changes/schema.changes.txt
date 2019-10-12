@@ -3,7 +3,6 @@ schema => aml.vocabularies.core
 
 ./auth-methods/auth-method-oauth2.js:    const nKey = this._getAmfKey(this.ns.schema.schemaName);
 ./auth-methods/auth-method-custom.js:    this._schemeDescription = this._getValue(scheme, this.ns.schema.desc);
-./api-example-generator/api-example-generator.js:    let title = this._getValue(example, this.ns.schema.schemaName);
 ./api-documentation-document/api-documentation-document.js:    this._title = this._getValue(shape, this.ns.schema.title);
 ./api-documentation-document/api-documentation-document.js:    this._content = this._getValue(shape, this.ns.schema.desc);
 ./api-type-document/property-document-mixin.js:        label = this._getValue(item, this.ns.schema.schemaName);

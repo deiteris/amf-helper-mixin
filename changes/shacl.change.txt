@@ -2,35 +2,6 @@
 ./api-body-editor/api-body-editor-amf-overlay.js:      const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
 ./api-body-editor/api-body-editor-amf-overlay.js:    const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
 ./api-body-editor/api-body-editor-amf-overlay.js:      if (this._hasType(item, this.ns.w3.shacl.name + 'NodeShape')) {
-./api-example-generator/api-example-generator.js:    const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
-./api-example-generator/api-example-generator.js:      const typeName = this._getValue(schema, this.ns.w3.shacl.name + 'name');
-./api-example-generator/api-example-generator.js:      raw = this._getValue(example, this.ns.w3.shacl.name + 'raw');
-./api-example-generator/api-example-generator.js:      let name = this._getValue(unionSchape, this.ns.w3.shacl.name + 'name');
-./api-example-generator/api-example-generator.js:    const dtKey = this._getAmfKey(this.ns.w3.shacl.name + 'datatype');
-./api-example-generator/api-example-generator.js:      const dtKey = this._getAmfKey(this.ns.w3.shacl.name + 'datatype');
-./api-example-generator/api-example-generator.js:    const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
-./api-example-generator/api-example-generator.js:      const typeName = this._getValue(schema, this.ns.w3.shacl.name + 'name');
-./api-example-generator/api-example-generator.js:      const name = this._getValue(property, this.ns.w3.shacl.name + 'name');
-./api-example-generator/api-example-generator.js:    if (this._hasType(range, this.ns.w3.shacl.name + 'NodeShape')) {
-./api-example-generator/api-example-generator.js:    const dtKey = this._getAmfKey(this.ns.w3.shacl.name + 'datatype');
-./api-example-generator/api-example-generator.js:    const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
-./api-example-generator/api-example-generator.js:        const name = this._getValue(item, this.ns.w3.shacl.name + 'name');
-./api-example-generator/api-example-generator.js:      if (this._hasType(item, this.ns.w3.shacl.name + 'NodeShape')) {
-./api-example-generator/api-example-generator.js:    const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
-./api-example-generator/api-example-generator.js:    return this._getValue(example, this.ns.w3.shacl.name + 'raw');
-./api-example-generator/api-example-generator.js:    const dvKey = this._getAmfKey(this.ns.w3.shacl.name + 'defaultValue');
-./api-example-generator/api-example-generator.js:    if (this._hasType(property, this.ns.w3.shacl.name + 'NodeShape')) {
-./api-example-generator/api-example-generator.js:      const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
-./api-example-generator/api-example-generator.js:        name = this._getValue(range, this.ns.w3.shacl.name + 'name');
-./api-example-generator/api-example-generator.js:    if (this._hasType(range, this.ns.w3.shacl.name + 'NodeShape')) {
-./api-example-generator/api-example-generator.js:    const dtKey = this._getAmfKey(this.ns.w3.shacl.name + 'datatype');
-./api-example-generator/api-example-generator.js:      name = this._getValue(range, this.ns.w3.shacl.name + 'name');
-./api-example-generator/api-example-generator.js:    let name = this._getValue(range, this.ns.w3.shacl.name + 'name');
-./api-example-generator/api-example-generator.js:    let nodeValue = this._getValue(range, this.ns.w3.shacl.name + 'defaultValueStr');
-./api-example-generator/api-example-generator.js:    const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
-./api-example-generator/api-example-generator.js:        const name = this._getValue(prop, this.ns.w3.shacl.name + 'name');
-./api-example-generator/api-example-generator.js:    const name = this._getValue(property, this.ns.w3.shacl.name + 'name') || 'unknown';
-./api-example-generator/api-example-generator.js:        const dtKey = this._getAmfKey(this.ns.w3.shacl.name + 'datatype');
 ./api-type-document/property-document-mixin.js:      const key = this._getAmfKey(this.ns.w3.shacl.name + 'datatype');
 ./api-type-document/property-document-mixin.js:    if (this._hasType(range, this.ns.w3.shacl.name + 'NodeShape')) {
 ./api-type-document/property-document-mixin.js:          const pkey = this._getAmfKey(this.ns.w3.shacl.name + 'property');

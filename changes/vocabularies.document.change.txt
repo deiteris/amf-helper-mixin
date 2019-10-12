@@ -1,20 +1,5 @@
 ns2.aml.vocabularies.document
 
-./api-example-generator/api-example-generator.js:    const eKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
-./api-example-generator/api-example-generator.js:    if (this._hasType(schema, this.ns.raml.vocabularies.document + 'Example')) {
-./api-example-generator/api-example-generator.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
-./api-example-generator/api-example-generator.js:      if (this._hasType(examples, this.ns.raml.vocabularies.document + 'NamedExamples')) {
-./api-example-generator/api-example-generator.js:    if (examples.length === 1 && this._hasType(examples[0], this.ns.raml.vocabularies.document + 'NamedExamples')) {
-./api-example-generator/api-example-generator.js:    let raw = this._getValue(example, this.ns.raml.vocabularies.document + 'raw');
-./api-example-generator/api-example-generator.js:    const sKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'structuredValue');
-./api-example-generator/api-example-generator.js:      const eKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
-./api-example-generator/api-example-generator.js:        const sKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'structuredValue');
-./api-example-generator/api-example-generator.js:    if (this._hasType(example, this.ns.raml.vocabularies.document + 'NamedExamples')) {
-./api-example-generator/api-example-generator.js:      const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
-./api-example-generator/api-example-generator.js:    const rKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
-./api-example-generator/api-example-generator.js:    const eKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
-./api-example-generator/api-example-generator.js:    const sKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'structuredValue');
-./api-example-generator/api-example-generator.js:      const eKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
 ./api-request-editor/api-request-editor.js:    if (this._hasType(model, this.ns.raml.vocabularies.document + 'Document')) {
 ./api-documentation/api-documentation.js:    if (this._hasType(amf, this.ns.raml.vocabularies.document + 'Document')) {
 ./api-documentation/api-documentation.js:          if (!this._hasType(references[i], this.ns.raml.vocabularies.document + 'Module')) {
