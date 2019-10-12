@@ -1,12 +1,5 @@
 ns2.aml.vocabularies.document
 
-./api-navigation/api-navigation.js:    const moduleKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'Module');
-./api-navigation/api-navigation.js:    if (this._hasType(model, this.ns.raml.vocabularies.document + 'Document')) {
-./api-navigation/api-navigation.js:    } else if (this._hasType(model, this.ns.raml.vocabularies.document + 'SecuritySchemeFragment')) {
-./api-navigation/api-navigation.js:    } else if (this._hasType(model, this.ns.raml.vocabularies.document + 'UserDocumentation')) {
-./api-navigation/api-navigation.js:    } else if (this._hasType(model, this.ns.raml.vocabularies.document + 'DataType')) {
-./api-navigation/api-navigation.js:      if (!this._hasType(item, this.ns.raml.vocabularies.document + 'Module')) {
-./api-navigation/api-navigation.js:    const rfIdKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'reference-id');
 ./api-example-generator/api-example-generator.js:    const eKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
 ./api-example-generator/api-example-generator.js:    if (this._hasType(schema, this.ns.raml.vocabularies.document + 'Example')) {
 ./api-example-generator/api-example-generator.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
@@ -42,5 +35,3 @@ ns2.aml.vocabularies.document
 ./api-endpoint-documentation/api-endpoint-documentation.js:      this._hasType(item, this.ns.raml.vocabularies.document + 'ParametrizedTrait'));
 ./api-endpoint-documentation/api-endpoint-documentation.js:      const examplesKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
 ./api-endpoint-documentation/api-endpoint-documentation.js:        value = this._getValue(item, this.ns.raml.vocabularies.document + 'value');
-./api-annotation-document/api-annotation-document.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'customDomainProperties');
-./api-annotation-document/api-annotation-document.js:    return this._getValue(item, this.ns.raml.vocabularies.document + 'name');

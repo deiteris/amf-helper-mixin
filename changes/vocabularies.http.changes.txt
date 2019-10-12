@@ -60,11 +60,6 @@ ns.aml.vocabularies.apiContract;
 ./api-url-data-model/api-url-data-model.js:    if (this._hasType(amf, this.ns.raml.vocabularies.http + 'EndPoint')) {
 ./api-url-data-model/test/api-url-data-model.test.js:          const key = element._getAmfKey(element.ns.raml.vocabularies.http + 'Server');
 ./api-url-data-model/test/api-url-data-model.test.js:          const key = element._getAmfKey(element.ns.raml.vocabularies.http + 'Server');
-./api-navigation/api-navigation.js:    const ekey = this._getAmfKey(this.ns.raml.vocabularies.http + 'endpoint');
-./api-navigation/api-navigation.js:    } else if (this._hasType(item, this.ns.raml.vocabularies.http + 'EndPoint')) {
-./api-navigation/api-navigation.js:    const path = this._getValue(item, this.ns.raml.vocabularies.http + 'path');
-./api-summary/api-summary.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.http + 'endpoint');
-./api-summary/api-summary.js:        path: this._getValue(item, this.ns.raml.vocabularies.http + 'path'),
 ./api-endpoint-documentation/demo/index.js:      name = helper._getValue(item, helper.ns.raml.vocabularies.http + 'path');
 ./api-endpoint-documentation/demo/index.js:      name = helper._getValue(item, helper.ns.raml.vocabularies.http + 'path');
 ./api-endpoint-documentation/api-endpoint-documentation.js:    return this._getValue(endpoint, this.ns.raml.vocabularies.http + 'path');

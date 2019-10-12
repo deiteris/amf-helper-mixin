@@ -7,8 +7,6 @@ ns2.w3.shacl
 ./api-body-editor/api-body-editor-amf-overlay.js:      const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
 ./api-body-editor/api-body-editor-amf-overlay.js:    const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
 ./api-body-editor/api-body-editor-amf-overlay.js:      if (this._hasType(item, this.ns.w3.shacl.name + 'NodeShape')) {
-./api-navigation/api-navigation.js:    if (this._hasType(item, this.ns.w3.shacl.shape)) {
-./api-navigation/api-navigation.js:    const w3name = this._getValue(item, this.ns.w3.shacl.name + 'name');
 ./api-example-generator/api-example-generator.js:    const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
 ./api-example-generator/api-example-generator.js:      const typeName = this._getValue(schema, this.ns.w3.shacl.name + 'name');
 ./api-example-generator/api-example-generator.js:      raw = this._getValue(example, this.ns.w3.shacl.name + 'raw');

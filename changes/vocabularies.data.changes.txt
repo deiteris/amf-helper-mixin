@@ -26,7 +26,3 @@ ns2.aml.vocabularies.data
 ./api-view-model-transformer/api-view-model-transformer.js:      case this._getAmfKey(this.ns.raml.vocabularies.data + 'Array'):
 ./api-view-model-transformer/api-view-model-transformer.js:    const valueKey = this._getAmfKey(this.ns.raml.vocabularies.data + 'value');
 ./api-view-model-transformer/api-view-model-transformer.js:      const vKey = this._getAmfKey(this.ns.raml.vocabularies.data + 'value');
-./api-annotation-document/api-annotation-document.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.data + 'value');
-./api-annotation-document/api-annotation-document.js:    return this._hasType(item, this.ns.raml.vocabularies.data + 'Scalar');
-./api-annotation-document/api-annotation-document.js:    return this._getValue(item, this.ns.raml.vocabularies.data + 'value');
-./api-annotation-document/api-annotation-document.js:    const dataKey = this._getAmfKey(this.ns.raml.vocabularies.data);

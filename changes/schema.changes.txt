@@ -1,28 +1,8 @@
 schema => aml.vocabularies.core
 
 
-./amf-helper-mixin/amf-helper-mixin.js:      return this._getValue(shape, this.ns.schema.desc);
-./amf-helper-mixin/amf-helper-mixin.js:      if (this._hasType(enc, this.ns.schema.webApi)) {
-./amf-helper-mixin/amf-helper-mixin.js:      const key = this._getAmfKey(this.ns.schema.doc);
 ./auth-methods/auth-method-oauth2.js:    const nKey = this._getAmfKey(this.ns.schema.schemaName);
 ./auth-methods/auth-method-custom.js:    this._schemeDescription = this._getValue(scheme, this.ns.schema.desc);
-./api-summary/api-summary.js:    return this._getValue(shape, this.ns.schema.schemaName);
-./api-summary/api-summary.js:    return this._getValue(webApi, this.ns.schema.name + 'version');
-./api-summary/api-summary.js:    const key = this._getAmfKey(this.ns.schema.name + 'provider');
-./api-summary/api-summary.js:    return this._getValue(provider, this.ns.schema.schemaName);
-./api-summary/api-summary.js:    return this._getValue(provider, this.ns.schema.name + 'email');
-./api-summary/api-summary.js:    let value = this._getValue(provider, this.ns.schema.name + 'url');
-./api-summary/api-summary.js:      const key = this._getAmfKey(this.ns.schema.name + 'url');
-./api-summary/api-summary.js:    return this._getValue(webApi, this.ns.schema.name + 'termsOfService');
-./api-summary/api-summary.js:    const key = this._getAmfKey(this.ns.schema.name + 'license');
-./api-summary/api-summary.js:        name: this._getValue(item, this.ns.schema.schemaName),
-./api-navigation/api-navigation.js:    const dkey = this._getAmfKey(this.ns.schema.doc);
-./api-navigation/api-navigation.js:    } else if (this._hasType(item, this.ns.schema.creativeWork)) {
-./api-navigation/api-navigation.js:    let name = this._getValue(item, this.ns.schema.schemaName);
-./api-navigation/api-navigation.js:    let name = this._getValue(item, this.ns.schema.displayName);
-./api-navigation/api-navigation.js:    const name = this._getValue(item, this.ns.schema.title);
-./api-navigation/api-navigation.js:    let name = this._getValue(item, this.ns.schema.schemaName);
-./api-navigation/api-navigation.js:    const label = this._getValue(item, this.ns.schema.schemaName);
 ./api-example-generator/api-example-generator.js:    let title = this._getValue(example, this.ns.schema.schemaName);
 ./api-documentation-document/api-documentation-document.js:    this._title = this._getValue(shape, this.ns.schema.title);
 ./api-documentation-document/api-documentation-document.js:    this._content = this._getValue(shape, this.ns.schema.desc);

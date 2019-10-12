@@ -1,8 +1,6 @@
 ns2.aml.vocabularies.security
 
 
-
-
 ./auth-methods/demo/oauth2.js:    const key = helper._getAmfKey(helper.ns.raml.vocabularies.security + 'security');
 ./auth-methods/demo/oauth2.js:    const secPrefix = helper.ns.raml.vocabularies.security;
 ./auth-methods/demo/custom.js:    const key = helper._getAmfKey(helper.ns.raml.vocabularies.security + 'security');
@@ -18,9 +16,6 @@ ns2.aml.vocabularies.security
 ./auth-methods/auth-method-oauth2.js:      const value = this._getValue(model[i], this.ns.raml.vocabularies.security + 'name');
 ./auth-methods/auth-method-custom.js:    const prefix = this.ns.raml.vocabularies.security;
 ./auth-methods/auth-method-custom.js:    if (!this._hasType(model, this.ns.raml.vocabularies.security + 'ParametrizedSecurityScheme')) {
-./api-navigation/api-navigation.js:    } else if (this._hasType(item, this.ns.raml.vocabularies.security + 'SecurityScheme')) {
-./api-navigation/api-navigation.js:      name = this._getValue(item, this.ns.raml.vocabularies.security + 'name');
-./api-navigation/api-navigation.js:      name = this._getValue(item, this.ns.raml.vocabularies.security + 'type');
 ./api-request-editor/api-request-editor.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.security + 'security');
 ./amf-examples/amf-client-module.js:    this.Security$1 = new $c_Lamf_core_vocabulary_Namespace().init___T("http://raml.org/vocabularies/security#");
 ./amf-examples/amf-client-module.js:    } else if ((uri === "http://raml.org/vocabularies/security")) {
