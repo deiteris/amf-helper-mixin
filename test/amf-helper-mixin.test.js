@@ -199,6 +199,9 @@ describe('AmfHelperMixin', function() {
           assert.typeOf(r.rdfSyntax, 'object', 'rdfSyntax is set');
           assert.equal(r.rdfSyntax.toString(), key + '1999/02/22-rdf-syntax-ns#', 'rdfSyntax namespace as string is the key');
           assert.equal(r.rdfSyntax.key, key + '1999/02/22-rdf-syntax-ns#', 'rdfSyntax.key is set');
+          assert.typeOf(r.rdfSchema, 'object', 'rdfSchema is set');
+          assert.equal(r.rdfSchema.toString(), key + '2000/01/rdf-schema#', 'rdfSchema namespace as string is the key');
+          assert.equal(r.rdfSchema.key, key + '2000/01/rdf-schema#', 'rdfSchema.key is set');
           assert.typeOf(r.hydra, 'object', 'hydra is set');
           assert.equal(r.hydra.toString(), key + 'ns/hydra/', 'hydra namespace as string is the key');
           assert.equal(r.hydra.key, key + 'ns/hydra/', 'hydra.key is set');
@@ -540,6 +543,42 @@ describe('AmfHelperMixin', function() {
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.w3.xmlSchema[property];
+            assert.equal(result, value);
+          });
+        });
+      });
+
+      describe('w3.rdfSyntax namespace', () => {
+        let element;
+        const key = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#';
+        beforeEach(async () => {
+          element = await modelFixture(model);
+        });
+
+        [
+          ['member', key + 'member'],
+          ['Seq', key + 'Seq'],
+        ].forEach(([property, value]) => {
+          it(`has value for ${property}`, () => {
+            const result = element.ns.w3.rdfSyntax[property];
+            assert.equal(result, value);
+          });
+        });
+      });
+
+      describe('w3.rdfSchema namespace', () => {
+        let element;
+        const key = 'http://www.w3.org/2000/01/rdf-schema#';
+        beforeEach(async () => {
+          element = await modelFixture(model);
+        });
+
+        [
+          ['member', key + 'member'],
+          ['Seq', key + 'Seq'],
+        ].forEach(([property, value]) => {
+          it(`has value for ${property}`, () => {
+            const result = element.ns.w3.rdfSchema[property];
             assert.equal(result, value);
           });
         });

@@ -153,7 +153,14 @@ ns.w3.key = 'http://www.w3.org/';
 ns.w3.rdfSyntax = {};
 ns.w3.rdfSyntax.key = ns.w3.key + '1999/02/22-rdf-syntax-ns#';
 ns.w3.rdfSyntax.toString = () => ns.w3.rdfSyntax.key;
+// TODO: is this unescesary?
 ns.w3.rdfSyntax.member = ns.w3.rdfSyntax.key + 'member';
+ns.w3.rdfSyntax.Seq = ns.w3.rdfSyntax.key + 'Seq';
+ns.w3.rdfSchema = {};
+ns.w3.rdfSchema.key = ns.w3.key + '2000/01/rdf-schema#';
+ns.w3.rdfSchema.toString = () => ns.w3.rdfSchema.key;
+ns.w3.rdfSchema.member = ns.w3.rdfSchema.key + 'member';
+ns.w3.rdfSchema.Seq = ns.w3.rdfSchema.key + 'Seq';
 ns.w3.hydra = {};
 ns.w3.hydra.key = ns.w3.key + 'ns/hydra/';
 ns.w3.hydra.toString = () => ns.w3.hydra.key;
