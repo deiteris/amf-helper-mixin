@@ -443,6 +443,8 @@ describe('AmfHelperMixin', function() {
           ['NilShape', key + 'NilShape'],
           ['FileShape', key + 'FileShape'],
           ['AnyShape', key + 'AnyShape'],
+          ['MatrixShape', key + 'MatrixShape'],
+          ['TupleShape', key + 'TupleShape'],
           ['DataTypeFragment', key + 'DataTypeFragment'],
           ['range', key + 'range'],
           ['items', key + 'items'],
@@ -455,6 +457,8 @@ describe('AmfHelperMixin', function() {
           ['boolean', key + 'boolean'],
           ['float', key + 'float'],
           ['nil', key + 'nil'],
+          ['dateTimeOnly', key + 'dateTimeOnly'],
+          ['password', key + 'password'],
           ['schema', key + 'schema'],
           ['xmlSerialization', key + 'xmlSerialization'],
           ['xmlName', key + 'xmlName'],
@@ -480,6 +484,21 @@ describe('AmfHelperMixin', function() {
           ['Object', key + 'Object'],
           ['Array', key + 'Array'],
           ['value', key + 'value'],
+          ['description', key + 'description'],
+          ['required', key + 'required'],
+          ['displayName', key + 'displayName'],
+          ['minLength', key + 'minLength'],
+          ['maxLength', key + 'maxLength'],
+          ['default', key + 'default'],
+          ['multipleOf', key + 'multipleOf'],
+          ['minimum', key + 'minimum'],
+          ['maximum', key + 'maximum'],
+          ['enum', key + 'enum'],
+          ['pattern', key + 'pattern'],
+          ['items', key + 'items'],
+          ['format', key + 'format'],
+          ['example', key + 'example'],
+          ['examples', key + 'examples'],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.data[property];
@@ -540,6 +559,10 @@ describe('AmfHelperMixin', function() {
           ['double', key + 'double'],
           ['float', key + 'float'],
           ['nil', key + 'nil'],
+          ['dateTime', key + 'dateTime'],
+          ['time', key + 'time'],
+          ['date', key + 'date'],
+          ['base64Binary', key + 'base64Binary'],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.w3.xmlSchema[property];
