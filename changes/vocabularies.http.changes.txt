@@ -1,10 +1,5 @@
 ns.aml.vocabularies.apiContract;
 
-./api-resource-example-document/api-resource-example-document.js:      if (this._hasType(examples[0], this.ns.raml.vocabularies.http + 'Payload')) {
-./api-resource-example-document/api-resource-example-document.js:    } else if (this._hasType(examples, this.ns.raml.vocabularies.http + 'Payload')) {
-./api-resource-example-document/demo/index.js:      const label = helper._getValue(item, helper.ns.raml.vocabularies.http + 'mediaType');
-./api-resource-example-document/test/api-resource-example-document.test.js:    const sKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'schema');
-./api-resource-example-document/test/api-resource-example-document.test.js:          const sKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'schema');
 ./api-headers-form/demo/index.js:    const hKey = this.helper._getAmfKey(this.helper.ns.raml.vocabularies.http + 'header');
 ./api-body-editor/src/ApiBodyEditorAmfOverlay.js:      if (this._hasType(model[0], this.ns.raml.vocabularies.http + 'Payload')) {
 ./api-body-editor/src/ApiBodyEditorAmfOverlay.js:    if (!this._hasType(model, this.ns.raml.vocabularies.http + 'Request')) {
@@ -54,17 +49,6 @@ ns.aml.vocabularies.apiContract;
 ./auth-methods/auth-method-custom.js:    const pKey = this._getAmfKey(this.ns.raml.vocabularies.http + 'parameter');
 ./auth-methods/auth-method-custom.js:    const qKey = this._getAmfKey(this.ns.raml.vocabularies.http + 'queryString');
 ./auth-methods/auth-method-oauth2.js:    const http = this.ns.raml.vocabularies.http;
-./api-type-document/property-shape-document.js:      if (this._hasType(shape, this.ns.raml.vocabularies.http + 'Parameter')) {
-./api-type-document/property-shape-document.js:    if (this._hasType(shape, this.ns.raml.vocabularies.http + 'Parameter')) {
-./api-type-document/property-document-mixin.js:    } else if (this._hasType(shape, this.ns.raml.vocabularies.http + 'Parameter')) {
-./api-type-document/property-document-mixin.js:      const key = this._getAmfKey(this.ns.raml.vocabularies.http + 'schema');
-./api-type-document/property-document-mixin.js:    if (this._hasType(shape, this.ns.raml.vocabularies.http + 'Parameter')) {
-./api-type-document/property-document-mixin.js:      //   name =  this._getValue(shape, this.ns.raml.vocabularies.http + 'paramName');
-./api-type-document/demo/index.js:    const mt = helper._getValue(payload, helper.ns.raml.vocabularies.http + 'mediaType');
-./api-type-document/demo/index.js:    const key = helper._getAmfKey(helper.ns.raml.vocabularies.http + 'schema');
-./api-type-document/demo/index.js:    const key = helper._getAmfKey(helper.ns.raml.vocabularies.http + 'accepts');
-./api-type-document/test/api-type-document.test.js:    const mt = element._getValue(payload, element.ns.raml.vocabularies.http + 'mediaType');
-./api-type-document/test/api-type-document.test.js:    const key = element._getAmfKey(element.ns.raml.vocabularies.http + 'schema');
 ./api-type-documentation/demo/index.js:    const key = helper._getAmfKey(ns.raml.vocabularies.http + 'accepts');
 ./api-headers-editor/demo/index.js:    const hKey = this.helper._getAmfKey(this.helper.ns.raml.vocabularies.http + 'header');
 ./api-headers-editor/test/api-headers-editor.test.js:      const hKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'header');

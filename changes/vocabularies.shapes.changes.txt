@@ -4,36 +4,6 @@ ns2.aml.vocabularies.shapes
 
 ./api-body-editor/api-body-editor-amf-overlay.js:    if (this._hasType(schema, this.ns.raml.vocabularies.shapes + 'UnionShape')) {
 ./api-body-editor/api-body-editor-amf-overlay.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'anyOf');
-./api-type-document/property-document-mixin.js:    const rs = this.ns.raml.vocabularies.shapes;
-./api-type-document/property-document-mixin.js:    if (this._hasType(shape, this.ns.raml.vocabularies.shapes + 'ScalarShape')) {
-./api-type-document/property-document-mixin.js:      const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'range');
-./api-type-document/property-document-mixin.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'items');
-./api-type-document/property-document-mixin.js:      case this._hasType(item, this.ns.raml.vocabularies.shapes + 'ScalarShape'):
-./api-type-document/property-document-mixin.js:      case this._hasType(item, this.ns.raml.vocabularies.shapes + 'UnionShape'):
-./api-type-document/property-document-mixin.js:      case this._hasType(item, this.ns.raml.vocabularies.shapes + 'ArrayShape'):
-./api-type-document/property-document-mixin.js:    return this._hasType(range, this.ns.raml.vocabularies.shapes + 'UnionShape');
-./api-type-document/property-document-mixin.js:    return this._hasType(range, this.ns.raml.vocabularies.shapes + 'ArrayShape');
-./api-type-document/property-document-mixin.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'anyOf');
-./api-type-document/property-document-mixin.js:      let isScalar = this._hasType(item, this.ns.raml.vocabularies.shapes + 'ScalarShape');
-./api-type-document/property-document-mixin.js:      const isNil = this._hasType(item, this.ns.raml.vocabularies.shapes + 'NilShape');
-./api-type-document/property-document-mixin.js:      const isArray = this._hasType(item, this.ns.raml.vocabularies.shapes + 'ArrayShape');
-./api-type-document/property-document-mixin.js:          const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'items');
-./api-type-document/property-document-mixin.js:        if (!label && this._hasType(item, this.ns.raml.vocabularies.shapes + 'ScalarShape')) {
-./api-type-document/property-document-mixin.js:    if (this._hasType(items, this.ns.raml.vocabularies.shapes + 'ScalarShape')) {
-./api-type-document/property-shape-document.js:        this._hasType(shape, this.ns.raml.vocabularies.shapes + 'NilShape') ||
-./api-type-document/property-shape-document.js:        this._hasType(shape, this.ns.raml.vocabularies.shapes + 'AnyShape')) {
-./api-type-document/property-shape-document.js:      this._hasType(shape, this.ns.raml.vocabularies.shapes + 'ScalarShape')) {
-./api-type-document/api-type-document.js:    } else if (this._hasType(type, this.ns.raml.vocabularies.shapes + 'ScalarShape') ||
-./api-type-document/api-type-document.js:      this._hasType(type, this.ns.raml.vocabularies.shapes + 'NilShape')) {
-./api-type-document/api-type-document.js:    } else if (this._hasType(type, this.ns.raml.vocabularies.shapes + 'UnionShape')) {
-./api-type-document/api-type-document.js:    } else if (this._hasType(type, this.ns.raml.vocabularies.shapes + 'ArrayShape')) {
-./api-type-document/api-type-document.js:    } else if (this._hasType(type, this.ns.raml.vocabularies.shapes + 'AnyShape')) {
-./api-type-document/api-type-document.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'anyOf');
-./api-type-document/api-type-document.js:    if (this._hasType(item, this.ns.raml.vocabularies.shapes + 'ArrayShape')) {
-./api-type-document/api-type-document.js:      const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'items');
-./api-type-document/property-range-document.js:    return this._hasType(range, this.ns.raml.vocabularies.shapes + 'UnionShape');
-./api-type-document/property-range-document.js:    return this._hasType(range, this.ns.raml.vocabularies.shapes + 'ArrayShape');
-./api-type-document/property-range-document.js:    return this._hasType(range, this.ns.raml.vocabularies.shapes + 'FileShape');
 ./api-schema-document/api-schema-document.js:        this._hasType(schema, this.ns.raml.vocabularies.shapes + 'AnyShape') ||
 ./api-schema-document/api-schema-document.js:        this._hasType(schema, this.ns.raml.vocabularies.shapes + 'ScalarShape') ||
 ./api-body-document/api-body-document.js:      this._hasType(body, this.ns.raml.vocabularies.shapes + 'UnionShape')) {

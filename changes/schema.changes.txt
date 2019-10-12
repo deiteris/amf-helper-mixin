@@ -5,12 +5,6 @@ schema => aml.vocabularies.core
 ./auth-methods/auth-method-custom.js:    this._schemeDescription = this._getValue(scheme, this.ns.schema.desc);
 ./api-documentation-document/api-documentation-document.js:    this._title = this._getValue(shape, this.ns.schema.title);
 ./api-documentation-document/api-documentation-document.js:    this._content = this._getValue(shape, this.ns.schema.desc);
-./api-type-document/property-document-mixin.js:        label = this._getValue(item, this.ns.schema.schemaName);
-./api-type-document/property-document-mixin.js:      return this._getValue(range, this.ns.schema.schemaName);
-./api-type-document/property-document-mixin.js:      return this._getValue(range, this.ns.schema.schemaName);
-./api-type-document/property-shape-document.js:          name = this._getValue(shape, this.ns.schema.schemaName);
-./api-type-document/property-shape-document.js:    return this._getValue(range, this.ns.schema.desc);
-./api-type-document/api-type-document.js:      let label = this._getValue(item, this.ns.schema.schemaName);
 ./authorization-panel/authorization-panel-amf-overlay.js:      let name = this._getValue(scheme, this.ns.schema.displayName);
 ./authorization-panel/authorization-panel-amf-overlay.js:        let modelName = this._getValue(scheme, this.ns.schema.displayName);
 ./api-type-documentation/api-type-documentation.js:    let name = this._getValue(shape, this.ns.schema.schemaName);

@@ -3,4 +3,3 @@ ns2.aml.vocabularies.data
 ./auth-methods/auth-method-oauth2.js:    const data = this.ns.raml.vocabularies.data;
 ./auth-methods/auth-method-oauth2.js:    const d = this.ns.raml.vocabularies.data;
 ./auth-methods/auth-method-oauth2.js:    const d = this.ns.raml.vocabularies.data;
-./api-type-document/property-range-document.js:      let result = this._getValue(value, this.ns.raml.vocabularies.data + 'value');
