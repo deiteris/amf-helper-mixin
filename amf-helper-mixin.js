@@ -338,7 +338,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       for (let i = 0, len = keys.length; i < len; i++) {
         const k = keys[i];
         if (ctx[k] === property) {
-          cache[property] = ctx[k];
+          cache[property] = k;
           return k;
         } else if (hashIndex === -1 && property.indexOf(ctx[k]) === 0) {
           const result = property.replace(ctx[k], k + ':');
