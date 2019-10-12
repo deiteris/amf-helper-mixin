@@ -296,8 +296,8 @@ describe('AmfHelperMixin', function() {
           ['Module', key + 'Module'],
           ['Document', key + 'Document'],
           // ['SecuritySchemeFragment', key + 'SecuritySchemeFragment'],
-          ['UserDocumentation', key + 'UserDocumentation'],
-          ['DataType', key + 'DataType'],
+          // ['UserDocumentation', key + 'UserDocumentation'],
+          // ['DataType', key + 'DataType'],
           ['Example', key + 'Example'],
           ['NamedExamples', key + 'NamedExamples'],
           ['DomainElement', key + 'DomainElement'],
@@ -347,6 +347,51 @@ describe('AmfHelperMixin', function() {
         });
       });
 
+      describe('vocabularies.apiContract namespace', () => {
+        let element;
+        const key = 'http://a.ml/vocabularies/apiContract#';
+        beforeEach(async () => {
+          element = await modelFixture(model);
+        });
+
+        [
+          ['Payload', key + 'Payload'],
+          ['Request', key + 'Request'],
+          ['EndPoint', key + 'EndPoint'],
+          ['Parameter', key + 'Parameter'],
+          ['Operation', key + 'Operation'],
+          ['WebAPI', key + 'WebAPI'],
+          ['UserDocumentationFragment', key + 'UserDocumentationFragment'],
+          ['header', key + 'header'],
+          ['parameter', key + 'parameter'],
+          ['uriParameter', key + 'uriParameter'],
+          ['variable', key + 'variable'],
+          ['payload', key + 'payload'],
+          ['path', key + 'path'],
+          ['url', key + 'url'],
+          ['scheme', key + 'scheme'],
+          ['endpoint', key + 'endpoint'],
+          ['queryString', key + 'queryString'],
+          ['mediaType', key + 'mediaType'],
+          ['accepts', key + 'accepts'],
+          ['guiSummary', key + 'guiSummary'],
+          ['binding', key + 'binding'],
+          ['response', key + 'response'],
+          ['returns', key + 'returns'],
+          ['expects', key + 'expects'],
+          ['examples', key + 'examples'],
+          ['supportedOperation', key + 'supportedOperation'],
+          ['statusCode', key + 'statusCode'],
+          ['method', key + 'method'],
+          ['required', key + 'required'],
+        ].forEach(([property, value]) => {
+          it(`has value for ${property}`, () => {
+            const result = element.ns.aml.vocabularies.apiContract[property];
+            assert.equal(result, value);
+          });
+        });
+      });
+
       describe('vocabularies.shapes namespace', () => {
         let element;
         const key = 'http://a.ml/vocabularies/shapes#';
@@ -361,6 +406,7 @@ describe('AmfHelperMixin', function() {
           ['NilShape', key + 'NilShape'],
           ['FileShape', key + 'FileShape'],
           ['AnyShape', key + 'AnyShape'],
+          ['DataTypeFragment', key + 'DataTypeFragment'],
           ['range', key + 'range'],
           ['items', key + 'items'],
           ['anyOf', key + 'anyOf'],
