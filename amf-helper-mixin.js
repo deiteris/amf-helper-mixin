@@ -88,6 +88,7 @@ ns.aml.vocabularies.apiContract.Operation = contractKey + 'Operation';
 ns.aml.vocabularies.apiContract.WebAPI = contractKey + 'WebAPI';
 ns.aml.vocabularies.apiContract.UserDocumentationFragment = contractKey + 'UserDocumentationFragment';
 ns.aml.vocabularies.apiContract.Example = contractKey + 'Example';
+ns.aml.vocabularies.apiContract.Server = contractKey + 'Server';
 ns.aml.vocabularies.apiContract.header = contractKey + 'header';
 ns.aml.vocabularies.apiContract.parameter = contractKey + 'parameter';
 ns.aml.vocabularies.apiContract.paramName = contractKey + 'paramName';

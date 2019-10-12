@@ -399,6 +399,8 @@ describe('AmfHelperMixin', function() {
           ['Operation', key + 'Operation'],
           ['WebAPI', key + 'WebAPI'],
           ['UserDocumentationFragment', key + 'UserDocumentationFragment'],
+          ['Example', key + 'Example'],
+          ['Server', key + 'Server'],
           ['header', key + 'header'],
           ['parameter', key + 'parameter'],
           ['paramName', key + 'paramName'],
