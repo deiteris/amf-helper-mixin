@@ -340,11 +340,21 @@ describe('AmfHelperMixin', function() {
           ['ParametrizedSecurityScheme', key + 'ParametrizedSecurityScheme'],
           ['SecuritySchemeFragment', key + 'SecuritySchemeFragment'],
           ['SecurityScheme', key + 'SecurityScheme'],
+          ['OAuth1Settings', key + 'OAuth1Settings'],
+          ['OAuth2Settings', key + 'OAuth2Settings'],
+          ['Scope', key + 'Scope'],
           ['security', key + 'security'],
           ['scheme', key + 'scheme'],
           ['settings', key + 'settings'],
           ['name', key + 'name'],
           ['type', key + 'type'],
+          ['scope', key + 'scope'],
+          ['accessTokenUri', key + 'accessTokenUri'],
+          ['authorizationUri', key + 'authorizationUri'],
+          ['authorizationGrant', key + 'authorizationGrant'],
+          ['signature', key + 'signature'],
+          ['tokenCredentialsUri', key + 'tokenCredentialsUri'],
+          ['requestTokenUri', key + 'requestTokenUri'],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.security[property];
