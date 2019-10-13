@@ -446,6 +446,7 @@ describe('AmfHelperMixin', function() {
           ['NilShape', key + 'NilShape'],
           ['FileShape', key + 'FileShape'],
           ['AnyShape', key + 'AnyShape'],
+          ['SchemaShape', key + 'SchemaShape'],
           ['MatrixShape', key + 'MatrixShape'],
           ['TupleShape', key + 'TupleShape'],
           ['DataTypeFragment', key + 'DataTypeFragment'],

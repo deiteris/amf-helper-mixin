@@ -122,6 +122,7 @@ ns.aml.vocabularies.shapes.UnionShape = shapesKey + 'UnionShape';
 ns.aml.vocabularies.shapes.NilShape = shapesKey + 'NilShape';
 ns.aml.vocabularies.shapes.FileShape = shapesKey + 'FileShape';
 ns.aml.vocabularies.shapes.AnyShape = shapesKey + 'AnyShape';
+ns.aml.vocabularies.shapes.SchemaShape = shapesKey + 'SchemaShape';
 ns.aml.vocabularies.shapes.MatrixShape = shapesKey + 'MatrixShape';
 ns.aml.vocabularies.shapes.TupleShape = shapesKey + 'TupleShape';
 ns.aml.vocabularies.shapes.DataTypeFragment = shapesKey + 'DataTypeFragment';
