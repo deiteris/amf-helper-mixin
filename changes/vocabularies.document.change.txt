@@ -13,8 +13,6 @@ ns2.aml.vocabularies.document
 ./api-schema-document/api-schema-document.js:    let raw = this._getValue(item, this.ns.raml.vocabularies.document + 'raw');
 ./api-method-documentation/api-method-documentation.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'extends');
 ./api-method-documentation/api-method-documentation.js:      this._hasType(item, this.ns.raml.vocabularies.document + 'ParametrizedTrait'));
-./api-url-data-model/api-url-data-model.js:    if (!model || !this._hasType(model, this.ns.raml.vocabularies.document + 'Document')) {
-./api-url-data-model/api-url-data-model.js:    if (this._hasType(amf, this.ns.raml.vocabularies.document + 'Document')) {
 ./api-endpoint-documentation/api-endpoint-documentation.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'extends');
 ./api-endpoint-documentation/api-endpoint-documentation.js:      this._hasType(item, this.ns.raml.vocabularies.document + 'ParametrizedResourceType'));
 ./api-endpoint-documentation/api-endpoint-documentation.js:      this._hasType(item, this.ns.raml.vocabularies.document + 'ParametrizedTrait'));

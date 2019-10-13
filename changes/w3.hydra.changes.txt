@@ -14,7 +14,6 @@ ns2.w3.hydra.core => ns2.aml.vocabularies.apiContract;
 ./api-documentation/api-documentation.js:    const opKey = this._getAmfKey(this.ns.w3.hydra.supportedOperation);
 ./api-method-documentation/api-method-documentation.js:      name = this._getValue(method, this.ns.w3.hydra.core + 'method');
 ./api-method-documentation/api-method-documentation.js:    let name = this._getValue(method, this.ns.w3.hydra.core + 'method');
-./api-url-data-model/api-url-data-model.js:    const key = this._getAmfKey(this.ns.w3.hydra.supportedOperation);
 ./api-endpoint-documentation/api-endpoint-documentation.js:    const key = this._getAmfKey(this.ns.w3.hydra.supportedOperation);
 ./api-endpoint-documentation/api-endpoint-documentation.js:      const method = this._getValue(op, this.ns.w3.hydra.core + 'method');
 ./api-endpoint-documentation/api-endpoint-documentation.js:    if (this._hasType(payload, this.ns.w3.hydra.core + 'Operation')) {

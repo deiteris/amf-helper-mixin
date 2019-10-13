@@ -12,11 +12,9 @@ schema => aml.vocabularies.core
 ./api-documentation/api-documentation.js:    let name = this._getValue(item, this.ns.schema.schemaName);
 ./api-documentation/api-documentation.js:    let name = this._getValue(item, this.ns.schema.schemaName);
 ./api-documentation/api-documentation.js:    return this._hasType(model, this.ns.schema.creativeWork);
-./api-body-document/api-body-document.js:    this._bodyName = this._getValue(body, this.ns.schema.schemaName);
 ./api-method-documentation/api-method-documentation.js:    let name = this._getValue(method, this.ns.schema.schemaName);
 ./api-method-documentation/api-method-documentation.js:        const name = this._getValue(item, this.ns.schema.schemaName);
 ./api-method-documentation/api-method-documentation.js:    const names = traits.map((trait) => this._getValue(trait, this.ns.schema.schemaName));
-./api-url-data-model/api-url-data-model.js:        const name = this._getValue(variables[i], this.ns.schema.schemaName);
 ./api-endpoint-documentation/api-endpoint-documentation.js:    const name = this._getValue(endpoint, this.ns.schema.schemaName);
 ./api-endpoint-documentation/api-endpoint-documentation.js:    return this._getValue(type, this.ns.schema.schemaName);
 ./api-endpoint-documentation/api-endpoint-documentation.js:    const names = traits.map((trait) => this._getValue(trait, this.ns.schema.schemaName));

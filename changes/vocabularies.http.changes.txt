@@ -28,17 +28,7 @@ ns.aml.vocabularies.apiContract;
 ./api-documentation/api-documentation.js:    if (this._hasType(model, this.ns.raml.vocabularies.http + 'EndPoint')) {
 ./api-documentation/api-documentation.js:    return this._hasType(model, this.ns.raml.vocabularies.http + 'EndPoint');
 ./api-documentation/api-documentation.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.http + 'accepts');
-./api-body-document/api-body-document.js:      const label = this._getValue(item, this.ns.raml.vocabularies.http + 'mediaType');
-./api-body-document/api-body-document.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.http + 'schema');
-./api-body-document/api-body-document.js:    return this._getValue(data, this.ns.raml.vocabularies.http + 'mediaType');
-./api-body-document/test/amf-loader.js:  const pKey = helper._getAmfKey(helper.ns.raml.vocabularies.http + 'payload');
-./api-body-document/test/api-body-document.test.js:    const pKey = element._getAmfKey(element.ns.raml.vocabularies.http + 'payload');
 ./api-parameters-document/demo/index.js:    const key = helper._getAmfKey(helper.ns.raml.vocabularies.http + 'parameter');
-./api-url-data-model/api-url-data-model.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.http + 'uriParameter');
-./api-url-data-model/api-url-data-model.js:    return this._getValue(endpoint, this.ns.raml.vocabularies.http + 'path');
-./api-url-data-model/api-url-data-model.js:    if (this._hasType(amf, this.ns.raml.vocabularies.http + 'EndPoint')) {
-./api-url-data-model/test/api-url-data-model.test.js:          const key = element._getAmfKey(element.ns.raml.vocabularies.http + 'Server');
-./api-url-data-model/test/api-url-data-model.test.js:          const key = element._getAmfKey(element.ns.raml.vocabularies.http + 'Server');
 ./api-endpoint-documentation/demo/index.js:      name = helper._getValue(item, helper.ns.raml.vocabularies.http + 'path');
 ./api-endpoint-documentation/demo/index.js:      name = helper._getValue(item, helper.ns.raml.vocabularies.http + 'path');
 ./api-endpoint-documentation/api-endpoint-documentation.js:    return this._getValue(endpoint, this.ns.raml.vocabularies.http + 'path');

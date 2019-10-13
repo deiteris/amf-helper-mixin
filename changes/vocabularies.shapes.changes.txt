@@ -1,12 +1,6 @@
 ns2.aml.vocabularies.shapes
 
-
-
 ./api-body-editor/api-body-editor-amf-overlay.js:    if (this._hasType(schema, this.ns.raml.vocabularies.shapes + 'UnionShape')) {
 ./api-body-editor/api-body-editor-amf-overlay.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.shapes + 'anyOf');
 ./api-schema-document/api-schema-document.js:        this._hasType(schema, this.ns.raml.vocabularies.shapes + 'AnyShape') ||
 ./api-schema-document/api-schema-document.js:        this._hasType(schema, this.ns.raml.vocabularies.shapes + 'ScalarShape') ||
-./api-body-document/api-body-document.js:      this._hasType(body, this.ns.raml.vocabularies.shapes + 'UnionShape')) {
-./api-body-document/api-body-document.js:      this._hasType(body, this.ns.raml.vocabularies.shapes + 'ScalarShape')) {
-./api-body-document/api-body-document.js:    } else if (this._hasType(body, this.ns.raml.vocabularies.shapes + 'ArrayShape')) {
-./api-body-document/api-body-document.js:    } else if (this._hasType(body, this.ns.raml.vocabularies.shapes + 'AnyShape')) {

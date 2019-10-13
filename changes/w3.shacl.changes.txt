@@ -13,8 +13,4 @@ ns2.w3.shacl
 ./api-schema-document/api-schema-document.js:        this._hasType(schema, this.ns.w3.shacl.name + 'NodeShape')) {
 ./api-schema-document/api-schema-document.js:          raw = this._getValue(schema, this.ns.w3.shacl.name + 'raw');
 ./api-schema-document/api-schema-document.js:      raw = this._getValue(item, this.ns.w3.shacl.name + 'raw');
-./api-body-document/api-body-document.js:    if (this._hasType(body, this.ns.w3.shacl.name + 'NodeShape') ||
-./api-body-document/api-body-document.js:    } else if (this._hasType(body, this.ns.w3.shacl.name + 'SchemaShape') ||
-./api-body-document/api-body-document.js:      const key = this._getAmfKey(this.ns.w3.shacl.name + 'and');
-./api-body-document/api-body-document.js:    let value = this._getValue(body, this.ns.w3.shacl.name + 'name');
 ./api-method-documentation/api-method-documentation.js:    let value = this._getValue(schema, this.ns.w3.shacl.name + 'defaultValue');
