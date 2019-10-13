@@ -1,16 +1,4 @@
-./api-body-editor/api-body-editor-amf-overlay.js:    } else if (this._hasType(schema, this.ns.w3.shacl.name + 'NodeShape')) {
-./api-body-editor/api-body-editor-amf-overlay.js:      const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
-./api-body-editor/api-body-editor-amf-overlay.js:    const pKey = this._getAmfKey(this.ns.w3.shacl.name + 'property');
-./api-body-editor/api-body-editor-amf-overlay.js:      if (this._hasType(item, this.ns.w3.shacl.name + 'NodeShape')) {
-./api-type-documentation/api-type-documentation.js:      name = this._getValue(shape, this.ns.w3.shacl.name + 'name');
-./api-type-documentation/api-type-documentation.js:    return this._hasType(shape, this.ns.w3.shacl.name + 'SchemaShape');
-./api-type-documentation/coverage/api-type-documentation.js.html:      name = this._getValue(shape, this.ns.w3.shacl.name + 'name');
-./api-type-documentation/coverage/api-type-documentation.js.html:    return this._hasType(shape, this.ns.w3.shacl.name + 'SchemaShape');
-./api-schema-document/api-schema-document.js:      if (this._hasType(schema, this.ns.w3.shacl.name + 'SchemaShape') ||
-./api-schema-document/api-schema-document.js:        this._hasType(schema, this.ns.w3.shacl.name + 'NodeShape')) {
-./api-schema-document/api-schema-document.js:          raw = this._getValue(schema, this.ns.w3.shacl.name + 'raw');
-./api-schema-document/api-schema-document.js:      raw = this._getValue(item, this.ns.w3.shacl.name + 'raw');
-./api-method-documentation/api-method-documentation.js:    let value = this._getValue(schema, this.ns.w3.shacl.name + 'defaultValue');
-./api-method-documentation/coverage/api-method-documentation.js.html:    let value = this._getValue(schema, this.ns.w3.shacl.name + 'defaultValue');
+
+
 ./api-endpoint-documentation/api-endpoint-documentation.js:    let value = this._getValue(item, this.ns.w3.shacl.name + 'defaultValue');
 ./api-endpoint-documentation/coverage/api-endpoint-documentation.js.html:    let value = this._getValue(item, this.ns.w3.shacl.name + 'defaultValue');

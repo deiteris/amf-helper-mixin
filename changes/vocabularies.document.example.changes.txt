@@ -1,5 +1,3 @@
 ns.raml.vocabularies.document + 'examples' => ns.raml.vocabularies.apiContract.examples
 
-./api-schema-document/api-schema-document.js:        const key = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples');
-./amf-helper-mixin/test/amf-helper-mixin.test.js:            exKey = element._getAmfKey(ns.raml.vocabularies.document + 'examples');
 ./api-endpoint-documentation/api-endpoint-documentation.js:      const examplesKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples')

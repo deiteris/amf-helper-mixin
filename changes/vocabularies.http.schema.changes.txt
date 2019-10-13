@@ -1,9 +1,4 @@
 raml.vocabularies.http + 'schema' =>  ns.aml.vocabularies.shapes.schema
 
 
-./api-body-editor/src/ApiBodyEditorAmfOverlay.js:    const schemaKey = this._getAmfKey(this.ns.raml.vocabularies.http + 'schema');
-./api-body-editor/src/ApiBodyEditorAmfOverlay.js:        const sKey = this._getAmfKey(this.ns.raml.vocabularies.http + 'schema');
 ./api-endpoint-documentation/api-endpoint-documentation.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.http + 'schema');
-./multipart-payload-editor/demo/index.js:    const skey = this.helper._getAmfKey(this.helper.ns.raml.vocabularies.http + 'schema');
-./api-method-documentation/api-method-documentation.js:    const skey = this._getAmfKey(this.ns.raml.vocabularies.http + 'schema');
-./form-data-editor/demo/index.js:    const key = this.helper._getAmfKey(this.helper.ns.raml.vocabularies.http + 'schema');
