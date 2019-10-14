@@ -1,4 +1,0 @@
-
-
-./api-endpoint-documentation/api-endpoint-documentation.js:    let value = this._getValue(item, this.ns.w3.shacl.name + 'defaultValue');
-./api-endpoint-documentation/coverage/api-endpoint-documentation.js.html:    let value = this._getValue(item, this.ns.w3.shacl.name + 'defaultValue');

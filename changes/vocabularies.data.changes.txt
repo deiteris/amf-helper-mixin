@@ -1,5 +1,0 @@
-ns2.aml.vocabularies.data
-
-./auth-methods/auth-method-oauth2.js:    const data = this.ns.raml.vocabularies.data;
-./auth-methods/auth-method-oauth2.js:    const d = this.ns.raml.vocabularies.data;
-./auth-methods/auth-method-oauth2.js:    const d = this.ns.raml.vocabularies.data;

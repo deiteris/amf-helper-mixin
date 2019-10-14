@@ -1,3 +1,0 @@
-ns.raml.vocabularies.document + 'examples' => ns.raml.vocabularies.apiContract.examples
-
-./api-endpoint-documentation/api-endpoint-documentation.js:      const examplesKey = this._getAmfKey(this.ns.raml.vocabularies.document + 'examples')

@@ -1,4 +1,0 @@
-raml.vocabularies.http + 'schema' =>  ns.aml.vocabularies.shapes.schema
-
-
-./api-endpoint-documentation/api-endpoint-documentation.js:    const key = this._getAmfKey(this.ns.raml.vocabularies.http + 'schema');
