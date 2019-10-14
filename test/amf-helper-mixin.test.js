@@ -301,10 +301,9 @@ describe('AmfHelperMixin', function() {
         [
           ['Module', key + 'Module'],
           ['Document', key + 'Document'],
-          // ['SecuritySchemeFragment', key + 'SecuritySchemeFragment'],
-          // ['UserDocumentation', key + 'UserDocumentation'],
-          // ['DataType', key + 'DataType'],
-          // ['Example', key + 'Example'],
+          ['SecuritySchemeFragment', key + 'SecuritySchemeFragment'],
+          ['UserDocumentation', key + 'UserDocumentation'],
+          ['DataType', key + 'DataType'],
           ['NamedExamples', key + 'NamedExamples'],
           ['DomainElement', key + 'DomainElement'],
           ['customDomainProperties', key + 'customDomainProperties'],
