@@ -90,6 +90,7 @@ ns.aml.vocabularies.security.flows = secKey + 'flows';
 ns.aml.vocabularies.security.signature = secKey + 'signature';
 ns.aml.vocabularies.security.tokenCredentialsUri = secKey + 'tokenCredentialsUri';
 ns.aml.vocabularies.security.requestTokenUri = secKey + 'requestTokenUri';
+ns.aml.vocabularies.security.securityRequirement = secKey + 'SecurityRequirement';
 ns.aml.vocabularies.apiContract = {};
 ns.aml.vocabularies.http = ns.aml.vocabularies.apiContract;
 const contractKey = ns.aml.vocabularies.apiContract.key = ns.aml.vocabularies.key + 'apiContract#';
