@@ -78,6 +78,7 @@ ns.aml.vocabularies.security.OAuth2Flow = secKey + 'OAuth2Flow';
 ns.aml.vocabularies.security.Scope = secKey + 'Scope';
 ns.aml.vocabularies.security.security = secKey + 'security';
 ns.aml.vocabularies.security.scheme = secKey + 'scheme';
+ns.aml.vocabularies.security.schemes = secKey + 'schemes';
 ns.aml.vocabularies.security.settings = secKey + 'settings';
 ns.aml.vocabularies.security.name = secKey + 'name';
 ns.aml.vocabularies.security.type = secKey + 'type';
