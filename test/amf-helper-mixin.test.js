@@ -1134,9 +1134,9 @@ describe('AmfHelperMixin', function() {
           assert.typeOf(result, 'array');
         });
 
-        it('Returns all items in the array', () => {
+        it('returns all items in the array', () => {
           const result = element._computeDeclares(model);
-          assert.lengthOf(result, 17);
+          assert.lengthOf(result, 15);
         });
       });
 
