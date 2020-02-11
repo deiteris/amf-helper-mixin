@@ -353,6 +353,8 @@ describe('AmfHelperMixin', function() {
           ['tokenCredentialsUri', key + 'tokenCredentialsUri'],
           ['requestTokenUri', key + 'requestTokenUri'],
           ['in', key + 'in'],
+          ['flows', key + 'flows'],
+          ['flow', key + 'flow'],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.security[property];

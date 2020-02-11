@@ -87,6 +87,7 @@ ns.aml.vocabularies.security.accessTokenUri = secKey + 'accessTokenUri';
 ns.aml.vocabularies.security.authorizationUri = secKey + 'authorizationUri';
 ns.aml.vocabularies.security.authorizationGrant = secKey + 'authorizationGrant';
 ns.aml.vocabularies.security.flows = secKey + 'flows';
+ns.aml.vocabularies.security.flow = secKey + 'flow';
 ns.aml.vocabularies.security.signature = secKey + 'signature';
 ns.aml.vocabularies.security.tokenCredentialsUri = secKey + 'tokenCredentialsUri';
 ns.aml.vocabularies.security.requestTokenUri = secKey + 'requestTokenUri';
