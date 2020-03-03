@@ -760,16 +760,22 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * Computes value for `server` property that is later used with other computations.
      *
      * @param {Array|Object} model AMF model for an API
+     * @param {?String} selected Selected server id
      * @return {Object} The server model
      */
-    _computeServer(model) {
+    _computeServer(model, selected) {
       const api = this._computeWebApi(model);
       if (!api) {
         return;
       }
       const key = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
       const srv = this._ensureArray(api[key]);
-      return srv ? srv[0] : undefined;
+
+      if (selected) {
+        return srv.find(srvI => this._getValue(srvI, '@id') === selected)
+      }
+
+      return srv ? srv[0] : undefined
     }
     /**
      * Computes endpoint's URI based on `amf` and `endpoint` models.
