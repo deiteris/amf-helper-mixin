@@ -798,7 +798,6 @@ export const AmfHelperMixin = dedupingMixin((base) => {
         srv = this._getValueArray(endpoint, key);
       }
       const endpointSrvEmpty = !endpoint || (endpoint && (!srv || srv.length === 0));
-
       if (methodSrvEmpty && endpointSrvEmpty) {
         if (Array.isArray(amf)) {
           amf = amf[0];
