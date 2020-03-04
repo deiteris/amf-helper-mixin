@@ -778,7 +778,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       return srv ? srv[0] : undefined
     }
     _getServer({ endpoint, method, id }) {
-      const { amf } = this
+      let { amf } = this
       const key = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
       let srv;
       if (method) {
@@ -786,7 +786,15 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       } else if (endpoint) {
         srv = this._getValueArray(endpoint, key);
       } else {
-        srv = this._getValueArray(amf, key);
+        if (Array.isArray(amf)) {
+          amf = amf[0];
+        }
+        const encodesKey = this.ns.aml.vocabularies.document.encodes;
+        let encodes = this._getValueArray(amf, encodesKey);
+        if (Array.isArray(encodes)) {
+          encodes = encodes[0]
+        }
+        srv = this._getValueArray(encodes, key);
       }
 
       if (srv) {
