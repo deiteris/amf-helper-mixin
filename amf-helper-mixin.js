@@ -777,15 +777,29 @@ export const AmfHelperMixin = dedupingMixin((base) => {
 
       return srv ? srv[0] : undefined
     }
+
+    /**
+     * Compute values for `server` property based on node an optional selected id.
+     *
+     * @param {?Object} endpoint Optional endpoint node, required if method is provided
+     * @param {?Object} method Optional method node
+     * @param {?String} id Optional selected server id
+     * @return {undefined|any} The server list or undefined if node has no servers
+     */
     _getServer({ endpoint, method, id }) {
-      let { amf } = this
+      let { amf } = this;
       const key = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
       let srv;
       if (method) {
         srv = this._getValueArray(method, key);
-      } else if (endpoint) {
+      }
+      const methodSrvEmpty = !method || (method && (!srv || srv.length === 0));
+      if (methodSrvEmpty && endpoint) {
         srv = this._getValueArray(endpoint, key);
-      } else {
+      }
+      const endpointSrvEmpty = !endpoint || (endpoint && (!srv || srv.length === 0));
+
+      if (methodSrvEmpty && endpointSrvEmpty) {
         if (Array.isArray(amf)) {
           amf = amf[0];
         }
