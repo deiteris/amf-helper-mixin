@@ -777,6 +777,24 @@ export const AmfHelperMixin = dedupingMixin((base) => {
 
       return srv ? srv[0] : undefined
     }
+    _getServer({ endpoint, method, id }) {
+      const { amf } = this
+      const key = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
+      let srv;
+      if (method) {
+        srv = this._getValueArray(method, key);
+      } else if (endpoint) {
+        srv = this._getValueArray(endpoint, key);
+      } else {
+        srv = this._getValueArray(amf, key);
+      }
+
+      if (srv) {
+        return id ? srv.filter(s => this._getValue(s, '@id') === id) : srv;
+      }
+
+      return undefined;
+    }
     /**
      * Computes endpoint's URI based on `amf` and `endpoint` models.
      *

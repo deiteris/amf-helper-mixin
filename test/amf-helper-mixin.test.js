@@ -1198,50 +1198,62 @@ describe('AmfHelperMixin', function() {
       });
 
       describe('_computeServer()', () => {
-        describe('With one server', () => {
-          beforeEach(async () => {
-            element = await modelFixture(model);
-          });
-  
-          it('Returns undefined if no argument', () => {
-            assert.isUndefined(element._computeServer());
-          });
-  
-          it('Returns undefined if no encodes', () => {
-            assert.isUndefined(element._computeServer({}));
-          });
-  
-          it('Returns an object from AMF model', () => {
-            const result = element._computeServer(model);
-            assert.typeOf(result, 'object');
-          });
+        beforeEach(async () => {
+          element = await modelFixture(model);
         });
 
-        describe('With multiple servers', () => {
-          let operation;
+        it('Returns undefined if no argument', () => {
+          assert.isUndefined(element._computeServer());
+        });
 
-          before(async () => {
-            model = await AmfLoader.load(compact, 'multiple-servers')
-          });
+        it('Returns undefined if no encodes', () => {
+          assert.isUndefined(element._computeServer({}));
+        });
 
-          after(async () => {
-            model = await AmfLoader.load(compact);
-          });
+        it('Returns an object from AMF model', () => {
+          const result = element._computeServer(model);
+          assert.typeOf(result, 'object');
+        });
+
+        it('Returns an object from AMF model if selected', () => {
+          const idNumber = '#415';
+          const id = compact ? idNumber : `amf://id${idNumber}`;
+          const result = element._computeServer(model, id);
+          assert.typeOf(result, 'object');
+        });
+      });
+
+      describe('_getServer()', () => {
+        before(async () => {
+          model = await AmfLoader.load(compact, 'multiple-servers');
+        });
+
+        after(async () => {
+          model = await AmfLoader.load(compact);
+        });
+
+        describe('for operation', () => {
+          let method;
 
           beforeEach(async () => {
             element = await modelFixture(model);
-            operation = AmfLoader.lookupOperation(model, '/pets', 'get');
+            method = AmfLoader.lookupOperation(model, '/pets', 'get');
           });
-
-          it('Returns undefined if unknown @id', () => {
-            assert.isUndefined(element._computeServer(operation, 'foo'));
+  
+          it('Returns all servers if id undefined', () => {
+            const servers = element._getServer({ method });
+            assert.typeOf(servers, 'array');
+            assert.lengthOf(servers, 2);
           });
-
-          it('Returns object if defined @id', () => {
-            const result = element._computeServer(operation, '34');
-            assert.typeOf(result, 'object')
-          })
-        })
+  
+          it('Returns all matching servers if id is defined', () => {
+            const idNumber = '#34';
+            const id = compact ? idNumber : `amf://id${idNumber}`;
+            const servers = element._getServer({ method, id });
+            assert.typeOf(servers, 'array');
+            assert.lengthOf(servers, 1);
+          });
+        });
       });
 
       describe('_computeProtocols()', () => {
