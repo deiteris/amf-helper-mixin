@@ -792,11 +792,6 @@ export const AmfHelperMixin = dedupingMixin((base) => {
         servers = this._getValueArray(endpoint, serverKey);
       }
       if (!servers) {
-        // const encodesKey = this._getAmfKey(this.ns.aml.vocabularies.document.encodes);
-        // let encodes = this._getValue(model, encodesKey);
-        // if (Array.isArray(encodes)){
-        //   encodes = encodes[0];
-        // }
         servers = this._getValueArray(api, serverKey);
       }
       return servers;
