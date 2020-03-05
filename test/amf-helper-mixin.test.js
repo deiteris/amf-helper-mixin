@@ -1214,47 +1214,28 @@ describe('AmfHelperMixin', function() {
           const result = element._computeServer(model);
           assert.typeOf(result, 'object');
         });
-
-        it('Returns an object from AMF model if selected', () => {
-          const idNumber = '#415';
-          const id = compact ? idNumber : `amf://id${idNumber}`;
-          const result = element._computeServer(model, id);
-          assert.typeOf(result, 'object');
-        });
       });
 
-      describe('_getServer()', () => {
+      describe('_getServers()', () => {
         beforeEach(async () => {
           element = await modelFixture(model);
         });
 
         describe('RAML', () => {
           describe('root level', () => {
-            it('Returns all servers if id undefined', () => {
-              const servers = element._getServer({});
+            it('Returns all servers', () => {
+              const servers = element._getServers({ model });
               assert.typeOf(servers, 'array');
               assert.lengthOf(servers, 1);
-            });
-
-            it('Returns all matching servers if id is defined', () => {
-              const idNumber = '#415';
-              const id = compact ? idNumber : `amf://id${idNumber}`;
-              const servers = element._getServer({ id });
-              assert.typeOf(servers, 'array');
-              assert.lengthOf(servers, 1);
-            });
-
-            it('Returns [] if no matching id', () => {
-              const idNumber = 'foo';
-              const id = compact ? idNumber : `amf://id${idNumber}`;
-              const servers = element._getServer({ id });
-              assert.typeOf(servers, 'array');
-              assert.lengthOf(servers, 0);
             });
           });
         });
 
         describe('OAS', () => {
+          const methodId = `${compact ? '' : 'amf://id'}#23`;
+          // TODO uncomment this once AMF model has resolved servers on all levels
+          // const endpointId = `${compact ? '' : 'amf://id'}#22`;
+
           before(async () => {
             model = await AmfLoader.load(compact, 'multiple-servers');
           });
@@ -1264,23 +1245,83 @@ describe('AmfHelperMixin', function() {
           });
 
           describe('for operation', () => {
-            let method;
-
             beforeEach(async () => {
               element = await modelFixture(model);
-              method = AmfLoader.lookupOperation(model, '/pets', 'get');
             });
 
-            it('Returns all servers if id undefined', () => {
-              const servers = element._getServer({ method });
+            it('Returns all servers for method', () => {
+              const servers = element._getServers({ model, methodId });
               assert.typeOf(servers, 'array');
               assert.lengthOf(servers, 2);
+            });
+
+            it('Returns undefined if method not found and endpoint undefined', () => {
+              assert.isUndefined(element._getServers({ model, methodId: 'foo' }));
+            });
+
+            // TODO uncomment this once AMF model has resolved servers on all levels
+            /* it('Returns all endpoint servers if method not found and endpoint is defined', () => {
+              const servers = element._getServers({ model, methodId: 'foo', endpointId });
+              assert.typeOf(servers, 'array');
+              assert.lengthOf(servers, 2);
+            }); */
+
+            it('Returns undefined if no model', () => {
+              assert.isUndefined(element._getServers({}));
+            });
+          });
+        });
+      });
+
+      describe('_getServer()', () => {
+          describe('RAML', () => {
+            describe('root level', () => {
+              it('Returns no servers if id undefined', () => {
+                const servers = element._getServer({ model });
+                assert.typeOf(servers, 'array');
+                assert.lengthOf(servers, 0);
+              });
+
+              it('Returns all matching servers if id is defined', () => {
+                const idNumber = '#415';
+                const id = compact ? idNumber : `amf://id${idNumber}`;
+                const servers = element._getServer({ model, id });
+                assert.typeOf(servers, 'array');
+                assert.lengthOf(servers, 1);
+              });
+
+              it('Returns [] if no matching id', () => {
+                const idNumber = 'foo';
+                const id = compact ? idNumber : `amf://id${idNumber}`;
+                const servers = element._getServer({ model, id });
+                assert.typeOf(servers, 'array');
+                assert.lengthOf(servers, 0);
+              });
+            });
+          });
+
+        describe('OAS', () => {
+          const methodId = `${compact ? '' : 'amf://id'}#23`;
+
+          before(async () => {
+            model = await AmfLoader.load(compact, 'multiple-servers');
+          });
+
+          after(async () => {
+            model = await AmfLoader.load(compact);
+          });
+
+          describe('operation', () => {
+            it('Returns no servers if id undefined', () => {
+              const servers = element._getServer({ model, methodId });
+              assert.typeOf(servers, 'array');
+              assert.lengthOf(servers, 0);
             });
 
             it('Returns all matching servers if id is defined', () => {
               const idNumber = '#34';
               const id = compact ? idNumber : `amf://id${idNumber}`;
-              const servers = element._getServer({ method, id });
+              const servers = element._getServer({ model, methodId, id });
               assert.typeOf(servers, 'array');
               assert.lengthOf(servers, 1);
             });

@@ -763,7 +763,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @param {?String} selected Selected server id
      * @return {Object} The server model
      */
-    _computeServer(model, selected) {
+    _computeServer(model) {
       const api = this._computeWebApi(model);
       if (!api) {
         return;
@@ -771,50 +771,48 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       const key = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
       const srv = this._ensureArray(api[key]);
 
-      if (selected) {
-        return srv.find(srvI => this._getValue(srvI, '@id') === selected)
-      }
-
       return srv ? srv[0] : undefined
     }
-
+    _getServers({ model, endpointId, methodId }){
+      let api = this._computeWebApi(model);
+      if (Array.isArray(api)) {
+        api = api[0];
+      }
+      if (!api) {
+        return
+      }
+      const serverKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
+      let servers;
+      if (methodId) {
+        const method = this._computeMethodModel(api, methodId);
+        servers = this._getValueArray(method, serverKey);
+      }
+      if (endpointId && !servers) {
+        const endpoint = this._computeEndpointModel(api, endpointId);
+        servers = this._getValueArray(endpoint, serverKey);
+      }
+      if (!servers) {
+        // const encodesKey = this._getAmfKey(this.ns.aml.vocabularies.document.encodes);
+        // let encodes = this._getValue(model, encodesKey);
+        // if (Array.isArray(encodes)){
+        //   encodes = encodes[0];
+        // }
+        servers = this._getValueArray(api, serverKey);
+      }
+      return servers;
+    }
     /**
      * Compute values for `server` property based on node an optional selected id.
      *
-     * @param {?Object} endpoint Optional endpoint node, required if method is provided
-     * @param {?Object} method Optional method node
+     * @param {Object} model AMF model to get servers from
+     * @param {?String} endpointId Optional endpoint id, required if method is provided
+     * @param {?String} methodId Optional method id
      * @param {?String} id Optional selected server id
      * @return {undefined|any} The server list or undefined if node has no servers
      */
-    _getServer({ endpoint, method, id }) {
-      let { amf } = this;
-      const key = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
-      let srv;
-      if (method) {
-        srv = this._getValueArray(method, key);
-      }
-      const methodSrvEmpty = !method || (method && (!srv || srv.length === 0));
-      if (methodSrvEmpty && endpoint) {
-        srv = this._getValueArray(endpoint, key);
-      }
-      const endpointSrvEmpty = !endpoint || (endpoint && (!srv || srv.length === 0));
-      if (methodSrvEmpty && endpointSrvEmpty) {
-        if (Array.isArray(amf)) {
-          amf = amf[0];
-        }
-        const encodesKey = this.ns.aml.vocabularies.document.encodes;
-        let encodes = this._getValueArray(amf, encodesKey);
-        if (Array.isArray(encodes)) {
-          encodes = encodes[0]
-        }
-        srv = this._getValueArray(encodes, key);
-      }
-
-      if (srv) {
-        return id ? srv.filter(s => this._getValue(s, '@id') === id) : srv;
-      }
-
-      return undefined;
+    _getServer({ model, endpointId, methodId, id }) {
+      const servers = this._getServers({ model, endpointId, methodId });
+      return servers ? servers.filter(srv => this._getValue(srv, '@id') === id) : undefined;
     }
     /**
      * Computes endpoint's URI based on `amf` and `endpoint` models.
