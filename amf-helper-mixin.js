@@ -760,7 +760,6 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * Computes value for `server` property that is later used with other computations.
      *
      * @param {Array|Object} model AMF model for an API
-     * @param {?String} selected Selected server id
      * @return {Object} The server model
      */
     _computeServer(model) {
