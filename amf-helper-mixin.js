@@ -770,7 +770,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       const key = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
       const srv = this._ensureArray(api[key]);
 
-      return srv ? srv[0] : undefined
+      return srv ? srv[0] : undefined;
     }
     _getServers({ model, endpointId, methodId }){
       let api = this._computeWebApi(model);
