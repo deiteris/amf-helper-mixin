@@ -353,7 +353,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (old === value) {
         return;
       }
-      // Cahced keys cannot be static as this element can be using in the sane
+      // Cached keys cannot be static as this element can be using in the sane
       // document with different AMF models
       this.__cachedKeys = {};
       this._amf = value;
@@ -1185,23 +1185,66 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       if (!amf || !id) {
         return;
       }
-      const declares = this._computeDeclares(amf);
-      if (!declares) {
-        return;
-      }
       let target;
-      for (let i = 0; i < declares.length; i++) {
-        const _ref = declares[i];
-        if (_ref && _ref['@id'] === id) {
-          target = _ref;
-          break;
-        }
+      const declares = this._computeDeclares(amf);
+      if (declares) {
+        target = this._findById(declares, id);
+      }
+      if (!target) {
+        const references = this._computeReferences(amf);
+        target = this._obtainShapeFromReferences(references, id)
       }
       if (!target) {
         return;
       }
       // Declaration may contain references
       target = this._resolve(target);
+      return target;
+    }
+
+    /**
+     * Resolves the shape of a given reference.
+     *
+     * @param {Object} references References object to search in
+     * @param {Object} id Id of the shape to resolve
+     * @return {Object | undefined} Resolved shape for given reference, undefined otherwise
+     */
+    _obtainShapeFromReferences(references, id) {
+      let target;
+      for (let i = 0; i < references.length; i++) {
+        const _ref = references[i];
+        // case of fragment that encodes the shape
+        const encoded = this._computeEncodes(_ref);
+        if (encoded && encoded['@id'] === id) {
+          target = encoded;
+          break;
+        }
+        // case of a library which declares types
+        if (!encoded) {
+          target = this._findById(this._computeDeclares(_ref), id);
+          if (target) break;
+        }
+      }
+      return target;
+    }
+
+    /**
+     * Searches a node with a given ID in an array
+     *
+     * @param {Array} array Array to search for a given ID
+     * @param {String} id Id to search for
+     * @return {Object | undefined} Node with the given ID when found, undefined otherwise
+     */
+    _findById(array, id) {
+      if (!array) return;
+      let target;
+      for (let i = 0; i < array.length; i++) {
+        const _current = array[i];
+        if (_current && _current['@id'] === id) {
+          target = _current;
+          break;
+        }
+      }
       return target;
     }
 

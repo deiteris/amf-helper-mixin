@@ -58,7 +58,7 @@ describe('AmfHelperMixin', function() {
           element = await basicFixture();
         });
 
-        it('calls the function when amf property chnage', () => {
+        it('calls the function when amf property change', () => {
           const spy = sinon.spy(element, '__amfChanged');
           element.amf = model;
           assert.isTrue(spy.args[0][0] === model);
@@ -1139,7 +1139,7 @@ describe('AmfHelperMixin', function() {
 
         it('returns all items in the array', () => {
           const result = element._computeDeclares(model);
-          assert.lengthOf(result, 15);
+          assert.lengthOf(result, 14);
         });
       });
 
@@ -1167,7 +1167,7 @@ describe('AmfHelperMixin', function() {
 
         it('Returns all items in the array', () => {
           const result = element._computeReferences(model);
-          assert.lengthOf(result, 8);
+          assert.lengthOf(result, 9);
         });
       });
 
@@ -1273,7 +1273,7 @@ describe('AmfHelperMixin', function() {
         it('Returns a loist of endpoints', () => {
           const result = element._computeEndpoints(webApi);
           assert.typeOf(result, 'array');
-          assert.lengthOf(result, 34);
+          assert.lengthOf(result, 35);
         });
       });
 
@@ -1516,6 +1516,21 @@ describe('AmfHelperMixin', function() {
 
         it('Resolves link target', () => {
           const endpoint = element._computeEndpointByPath(webApi, '/referenceId');
+          const opKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.supportedOperation);
+          const exKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.expects);
+          const plKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.payload);
+          const scKey = element._getAmfKey(element.ns.aml.vocabularies.shapes.schema);
+          const nameKey = element._getAmfKey(element.ns.w3.shacl.name);
+          const op = element._ensureArray(endpoint[opKey])[0];
+          const expects = element._ensureArray(op[exKey])[0];
+          const payload = element._ensureArray(expects[plKey])[0];
+          const schema = element._ensureArray(payload[scKey])[0];
+          const result = element._resolve(schema);
+          assert.typeOf(result[nameKey], 'array');
+        });
+
+        it('Resolves link target for external fragment', () => {
+          const endpoint = element._computeEndpointByPath(webApi, '/external-data-type');
           const opKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.supportedOperation);
           const exKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.expects);
           const plKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.payload);
@@ -1926,7 +1941,30 @@ describe('AmfHelperMixin', function() {
           assert.deepEqual(result, ['a']);
         });
       });
-      // Keys caching is only enabled for compact model that requires cadditional
+
+      describe('_findById()', () => {
+        before(async () => {
+          element = await modelFixture(model);
+        });
+
+        it('Returns undefined when no argument', () => {
+          const result = element._findById();
+          assert.isUndefined(result);
+        });
+
+        it('Returns undefined when array does not contain id', () => {
+          const arr = [{ '@id': '1'},{ '@id': '2'},{ '@id': '3'},];
+          const result = element._findById(arr, '0');
+          assert.isUndefined(result);
+        });
+
+        it('Returns object when array contains id', () => {
+          const arr = [{ '@id': '1'},{ '@id': '2'},{ '@id': '3'},];
+          const result = element._findById(arr, '1');
+          assert.deepEqual(result, { '@id': '1'});
+        });
+      });
+      // Keys caching is only enabled for compact model that requires additional
       // computations.
       (compact ? describe : describe.skip)('keys computation caching', () => {
         before(async () => {
@@ -1939,7 +1977,7 @@ describe('AmfHelperMixin', function() {
           assert.equal(element.__cachedKeys[prop], key);
         });
 
-        it('retuens the same value', () => {
+        it('returns the same value', () => {
           const prop = element.ns.aml.vocabularies.document.encodes;
           const key1 = element._getAmfKey(prop);
           const key2 = element._getAmfKey(prop);
@@ -1954,7 +1992,7 @@ describe('AmfHelperMixin', function() {
           assert.equal(key, 'test');
         });
 
-        it('resets cahce when AMF changes', () => {
+        it('resets cache when AMF changes', () => {
           const prop = element.ns.aml.vocabularies.document.encodes;
           element._getAmfKey(prop);
           element.amf = undefined;
