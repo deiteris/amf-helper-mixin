@@ -1290,7 +1290,7 @@ describe('AmfHelperMixin', function() {
               });
 
               it('Returns all matching servers if id is defined', () => {
-                const id = AmfLoader.createAmfId(compact, '#415');
+                const id = element._getServers({})[0]['@id'];
                 const servers = element._getServer({ id });
                 assert.typeOf(servers, 'array');
                 assert.lengthOf(servers, 1);
@@ -1306,10 +1306,12 @@ describe('AmfHelperMixin', function() {
           });
 
         describe('OAS', () => {
-          const methodId = AmfLoader.createAmfId(compact, '#23');
+          let methodId;
 
           before(async () => {
             model = await AmfLoader.load(compact, 'multiple-servers');
+            const method = AmfLoader.lookupOperation(model, '/pets', 'get');
+            methodId = method['@id'];
           });
 
           after(async () => {
@@ -1324,7 +1326,7 @@ describe('AmfHelperMixin', function() {
             });
 
             it('Returns all matching servers if id is defined', () => {
-              const id = AmfLoader.createAmfId(compact, '#415');
+              const id = element._getServers({})[0]['@id'];
               const servers = element._getServer({ methodId, id });
               assert.typeOf(servers, 'array');
               assert.lengthOf(servers, 1);
