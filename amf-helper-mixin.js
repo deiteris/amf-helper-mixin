@@ -772,28 +772,42 @@ export const AmfHelperMixin = dedupingMixin((base) => {
 
       return srv ? srv[0] : undefined
     }
-    _getServers({ model, endpointId, methodId }){
-      let api = this._computeWebApi(model);
+    _getServers({ endpointId, methodId }){
+      const { amf } = this;
+      let api = this._computeWebApi(amf);
       if (Array.isArray(api)) {
         api = api[0];
       }
       if (!api) {
         return
       }
+
       const serverKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
-      let servers;
-      if (methodId) {
-        const method = this._computeMethodModel(api, methodId);
-        servers = this._getValueArray(method, serverKey);
-      }
-      if (endpointId && !servers) {
+
+      const getRootServers = () => {
+        return this._getValueArray(api, serverKey);
+      };
+      const getEndpointServers = () => {
         const endpoint = this._computeEndpointModel(api, endpointId);
-        servers = this._getValueArray(endpoint, serverKey);
+        if (endpoint) {
+          return this._getValueArray(endpoint, serverKey);
+        }
+        return getRootServers();
+      };
+      const getMethodServers = () => {
+        const method = this._computeMethodModel(api, methodId);
+        if (method) {
+          return this._getValueArray(method, serverKey);
+        }
+        return getEndpointServers()
+      };
+
+      if (methodId) {
+        return getMethodServers()
+      } else if (endpointId) {
+        return getEndpointServers()
       }
-      if (!servers) {
-        servers = this._getValueArray(api, serverKey);
-      }
-      return servers;
+      return getRootServers()
     }
     /**
      * Compute values for `server` property based on node an optional selected id.
@@ -804,8 +818,8 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @param {?String} id Optional selected server id
      * @return {undefined|any} The server list or undefined if node has no servers
      */
-    _getServer({ model, endpointId, methodId, id }) {
-      const servers = this._getServers({ model, endpointId, methodId });
+    _getServer({ endpointId, methodId, id }) {
+      const servers = this._getServers({ endpointId, methodId });
       return servers ? servers.filter(srv => this._getValue(srv, '@id') === id) : undefined;
     }
     /**

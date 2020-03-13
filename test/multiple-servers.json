@@ -20,6 +20,32 @@
             "@value": "Swagger Petstore"
           }
         ],
+        "http://a.ml/vocabularies/apiContract#server": [
+          {
+            "@id": "amf://id#22",
+            "@type": [
+              "http://a.ml/vocabularies/apiContract#Server",
+              "http://a.ml/vocabularies/document#DomainElement"
+            ],
+            "http://a.ml/vocabularies/core#urlTemplate": [
+              {
+                "@value": "http://petstore.swagger.io/v1"
+              }
+            ]
+          },
+          {
+            "@id": "amf://id#23",
+            "@type": [
+              "http://a.ml/vocabularies/apiContract#Server",
+              "http://a.ml/vocabularies/document#DomainElement"
+            ],
+            "http://a.ml/vocabularies/core#urlTemplate": [
+              {
+                "@value": "http://dev.petstore.swagger.io/v1"
+              }
+            ]
+          }
+        ],
         "http://a.ml/vocabularies/core#version": [
           {
             "@value": "1.0.0"
@@ -41,7 +67,7 @@
         ],
         "http://a.ml/vocabularies/apiContract#endpoint": [
           {
-            "@id": "amf://id#22",
+            "@id": "amf://id#24",
             "@type": [
               "http://a.ml/vocabularies/apiContract#EndPoint",
               "http://a.ml/vocabularies/document#DomainElement"
@@ -53,7 +79,7 @@
             ],
             "http://a.ml/vocabularies/apiContract#supportedOperation": [
               {
-                "@id": "amf://id#23",
+                "@id": "amf://id#25",
                 "@type": [
                   "http://a.ml/vocabularies/apiContract#Operation",
                   "http://a.ml/vocabularies/document#DomainElement"
@@ -75,7 +101,7 @@
                 ],
                 "http://a.ml/vocabularies/apiContract#expects": [
                   {
-                    "@id": "amf://id#31",
+                    "@id": "amf://id#33",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Request",
                       "http://a.ml/vocabularies/apiContract#Message",
@@ -83,7 +109,7 @@
                     ],
                     "http://a.ml/vocabularies/apiContract#parameter": [
                       {
-                        "@id": "amf://id#32",
+                        "@id": "amf://id#34",
                         "@type": [
                           "http://a.ml/vocabularies/apiContract#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -135,7 +161,7 @@
                         ],
                         "http://a.ml/vocabularies/shapes#schema": [
                           {
-                            "@id": "amf://id#33",
+                            "@id": "amf://id#35",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ScalarShape",
                               "http://a.ml/vocabularies/shapes#AnyShape",
@@ -166,7 +192,7 @@
                 ],
                 "http://a.ml/vocabularies/apiContract#returns": [
                   {
-                    "@id": "amf://id#25",
+                    "@id": "amf://id#27",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Response",
                       "http://a.ml/vocabularies/apiContract#Message",
@@ -189,7 +215,7 @@
                     ],
                     "http://a.ml/vocabularies/apiContract#payload": [
                       {
-                        "@id": "amf://id#28",
+                        "@id": "amf://id#30",
                         "@type": [
                           "http://a.ml/vocabularies/apiContract#Payload",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -225,7 +251,7 @@
                     ],
                     "http://a.ml/vocabularies/apiContract#header": [
                       {
-                        "@id": "amf://id#26",
+                        "@id": "amf://id#28",
                         "@type": [
                           "http://a.ml/vocabularies/apiContract#Parameter",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -257,7 +283,7 @@
                         ],
                         "http://a.ml/vocabularies/shapes#schema": [
                           {
-                            "@id": "amf://id#27",
+                            "@id": "amf://id#29",
                             "@type": [
                               "http://a.ml/vocabularies/shapes#ScalarShape",
                               "http://a.ml/vocabularies/shapes#AnyShape",
@@ -281,7 +307,7 @@
                     ]
                   },
                   {
-                    "@id": "amf://id#29",
+                    "@id": "amf://id#31",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Response",
                       "http://a.ml/vocabularies/apiContract#Message",
@@ -304,7 +330,7 @@
                     ],
                     "http://a.ml/vocabularies/apiContract#payload": [
                       {
-                        "@id": "amf://id#30",
+                        "@id": "amf://id#32",
                         "@type": [
                           "http://a.ml/vocabularies/apiContract#Payload",
                           "http://a.ml/vocabularies/document#DomainElement"
@@ -342,7 +368,7 @@
                 ],
                 "http://a.ml/vocabularies/apiContract#tag": [
                   {
-                    "@id": "amf://id#24",
+                    "@id": "amf://id#26",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Tag",
                       "http://a.ml/vocabularies/document#DomainElement"
@@ -356,7 +382,7 @@
                 ],
                 "http://a.ml/vocabularies/apiContract#server": [
                   {
-                    "@id": "amf://id#34",
+                    "@id": "amf://id#22",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Server",
                       "http://a.ml/vocabularies/document#DomainElement"
@@ -368,7 +394,7 @@
                     ]
                   },
                   {
-                    "@id": "amf://id#35",
+                    "@id": "amf://id#23",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Server",
                       "http://a.ml/vocabularies/document#DomainElement"
@@ -502,7 +528,7 @@
                 ],
                 "http://a.ml/vocabularies/apiContract#server": [
                   {
-                    "@id": "amf://id#34",
+                    "@id": "amf://id#22",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Server",
                       "http://a.ml/vocabularies/document#DomainElement"
@@ -514,7 +540,7 @@
                     ]
                   },
                   {
-                    "@id": "amf://id#35",
+                    "@id": "amf://id#23",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Server",
                       "http://a.ml/vocabularies/document#DomainElement"
@@ -524,6 +550,32 @@
                         "@value": "http://dev.petstore.swagger.io/v1"
                       }
                     ]
+                  }
+                ]
+              }
+            ],
+            "http://a.ml/vocabularies/apiContract#server": [
+              {
+                "@id": "amf://id#22",
+                "@type": [
+                  "http://a.ml/vocabularies/apiContract#Server",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://a.ml/vocabularies/core#urlTemplate": [
+                  {
+                    "@value": "http://petstore.swagger.io/v1"
+                  }
+                ]
+              },
+              {
+                "@id": "amf://id#23",
+                "@type": [
+                  "http://a.ml/vocabularies/apiContract#Server",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://a.ml/vocabularies/core#urlTemplate": [
+                  {
+                    "@value": "http://dev.petstore.swagger.io/v1"
                   }
                 ]
               }
@@ -774,7 +826,7 @@
                 ],
                 "http://a.ml/vocabularies/apiContract#server": [
                   {
-                    "@id": "amf://id#34",
+                    "@id": "amf://id#22",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Server",
                       "http://a.ml/vocabularies/document#DomainElement"
@@ -786,7 +838,7 @@
                     ]
                   },
                   {
-                    "@id": "amf://id#35",
+                    "@id": "amf://id#23",
                     "@type": [
                       "http://a.ml/vocabularies/apiContract#Server",
                       "http://a.ml/vocabularies/document#DomainElement"
@@ -799,6 +851,32 @@
                   }
                 ]
               }
+            ],
+            "http://a.ml/vocabularies/apiContract#server": [
+              {
+                "@id": "amf://id#22",
+                "@type": [
+                  "http://a.ml/vocabularies/apiContract#Server",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://a.ml/vocabularies/core#urlTemplate": [
+                  {
+                    "@value": "http://petstore.swagger.io/v1"
+                  }
+                ]
+              },
+              {
+                "@id": "amf://id#23",
+                "@type": [
+                  "http://a.ml/vocabularies/apiContract#Server",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://a.ml/vocabularies/core#urlTemplate": [
+                  {
+                    "@value": "http://dev.petstore.swagger.io/v1"
+                  }
+                ]
+              }
             ]
           }
         ]
@@ -806,7 +884,7 @@
     ],
     "http://a.ml/vocabularies/document#version": [
       {
-        "@value": "2.0.1"
+        "@value": "2.1.0"
       }
     ],
     "http://a.ml/vocabularies/document#root": [
@@ -996,7 +1074,7 @@
         ],
         "http://a.ml/vocabularies/shapes#items": [
           {
-            "@id": "amf://id#1/link--66389514",
+            "@id": "amf://id#1",
             "@type": [
               "http://www.w3.org/ns/shacl#NodeShape",
               "http://a.ml/vocabularies/shapes#AnyShape",
@@ -1004,12 +1082,162 @@
               "http://a.ml/vocabularies/shapes#Shape",
               "http://a.ml/vocabularies/document#DomainElement"
             ],
-            "http://a.ml/vocabularies/document#link-target": [
+            "http://www.w3.org/ns/shacl#closed": [
               {
-                "@id": "amf://id#1"
+                "@value": false
               }
             ],
-            "http://a.ml/vocabularies/document#link-label": [
+            "http://www.w3.org/ns/shacl#property": [
+              {
+                "@id": "amf://id#2",
+                "@type": [
+                  "http://www.w3.org/ns/shacl#PropertyShape",
+                  "http://www.w3.org/ns/shacl#Shape",
+                  "http://a.ml/vocabularies/shapes#Shape",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://www.w3.org/ns/shacl#path": [
+                  {
+                    "@id": "http://a.ml/vocabularies/data#id"
+                  }
+                ],
+                "http://a.ml/vocabularies/shapes#range": [
+                  {
+                    "@id": "amf://id#3",
+                    "@type": [
+                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                      "http://a.ml/vocabularies/shapes#AnyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://www.w3.org/ns/shacl#datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#long"
+                      }
+                    ],
+                    "http://a.ml/vocabularies/shapes#format": [
+                      {
+                        "@value": "int64"
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "id"
+                      }
+                    ]
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#minCount": [
+                  {
+                    "@value": 1
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#name": [
+                  {
+                    "@value": "id"
+                  }
+                ]
+              },
+              {
+                "@id": "amf://id#4",
+                "@type": [
+                  "http://www.w3.org/ns/shacl#PropertyShape",
+                  "http://www.w3.org/ns/shacl#Shape",
+                  "http://a.ml/vocabularies/shapes#Shape",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://www.w3.org/ns/shacl#path": [
+                  {
+                    "@id": "http://a.ml/vocabularies/data#name"
+                  }
+                ],
+                "http://a.ml/vocabularies/shapes#range": [
+                  {
+                    "@id": "amf://id#5",
+                    "@type": [
+                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                      "http://a.ml/vocabularies/shapes#AnyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://www.w3.org/ns/shacl#datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "name"
+                      }
+                    ]
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#minCount": [
+                  {
+                    "@value": 1
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#name": [
+                  {
+                    "@value": "name"
+                  }
+                ]
+              },
+              {
+                "@id": "amf://id#6",
+                "@type": [
+                  "http://www.w3.org/ns/shacl#PropertyShape",
+                  "http://www.w3.org/ns/shacl#Shape",
+                  "http://a.ml/vocabularies/shapes#Shape",
+                  "http://a.ml/vocabularies/document#DomainElement"
+                ],
+                "http://www.w3.org/ns/shacl#path": [
+                  {
+                    "@id": "http://a.ml/vocabularies/data#tag"
+                  }
+                ],
+                "http://a.ml/vocabularies/shapes#range": [
+                  {
+                    "@id": "amf://id#7",
+                    "@type": [
+                      "http://a.ml/vocabularies/shapes#ScalarShape",
+                      "http://a.ml/vocabularies/shapes#AnyShape",
+                      "http://www.w3.org/ns/shacl#Shape",
+                      "http://a.ml/vocabularies/shapes#Shape",
+                      "http://a.ml/vocabularies/document#DomainElement"
+                    ],
+                    "http://www.w3.org/ns/shacl#datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                      }
+                    ],
+                    "http://www.w3.org/ns/shacl#name": [
+                      {
+                        "@value": "tag"
+                      }
+                    ]
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#minCount": [
+                  {
+                    "@value": 0
+                  }
+                ],
+                "http://www.w3.org/ns/shacl#name": [
+                  {
+                    "@value": "tag"
+                  }
+                ]
+              }
+            ],
+            "http://a.ml/vocabularies/document#recursive": [
+              {
+                "@value": true
+              }
+            ],
+            "http://www.w3.org/ns/shacl#name": [
               {
                 "@value": "Pet"
               }

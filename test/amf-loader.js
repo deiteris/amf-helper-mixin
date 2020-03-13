@@ -42,3 +42,7 @@ AmfLoader.lookupOperation = function(model, endpoint, operation) {
   const ops = helper._ensureArray(endPoint[opKey]);
   return ops.find((item) => helper._getValue(item, helper.ns.w3.hydra.core + 'method') === operation);
 };
+
+AmfLoader.createAmfId = function(compact, id) {
+  return compact ? id : `amf://id${id}`;
+};

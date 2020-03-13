@@ -1,1165 +1,1392 @@
 [
-    {
-      "@id": "",
-      "@type": [
-        "doc:Document",
-        "doc:Fragment",
-        "doc:Module",
-        "doc:Unit"
-      ],
-      "doc:encodes": [
-        {
-          "@id": "#20",
-          "@type": [
-            "apiContract:WebAPI",
-            "doc:RootDomainElement",
-            "doc:DomainElement"
-          ],
-          "core:name": [
-            {
-              "@value": "Swagger Petstore"
-            }
-          ],
-          "core:version": [
-            {
-              "@value": "1.0.0"
-            }
-          ],
-          "core:license": [
-            {
-              "@id": "#21",
-              "@type": [
-                "core:License",
-                "doc:DomainElement"
-              ],
-              "core:name": [
-                {
-                  "@value": "MIT"
-                }
-              ]
-            }
-          ],
-          "apiContract:endpoint": [
-            {
-              "@id": "#22",
-              "@type": [
-                "apiContract:EndPoint",
-                "doc:DomainElement"
-              ],
-              "apiContract:path": [
-                {
-                  "@value": "/pets"
-                }
-              ],
-              "apiContract:supportedOperation": [
-                {
-                  "@id": "#23",
-                  "@type": [
-                    "apiContract:Operation",
-                    "doc:DomainElement"
-                  ],
-                  "apiContract:method": [
-                    {
-                      "@value": "get"
-                    }
-                  ],
-                  "core:name": [
-                    {
-                      "@value": "listPets"
-                    }
-                  ],
-                  "apiContract:guiSummary": [
-                    {
-                      "@value": "List all pets"
-                    }
-                  ],
-                  "apiContract:expects": [
-                    {
-                      "@id": "#31",
-                      "@type": [
-                        "apiContract:Request",
-                        "apiContract:Message",
-                        "doc:DomainElement"
-                      ],
-                      "apiContract:parameter": [
-                        {
-                          "@id": "#32",
-                          "@type": [
-                            "apiContract:Parameter",
-                            "doc:DomainElement"
-                          ],
-                          "core:name": [
-                            {
-                              "@value": "limit"
-                            }
-                          ],
-                          "apiContract:paramName": [
-                            {
-                              "@value": "limit"
-                            }
-                          ],
-                          "core:description": [
-                            {
-                              "@value": "How many items to return at one time (max 100)"
-                            }
-                          ],
-                          "apiContract:required": [
-                            {
-                              "@value": false
-                            }
-                          ],
-                          "apiContract:allowEmptyValue": [
-                            {
-                              "@value": false
-                            }
-                          ],
-                          "apiContract:style": [
-                            {
-                              "@value": "form"
-                            }
-                          ],
-                          "apiContract:explode": [
-                            {
-                              "@value": true
-                            }
-                          ],
-                          "apiContract:allowReserved": [
-                            {
-                              "@value": false
-                            }
-                          ],
-                          "apiContract:binding": [
-                            {
-                              "@value": "query"
-                            }
-                          ],
-                          "raml-shapes:schema": [
-                            {
-                              "@id": "#33",
-                              "@type": [
-                                "raml-shapes:ScalarShape",
-                                "raml-shapes:AnyShape",
-                                "shacl:Shape",
-                                "raml-shapes:Shape",
-                                "doc:DomainElement"
-                              ],
-                              "shacl:datatype": [
-                                {
-                                  "@id": "http://www.w3.org/2001/XMLSchema#integer"
-                                }
-                              ],
-                              "raml-shapes:format": [
-                                {
-                                  "@value": "int32"
-                                }
-                              ],
-                              "shacl:name": [
-                                {
-                                  "@value": "limit"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ],
-                  "apiContract:returns": [
-                    {
-                      "@id": "#25",
-                      "@type": [
-                        "apiContract:Response",
-                        "apiContract:Message",
-                        "doc:DomainElement"
-                      ],
-                      "apiContract:statusCode": [
-                        {
-                          "@value": "200"
-                        }
-                      ],
-                      "core:name": [
-                        {
-                          "@value": "200"
-                        }
-                      ],
-                      "core:description": [
-                        {
-                          "@value": "A paged array of pets"
-                        }
-                      ],
-                      "apiContract:payload": [
-                        {
-                          "@id": "#28",
-                          "@type": [
-                            "apiContract:Payload",
-                            "doc:DomainElement"
-                          ],
-                          "core:mediaType": [
-                            {
-                              "@value": "application/json"
-                            }
-                          ],
-                          "raml-shapes:schema": [
-                            {
-                              "@id": "#10/link-593997499",
-                              "@type": [
-                                "raml-shapes:ArrayShape",
-                                "raml-shapes:AnyShape",
-                                "shacl:Shape",
-                                "raml-shapes:Shape",
-                                "doc:DomainElement"
-                              ],
-                              "doc:link-target": [
-                                {
-                                  "@id": "#10"
-                                }
-                              ],
-                              "doc:link-label": [
-                                {
-                                  "@value": "Pets"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ],
-                      "apiContract:header": [
-                        {
-                          "@id": "#26",
-                          "@type": [
-                            "apiContract:Parameter",
-                            "doc:DomainElement"
-                          ],
-                          "core:name": [
-                            {
-                              "@value": "x-next"
-                            }
-                          ],
-                          "core:description": [
-                            {
-                              "@value": "A link to the next page of responses"
-                            }
-                          ],
-                          "apiContract:style": [
-                            {
-                              "@value": "simple"
-                            }
-                          ],
-                          "apiContract:explode": [
-                            {
-                              "@value": false
-                            }
-                          ],
-                          "apiContract:binding": [
-                            {
-                              "@value": "header"
-                            }
-                          ],
-                          "raml-shapes:schema": [
-                            {
-                              "@id": "#27",
-                              "@type": [
-                                "raml-shapes:ScalarShape",
-                                "raml-shapes:AnyShape",
-                                "shacl:Shape",
-                                "raml-shapes:Shape",
-                                "doc:DomainElement"
-                              ],
-                              "shacl:datatype": [
-                                {
-                                  "@id": "http://www.w3.org/2001/XMLSchema#string"
-                                }
-                              ],
-                              "shacl:name": [
-                                {
-                                  "@value": "schema"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "@id": "#29",
-                      "@type": [
-                        "apiContract:Response",
-                        "apiContract:Message",
-                        "doc:DomainElement"
-                      ],
-                      "apiContract:statusCode": [
-                        {
-                          "@value": "default"
-                        }
-                      ],
-                      "core:name": [
-                        {
-                          "@value": "default"
-                        }
-                      ],
-                      "core:description": [
-                        {
-                          "@value": "unexpected error"
-                        }
-                      ],
-                      "apiContract:payload": [
-                        {
-                          "@id": "#30",
-                          "@type": [
-                            "apiContract:Payload",
-                            "doc:DomainElement"
-                          ],
-                          "core:mediaType": [
-                            {
-                              "@value": "application/json"
-                            }
-                          ],
-                          "raml-shapes:schema": [
-                            {
-                              "@id": "#12/link-1281538207",
-                              "@type": [
-                                "shacl:NodeShape",
-                                "raml-shapes:AnyShape",
-                                "shacl:Shape",
-                                "raml-shapes:Shape",
-                                "doc:DomainElement"
-                              ],
-                              "doc:link-target": [
-                                {
-                                  "@id": "#12"
-                                }
-                              ],
-                              "doc:link-label": [
-                                {
-                                  "@value": "Error"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ],
-                  "apiContract:tag": [
-                    {
-                      "@id": "#24",
-                      "@type": [
-                        "apiContract:Tag",
-                        "doc:DomainElement"
-                      ],
-                      "core:name": [
-                        {
-                          "@value": "pets"
-                        }
-                      ]
-                    }
-                  ],
-                  "apiContract:server": [
-                    {
-                      "@id": "#34",
-                      "@type": [
-                        "apiContract:Server",
-                        "doc:DomainElement"
-                      ],
-                      "core:urlTemplate": [
-                        {
-                          "@value": "http://petstore.swagger.io/v1"
-                        }
-                      ]
-                    },
-                    {
-                      "@id": "#35",
-                      "@type": [
-                        "apiContract:Server",
-                        "doc:DomainElement"
-                      ],
-                      "core:urlTemplate": [
-                        {
-                          "@value": "http://dev.petstore.swagger.io/v1"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "@id": "#36",
-                  "@type": [
-                    "apiContract:Operation",
-                    "doc:DomainElement"
-                  ],
-                  "apiContract:method": [
-                    {
-                      "@value": "post"
-                    }
-                  ],
-                  "core:name": [
-                    {
-                      "@value": "createPets"
-                    }
-                  ],
-                  "apiContract:guiSummary": [
-                    {
-                      "@value": "Create a pet"
-                    }
-                  ],
-                  "apiContract:returns": [
-                    {
-                      "@id": "#38",
-                      "@type": [
-                        "apiContract:Response",
-                        "apiContract:Message",
-                        "doc:DomainElement"
-                      ],
-                      "apiContract:statusCode": [
-                        {
-                          "@value": "201"
-                        }
-                      ],
-                      "core:name": [
-                        {
-                          "@value": "201"
-                        }
-                      ],
-                      "core:description": [
-                        {
-                          "@value": "Null response"
-                        }
-                      ]
-                    },
-                    {
-                      "@id": "#39",
-                      "@type": [
-                        "apiContract:Response",
-                        "apiContract:Message",
-                        "doc:DomainElement"
-                      ],
-                      "apiContract:statusCode": [
-                        {
-                          "@value": "default"
-                        }
-                      ],
-                      "core:name": [
-                        {
-                          "@value": "default"
-                        }
-                      ],
-                      "core:description": [
-                        {
-                          "@value": "unexpected error"
-                        }
-                      ],
-                      "apiContract:payload": [
-                        {
-                          "@id": "#40",
-                          "@type": [
-                            "apiContract:Payload",
-                            "doc:DomainElement"
-                          ],
-                          "core:mediaType": [
-                            {
-                              "@value": "application/json"
-                            }
-                          ],
-                          "raml-shapes:schema": [
-                            {
-                              "@id": "#12/link-1281538207",
-                              "@type": [
-                                "shacl:NodeShape",
-                                "raml-shapes:AnyShape",
-                                "shacl:Shape",
-                                "raml-shapes:Shape",
-                                "doc:DomainElement"
-                              ],
-                              "doc:link-target": [
-                                {
-                                  "@id": "#12"
-                                }
-                              ],
-                              "doc:link-label": [
-                                {
-                                  "@value": "Error"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ],
-                  "apiContract:tag": [
-                    {
-                      "@id": "#37",
-                      "@type": [
-                        "apiContract:Tag",
-                        "doc:DomainElement"
-                      ],
-                      "core:name": [
-                        {
-                          "@value": "pets"
-                        }
-                      ]
-                    }
-                  ],
-                  "apiContract:server": [
-                    {
-                      "@id": "#34",
-                      "@type": [
-                        "apiContract:Server",
-                        "doc:DomainElement"
-                      ],
-                      "core:urlTemplate": [
-                        {
-                          "@value": "http://petstore.swagger.io/v1"
-                        }
-                      ]
-                    },
-                    {
-                      "@id": "#35",
-                      "@type": [
-                        "apiContract:Server",
-                        "doc:DomainElement"
-                      ],
-                      "core:urlTemplate": [
-                        {
-                          "@value": "http://dev.petstore.swagger.io/v1"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "@id": "#41",
-              "@type": [
-                "apiContract:EndPoint",
-                "doc:DomainElement"
-              ],
-              "apiContract:path": [
-                {
-                  "@value": "/pets/{petId}"
-                }
-              ],
-              "apiContract:supportedOperation": [
-                {
-                  "@id": "#42",
-                  "@type": [
-                    "apiContract:Operation",
-                    "doc:DomainElement"
-                  ],
-                  "apiContract:method": [
-                    {
-                      "@value": "get"
-                    }
-                  ],
-                  "core:name": [
-                    {
-                      "@value": "showPetById"
-                    }
-                  ],
-                  "apiContract:guiSummary": [
-                    {
-                      "@value": "Info for a specific pet"
-                    }
-                  ],
-                  "apiContract:expects": [
-                    {
-                      "@id": "#48",
-                      "@type": [
-                        "apiContract:Request",
-                        "apiContract:Message",
-                        "doc:DomainElement"
-                      ],
-                      "apiContract:uriParameter": [
-                        {
-                          "@id": "#49",
-                          "@type": [
-                            "apiContract:Parameter",
-                            "doc:DomainElement"
-                          ],
-                          "core:name": [
-                            {
-                              "@value": "petId"
-                            }
-                          ],
-                          "apiContract:paramName": [
-                            {
-                              "@value": "petId"
-                            }
-                          ],
-                          "core:description": [
-                            {
-                              "@value": "The id of the pet to retrieve"
-                            }
-                          ],
-                          "apiContract:required": [
-                            {
-                              "@value": true
-                            }
-                          ],
-                          "apiContract:style": [
-                            {
-                              "@value": "simple"
-                            }
-                          ],
-                          "apiContract:explode": [
-                            {
-                              "@value": false
-                            }
-                          ],
-                          "apiContract:binding": [
-                            {
-                              "@value": "path"
-                            }
-                          ],
-                          "raml-shapes:schema": [
-                            {
-                              "@id": "#50",
-                              "@type": [
-                                "raml-shapes:ScalarShape",
-                                "raml-shapes:AnyShape",
-                                "shacl:Shape",
-                                "raml-shapes:Shape",
-                                "doc:DomainElement"
-                              ],
-                              "shacl:datatype": [
-                                {
-                                  "@id": "http://www.w3.org/2001/XMLSchema#string"
-                                }
-                              ],
-                              "shacl:name": [
-                                {
-                                  "@value": "petId"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ],
-                  "apiContract:returns": [
-                    {
-                      "@id": "#44",
-                      "@type": [
-                        "apiContract:Response",
-                        "apiContract:Message",
-                        "doc:DomainElement"
-                      ],
-                      "apiContract:statusCode": [
-                        {
-                          "@value": "200"
-                        }
-                      ],
-                      "core:name": [
-                        {
-                          "@value": "200"
-                        }
-                      ],
-                      "core:description": [
-                        {
-                          "@value": "Expected response to a valid request"
-                        }
-                      ],
-                      "apiContract:payload": [
-                        {
-                          "@id": "#45",
-                          "@type": [
-                            "apiContract:Payload",
-                            "doc:DomainElement"
-                          ],
-                          "core:mediaType": [
-                            {
-                              "@value": "application/json"
-                            }
-                          ],
-                          "raml-shapes:schema": [
-                            {
-                              "@id": "#1/link--66389514",
-                              "@type": [
-                                "shacl:NodeShape",
-                                "raml-shapes:AnyShape",
-                                "shacl:Shape",
-                                "raml-shapes:Shape",
-                                "doc:DomainElement"
-                              ],
-                              "doc:link-target": [
-                                {
-                                  "@id": "#1"
-                                }
-                              ],
-                              "doc:link-label": [
-                                {
-                                  "@value": "Pet"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "@id": "#46",
-                      "@type": [
-                        "apiContract:Response",
-                        "apiContract:Message",
-                        "doc:DomainElement"
-                      ],
-                      "apiContract:statusCode": [
-                        {
-                          "@value": "default"
-                        }
-                      ],
-                      "core:name": [
-                        {
-                          "@value": "default"
-                        }
-                      ],
-                      "core:description": [
-                        {
-                          "@value": "unexpected error"
-                        }
-                      ],
-                      "apiContract:payload": [
-                        {
-                          "@id": "#47",
-                          "@type": [
-                            "apiContract:Payload",
-                            "doc:DomainElement"
-                          ],
-                          "core:mediaType": [
-                            {
-                              "@value": "application/json"
-                            }
-                          ],
-                          "raml-shapes:schema": [
-                            {
-                              "@id": "#12/link-1281538207",
-                              "@type": [
-                                "shacl:NodeShape",
-                                "raml-shapes:AnyShape",
-                                "shacl:Shape",
-                                "raml-shapes:Shape",
-                                "doc:DomainElement"
-                              ],
-                              "doc:link-target": [
-                                {
-                                  "@id": "#12"
-                                }
-                              ],
-                              "doc:link-label": [
-                                {
-                                  "@value": "Error"
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
-                    }
-                  ],
-                  "apiContract:tag": [
-                    {
-                      "@id": "#43",
-                      "@type": [
-                        "apiContract:Tag",
-                        "doc:DomainElement"
-                      ],
-                      "core:name": [
-                        {
-                          "@value": "pets"
-                        }
-                      ]
-                    }
-                  ],
-                  "apiContract:server": [
-                    {
-                      "@id": "#34",
-                      "@type": [
-                        "apiContract:Server",
-                        "doc:DomainElement"
-                      ],
-                      "core:urlTemplate": [
-                        {
-                          "@value": "http://petstore.swagger.io/v1"
-                        }
-                      ]
-                    },
-                    {
-                      "@id": "#35",
-                      "@type": [
-                        "apiContract:Server",
-                        "doc:DomainElement"
-                      ],
-                      "core:urlTemplate": [
-                        {
-                          "@value": "http://dev.petstore.swagger.io/v1"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "doc:version": [
-        {
-          "@value": "2.0.1"
-        }
-      ],
-      "doc:root": [
-        {
-          "@value": true
-        }
-      ],
-      "doc:declares": [
-        {
-          "@id": "#1",
-          "@type": [
-            "shacl:NodeShape",
-            "raml-shapes:AnyShape",
-            "shacl:Shape",
-            "raml-shapes:Shape",
-            "doc:DomainElement"
-          ],
-          "shacl:closed": [
-            {
-              "@value": false
-            }
-          ],
-          "shacl:property": [
-            {
-              "@id": "#2",
-              "@type": [
-                "shacl:PropertyShape",
-                "shacl:Shape",
-                "raml-shapes:Shape",
-                "doc:DomainElement"
-              ],
-              "shacl:path": [
-                {
-                  "@id": "http://a.ml/vocabularies/data#id"
-                }
-              ],
-              "raml-shapes:range": [
-                {
-                  "@id": "#3",
-                  "@type": [
-                    "raml-shapes:ScalarShape",
-                    "raml-shapes:AnyShape",
-                    "shacl:Shape",
-                    "raml-shapes:Shape",
-                    "doc:DomainElement"
-                  ],
-                  "shacl:datatype": [
-                    {
-                      "@id": "http://www.w3.org/2001/XMLSchema#long"
-                    }
-                  ],
-                  "raml-shapes:format": [
-                    {
-                      "@value": "int64"
-                    }
-                  ],
-                  "shacl:name": [
-                    {
-                      "@value": "id"
-                    }
-                  ]
-                }
-              ],
-              "shacl:minCount": [
-                {
-                  "@value": 1
-                }
-              ],
-              "shacl:name": [
-                {
-                  "@value": "id"
-                }
-              ]
-            },
-            {
-              "@id": "#4",
-              "@type": [
-                "shacl:PropertyShape",
-                "shacl:Shape",
-                "raml-shapes:Shape",
-                "doc:DomainElement"
-              ],
-              "shacl:path": [
-                {
-                  "@id": "http://a.ml/vocabularies/data#name"
-                }
-              ],
-              "raml-shapes:range": [
-                {
-                  "@id": "#5",
-                  "@type": [
-                    "raml-shapes:ScalarShape",
-                    "raml-shapes:AnyShape",
-                    "shacl:Shape",
-                    "raml-shapes:Shape",
-                    "doc:DomainElement"
-                  ],
-                  "shacl:datatype": [
-                    {
-                      "@id": "http://www.w3.org/2001/XMLSchema#string"
-                    }
-                  ],
-                  "shacl:name": [
-                    {
-                      "@value": "name"
-                    }
-                  ]
-                }
-              ],
-              "shacl:minCount": [
-                {
-                  "@value": 1
-                }
-              ],
-              "shacl:name": [
-                {
-                  "@value": "name"
-                }
-              ]
-            },
-            {
-              "@id": "#6",
-              "@type": [
-                "shacl:PropertyShape",
-                "shacl:Shape",
-                "raml-shapes:Shape",
-                "doc:DomainElement"
-              ],
-              "shacl:path": [
-                {
-                  "@id": "http://a.ml/vocabularies/data#tag"
-                }
-              ],
-              "raml-shapes:range": [
-                {
-                  "@id": "#7",
-                  "@type": [
-                    "raml-shapes:ScalarShape",
-                    "raml-shapes:AnyShape",
-                    "shacl:Shape",
-                    "raml-shapes:Shape",
-                    "doc:DomainElement"
-                  ],
-                  "shacl:datatype": [
-                    {
-                      "@id": "http://www.w3.org/2001/XMLSchema#string"
-                    }
-                  ],
-                  "shacl:name": [
-                    {
-                      "@value": "tag"
-                    }
-                  ]
-                }
-              ],
-              "shacl:minCount": [
-                {
-                  "@value": 0
-                }
-              ],
-              "shacl:name": [
-                {
-                  "@value": "tag"
-                }
-              ]
-            }
-          ],
-          "doc:recursive": [
-            {
-              "@value": true
-            }
-          ],
-          "shacl:name": [
-            {
-              "@value": "Pet"
-            }
-          ]
-        },
-        {
-          "@id": "#10",
-          "@type": [
-            "raml-shapes:ArrayShape",
-            "raml-shapes:AnyShape",
-            "shacl:Shape",
-            "raml-shapes:Shape",
-            "doc:DomainElement"
-          ],
-          "raml-shapes:items": [
-            {
-              "@id": "#1/link--66389514",
-              "@type": [
-                "shacl:NodeShape",
-                "raml-shapes:AnyShape",
-                "shacl:Shape",
-                "raml-shapes:Shape",
-                "doc:DomainElement"
-              ],
-              "doc:link-target": [
-                {
-                  "@id": "#1"
-                }
-              ],
-              "doc:link-label": [
-                {
-                  "@value": "Pet"
-                }
-              ]
-            }
-          ],
-          "doc:recursive": [
-            {
-              "@value": true
-            }
-          ],
-          "shacl:name": [
-            {
-              "@value": "Pets"
-            }
-          ]
-        },
-        {
-          "@id": "#12",
-          "@type": [
-            "shacl:NodeShape",
-            "raml-shapes:AnyShape",
-            "shacl:Shape",
-            "raml-shapes:Shape",
-            "doc:DomainElement"
-          ],
-          "shacl:closed": [
-            {
-              "@value": false
-            }
-          ],
-          "shacl:property": [
-            {
-              "@id": "#13",
-              "@type": [
-                "shacl:PropertyShape",
-                "shacl:Shape",
-                "raml-shapes:Shape",
-                "doc:DomainElement"
-              ],
-              "shacl:path": [
-                {
-                  "@id": "http://a.ml/vocabularies/data#code"
-                }
-              ],
-              "raml-shapes:range": [
-                {
-                  "@id": "#14",
-                  "@type": [
-                    "raml-shapes:ScalarShape",
-                    "raml-shapes:AnyShape",
-                    "shacl:Shape",
-                    "raml-shapes:Shape",
-                    "doc:DomainElement"
-                  ],
-                  "shacl:datatype": [
-                    {
-                      "@id": "http://www.w3.org/2001/XMLSchema#integer"
-                    }
-                  ],
-                  "raml-shapes:format": [
-                    {
-                      "@value": "int32"
-                    }
-                  ],
-                  "shacl:name": [
-                    {
-                      "@value": "code"
-                    }
-                  ]
-                }
-              ],
-              "shacl:minCount": [
-                {
-                  "@value": 1
-                }
-              ],
-              "shacl:name": [
-                {
-                  "@value": "code"
-                }
-              ]
-            },
-            {
-              "@id": "#15",
-              "@type": [
-                "shacl:PropertyShape",
-                "shacl:Shape",
-                "raml-shapes:Shape",
-                "doc:DomainElement"
-              ],
-              "shacl:path": [
-                {
-                  "@id": "http://a.ml/vocabularies/data#message"
-                }
-              ],
-              "raml-shapes:range": [
-                {
-                  "@id": "#16",
-                  "@type": [
-                    "raml-shapes:ScalarShape",
-                    "raml-shapes:AnyShape",
-                    "shacl:Shape",
-                    "raml-shapes:Shape",
-                    "doc:DomainElement"
-                  ],
-                  "shacl:datatype": [
-                    {
-                      "@id": "http://www.w3.org/2001/XMLSchema#string"
-                    }
-                  ],
-                  "shacl:name": [
-                    {
-                      "@value": "message"
-                    }
-                  ]
-                }
-              ],
-              "shacl:minCount": [
-                {
-                  "@value": 1
-                }
-              ],
-              "shacl:name": [
-                {
-                  "@value": "message"
-                }
-              ]
-            }
-          ],
-          "doc:recursive": [
-            {
-              "@value": true
-            }
-          ],
-          "shacl:name": [
-            {
-              "@value": "Error"
-            }
-          ]
-        }
-      ],
-      "@context": {
-        "@base": "amf://id",
-        "shacl": "http://www.w3.org/ns/shacl#",
-        "raml-shapes": "http://a.ml/vocabularies/shapes#",
-        "doc": "http://a.ml/vocabularies/document#",
-        "apiContract": "http://a.ml/vocabularies/apiContract#",
-        "core": "http://a.ml/vocabularies/core#"
+  {
+    "@id": "",
+    "@type": [
+      "doc:Document",
+      "doc:Fragment",
+      "doc:Module",
+      "doc:Unit"
+    ],
+    "doc:encodes": [
+      {
+        "@id": "#20",
+        "@type": [
+          "apiContract:WebAPI",
+          "doc:RootDomainElement",
+          "doc:DomainElement"
+        ],
+        "core:name": [
+          {
+            "@value": "Swagger Petstore"
+          }
+        ],
+        "apiContract:server": [
+          {
+            "@id": "#22",
+            "@type": [
+              "apiContract:Server",
+              "doc:DomainElement"
+            ],
+            "core:urlTemplate": [
+              {
+                "@value": "http://petstore.swagger.io/v1"
+              }
+            ]
+          },
+          {
+            "@id": "#23",
+            "@type": [
+              "apiContract:Server",
+              "doc:DomainElement"
+            ],
+            "core:urlTemplate": [
+              {
+                "@value": "http://dev.petstore.swagger.io/v1"
+              }
+            ]
+          }
+        ],
+        "core:version": [
+          {
+            "@value": "1.0.0"
+          }
+        ],
+        "core:license": [
+          {
+            "@id": "#21",
+            "@type": [
+              "core:License",
+              "doc:DomainElement"
+            ],
+            "core:name": [
+              {
+                "@value": "MIT"
+              }
+            ]
+          }
+        ],
+        "apiContract:endpoint": [
+          {
+            "@id": "#24",
+            "@type": [
+              "apiContract:EndPoint",
+              "doc:DomainElement"
+            ],
+            "apiContract:path": [
+              {
+                "@value": "/pets"
+              }
+            ],
+            "apiContract:supportedOperation": [
+              {
+                "@id": "#25",
+                "@type": [
+                  "apiContract:Operation",
+                  "doc:DomainElement"
+                ],
+                "apiContract:method": [
+                  {
+                    "@value": "get"
+                  }
+                ],
+                "core:name": [
+                  {
+                    "@value": "listPets"
+                  }
+                ],
+                "apiContract:guiSummary": [
+                  {
+                    "@value": "List all pets"
+                  }
+                ],
+                "apiContract:expects": [
+                  {
+                    "@id": "#33",
+                    "@type": [
+                      "apiContract:Request",
+                      "apiContract:Message",
+                      "doc:DomainElement"
+                    ],
+                    "apiContract:parameter": [
+                      {
+                        "@id": "#34",
+                        "@type": [
+                          "apiContract:Parameter",
+                          "doc:DomainElement"
+                        ],
+                        "core:name": [
+                          {
+                            "@value": "limit"
+                          }
+                        ],
+                        "apiContract:paramName": [
+                          {
+                            "@value": "limit"
+                          }
+                        ],
+                        "core:description": [
+                          {
+                            "@value": "How many items to return at one time (max 100)"
+                          }
+                        ],
+                        "apiContract:required": [
+                          {
+                            "@value": false
+                          }
+                        ],
+                        "apiContract:allowEmptyValue": [
+                          {
+                            "@value": false
+                          }
+                        ],
+                        "apiContract:style": [
+                          {
+                            "@value": "form"
+                          }
+                        ],
+                        "apiContract:explode": [
+                          {
+                            "@value": true
+                          }
+                        ],
+                        "apiContract:allowReserved": [
+                          {
+                            "@value": false
+                          }
+                        ],
+                        "apiContract:binding": [
+                          {
+                            "@value": "query"
+                          }
+                        ],
+                        "raml-shapes:schema": [
+                          {
+                            "@id": "#35",
+                            "@type": [
+                              "raml-shapes:ScalarShape",
+                              "raml-shapes:AnyShape",
+                              "shacl:Shape",
+                              "raml-shapes:Shape",
+                              "doc:DomainElement"
+                            ],
+                            "shacl:datatype": [
+                              {
+                                "@id": "http://www.w3.org/2001/XMLSchema#integer"
+                              }
+                            ],
+                            "raml-shapes:format": [
+                              {
+                                "@value": "int32"
+                              }
+                            ],
+                            "shacl:name": [
+                              {
+                                "@value": "limit"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "apiContract:returns": [
+                  {
+                    "@id": "#27",
+                    "@type": [
+                      "apiContract:Response",
+                      "apiContract:Message",
+                      "doc:DomainElement"
+                    ],
+                    "apiContract:statusCode": [
+                      {
+                        "@value": "200"
+                      }
+                    ],
+                    "core:name": [
+                      {
+                        "@value": "200"
+                      }
+                    ],
+                    "core:description": [
+                      {
+                        "@value": "A paged array of pets"
+                      }
+                    ],
+                    "apiContract:payload": [
+                      {
+                        "@id": "#30",
+                        "@type": [
+                          "apiContract:Payload",
+                          "doc:DomainElement"
+                        ],
+                        "core:mediaType": [
+                          {
+                            "@value": "application/json"
+                          }
+                        ],
+                        "raml-shapes:schema": [
+                          {
+                            "@id": "#10/link-593997499",
+                            "@type": [
+                              "raml-shapes:ArrayShape",
+                              "raml-shapes:AnyShape",
+                              "shacl:Shape",
+                              "raml-shapes:Shape",
+                              "doc:DomainElement"
+                            ],
+                            "doc:link-target": [
+                              {
+                                "@id": "#10"
+                              }
+                            ],
+                            "doc:link-label": [
+                              {
+                                "@value": "Pets"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "apiContract:header": [
+                      {
+                        "@id": "#28",
+                        "@type": [
+                          "apiContract:Parameter",
+                          "doc:DomainElement"
+                        ],
+                        "core:name": [
+                          {
+                            "@value": "x-next"
+                          }
+                        ],
+                        "core:description": [
+                          {
+                            "@value": "A link to the next page of responses"
+                          }
+                        ],
+                        "apiContract:style": [
+                          {
+                            "@value": "simple"
+                          }
+                        ],
+                        "apiContract:explode": [
+                          {
+                            "@value": false
+                          }
+                        ],
+                        "apiContract:binding": [
+                          {
+                            "@value": "header"
+                          }
+                        ],
+                        "raml-shapes:schema": [
+                          {
+                            "@id": "#29",
+                            "@type": [
+                              "raml-shapes:ScalarShape",
+                              "raml-shapes:AnyShape",
+                              "shacl:Shape",
+                              "raml-shapes:Shape",
+                              "doc:DomainElement"
+                            ],
+                            "shacl:datatype": [
+                              {
+                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ],
+                            "shacl:name": [
+                              {
+                                "@value": "schema"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "#31",
+                    "@type": [
+                      "apiContract:Response",
+                      "apiContract:Message",
+                      "doc:DomainElement"
+                    ],
+                    "apiContract:statusCode": [
+                      {
+                        "@value": "default"
+                      }
+                    ],
+                    "core:name": [
+                      {
+                        "@value": "default"
+                      }
+                    ],
+                    "core:description": [
+                      {
+                        "@value": "unexpected error"
+                      }
+                    ],
+                    "apiContract:payload": [
+                      {
+                        "@id": "#32",
+                        "@type": [
+                          "apiContract:Payload",
+                          "doc:DomainElement"
+                        ],
+                        "core:mediaType": [
+                          {
+                            "@value": "application/json"
+                          }
+                        ],
+                        "raml-shapes:schema": [
+                          {
+                            "@id": "#12/link-1281538207",
+                            "@type": [
+                              "shacl:NodeShape",
+                              "raml-shapes:AnyShape",
+                              "shacl:Shape",
+                              "raml-shapes:Shape",
+                              "doc:DomainElement"
+                            ],
+                            "doc:link-target": [
+                              {
+                                "@id": "#12"
+                              }
+                            ],
+                            "doc:link-label": [
+                              {
+                                "@value": "Error"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "apiContract:tag": [
+                  {
+                    "@id": "#26",
+                    "@type": [
+                      "apiContract:Tag",
+                      "doc:DomainElement"
+                    ],
+                    "core:name": [
+                      {
+                        "@value": "pets"
+                      }
+                    ]
+                  }
+                ],
+                "apiContract:server": [
+                  {
+                    "@id": "#22",
+                    "@type": [
+                      "apiContract:Server",
+                      "doc:DomainElement"
+                    ],
+                    "core:urlTemplate": [
+                      {
+                        "@value": "http://petstore.swagger.io/v1"
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "#23",
+                    "@type": [
+                      "apiContract:Server",
+                      "doc:DomainElement"
+                    ],
+                    "core:urlTemplate": [
+                      {
+                        "@value": "http://dev.petstore.swagger.io/v1"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "@id": "#36",
+                "@type": [
+                  "apiContract:Operation",
+                  "doc:DomainElement"
+                ],
+                "apiContract:method": [
+                  {
+                    "@value": "post"
+                  }
+                ],
+                "core:name": [
+                  {
+                    "@value": "createPets"
+                  }
+                ],
+                "apiContract:guiSummary": [
+                  {
+                    "@value": "Create a pet"
+                  }
+                ],
+                "apiContract:returns": [
+                  {
+                    "@id": "#38",
+                    "@type": [
+                      "apiContract:Response",
+                      "apiContract:Message",
+                      "doc:DomainElement"
+                    ],
+                    "apiContract:statusCode": [
+                      {
+                        "@value": "201"
+                      }
+                    ],
+                    "core:name": [
+                      {
+                        "@value": "201"
+                      }
+                    ],
+                    "core:description": [
+                      {
+                        "@value": "Null response"
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "#39",
+                    "@type": [
+                      "apiContract:Response",
+                      "apiContract:Message",
+                      "doc:DomainElement"
+                    ],
+                    "apiContract:statusCode": [
+                      {
+                        "@value": "default"
+                      }
+                    ],
+                    "core:name": [
+                      {
+                        "@value": "default"
+                      }
+                    ],
+                    "core:description": [
+                      {
+                        "@value": "unexpected error"
+                      }
+                    ],
+                    "apiContract:payload": [
+                      {
+                        "@id": "#40",
+                        "@type": [
+                          "apiContract:Payload",
+                          "doc:DomainElement"
+                        ],
+                        "core:mediaType": [
+                          {
+                            "@value": "application/json"
+                          }
+                        ],
+                        "raml-shapes:schema": [
+                          {
+                            "@id": "#12/link-1281538207",
+                            "@type": [
+                              "shacl:NodeShape",
+                              "raml-shapes:AnyShape",
+                              "shacl:Shape",
+                              "raml-shapes:Shape",
+                              "doc:DomainElement"
+                            ],
+                            "doc:link-target": [
+                              {
+                                "@id": "#12"
+                              }
+                            ],
+                            "doc:link-label": [
+                              {
+                                "@value": "Error"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "apiContract:tag": [
+                  {
+                    "@id": "#37",
+                    "@type": [
+                      "apiContract:Tag",
+                      "doc:DomainElement"
+                    ],
+                    "core:name": [
+                      {
+                        "@value": "pets"
+                      }
+                    ]
+                  }
+                ],
+                "apiContract:server": [
+                  {
+                    "@id": "#22",
+                    "@type": [
+                      "apiContract:Server",
+                      "doc:DomainElement"
+                    ],
+                    "core:urlTemplate": [
+                      {
+                        "@value": "http://petstore.swagger.io/v1"
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "#23",
+                    "@type": [
+                      "apiContract:Server",
+                      "doc:DomainElement"
+                    ],
+                    "core:urlTemplate": [
+                      {
+                        "@value": "http://dev.petstore.swagger.io/v1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "apiContract:server": [
+              {
+                "@id": "#22",
+                "@type": [
+                  "apiContract:Server",
+                  "doc:DomainElement"
+                ],
+                "core:urlTemplate": [
+                  {
+                    "@value": "http://petstore.swagger.io/v1"
+                  }
+                ]
+              },
+              {
+                "@id": "#23",
+                "@type": [
+                  "apiContract:Server",
+                  "doc:DomainElement"
+                ],
+                "core:urlTemplate": [
+                  {
+                    "@value": "http://dev.petstore.swagger.io/v1"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "@id": "#41",
+            "@type": [
+              "apiContract:EndPoint",
+              "doc:DomainElement"
+            ],
+            "apiContract:path": [
+              {
+                "@value": "/pets/{petId}"
+              }
+            ],
+            "apiContract:supportedOperation": [
+              {
+                "@id": "#42",
+                "@type": [
+                  "apiContract:Operation",
+                  "doc:DomainElement"
+                ],
+                "apiContract:method": [
+                  {
+                    "@value": "get"
+                  }
+                ],
+                "core:name": [
+                  {
+                    "@value": "showPetById"
+                  }
+                ],
+                "apiContract:guiSummary": [
+                  {
+                    "@value": "Info for a specific pet"
+                  }
+                ],
+                "apiContract:expects": [
+                  {
+                    "@id": "#48",
+                    "@type": [
+                      "apiContract:Request",
+                      "apiContract:Message",
+                      "doc:DomainElement"
+                    ],
+                    "apiContract:uriParameter": [
+                      {
+                        "@id": "#49",
+                        "@type": [
+                          "apiContract:Parameter",
+                          "doc:DomainElement"
+                        ],
+                        "core:name": [
+                          {
+                            "@value": "petId"
+                          }
+                        ],
+                        "apiContract:paramName": [
+                          {
+                            "@value": "petId"
+                          }
+                        ],
+                        "core:description": [
+                          {
+                            "@value": "The id of the pet to retrieve"
+                          }
+                        ],
+                        "apiContract:required": [
+                          {
+                            "@value": true
+                          }
+                        ],
+                        "apiContract:style": [
+                          {
+                            "@value": "simple"
+                          }
+                        ],
+                        "apiContract:explode": [
+                          {
+                            "@value": false
+                          }
+                        ],
+                        "apiContract:binding": [
+                          {
+                            "@value": "path"
+                          }
+                        ],
+                        "raml-shapes:schema": [
+                          {
+                            "@id": "#50",
+                            "@type": [
+                              "raml-shapes:ScalarShape",
+                              "raml-shapes:AnyShape",
+                              "shacl:Shape",
+                              "raml-shapes:Shape",
+                              "doc:DomainElement"
+                            ],
+                            "shacl:datatype": [
+                              {
+                                "@id": "http://www.w3.org/2001/XMLSchema#string"
+                              }
+                            ],
+                            "shacl:name": [
+                              {
+                                "@value": "petId"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "apiContract:returns": [
+                  {
+                    "@id": "#44",
+                    "@type": [
+                      "apiContract:Response",
+                      "apiContract:Message",
+                      "doc:DomainElement"
+                    ],
+                    "apiContract:statusCode": [
+                      {
+                        "@value": "200"
+                      }
+                    ],
+                    "core:name": [
+                      {
+                        "@value": "200"
+                      }
+                    ],
+                    "core:description": [
+                      {
+                        "@value": "Expected response to a valid request"
+                      }
+                    ],
+                    "apiContract:payload": [
+                      {
+                        "@id": "#45",
+                        "@type": [
+                          "apiContract:Payload",
+                          "doc:DomainElement"
+                        ],
+                        "core:mediaType": [
+                          {
+                            "@value": "application/json"
+                          }
+                        ],
+                        "raml-shapes:schema": [
+                          {
+                            "@id": "#1/link--66389514",
+                            "@type": [
+                              "shacl:NodeShape",
+                              "raml-shapes:AnyShape",
+                              "shacl:Shape",
+                              "raml-shapes:Shape",
+                              "doc:DomainElement"
+                            ],
+                            "doc:link-target": [
+                              {
+                                "@id": "#1"
+                              }
+                            ],
+                            "doc:link-label": [
+                              {
+                                "@value": "Pet"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "#46",
+                    "@type": [
+                      "apiContract:Response",
+                      "apiContract:Message",
+                      "doc:DomainElement"
+                    ],
+                    "apiContract:statusCode": [
+                      {
+                        "@value": "default"
+                      }
+                    ],
+                    "core:name": [
+                      {
+                        "@value": "default"
+                      }
+                    ],
+                    "core:description": [
+                      {
+                        "@value": "unexpected error"
+                      }
+                    ],
+                    "apiContract:payload": [
+                      {
+                        "@id": "#47",
+                        "@type": [
+                          "apiContract:Payload",
+                          "doc:DomainElement"
+                        ],
+                        "core:mediaType": [
+                          {
+                            "@value": "application/json"
+                          }
+                        ],
+                        "raml-shapes:schema": [
+                          {
+                            "@id": "#12/link-1281538207",
+                            "@type": [
+                              "shacl:NodeShape",
+                              "raml-shapes:AnyShape",
+                              "shacl:Shape",
+                              "raml-shapes:Shape",
+                              "doc:DomainElement"
+                            ],
+                            "doc:link-target": [
+                              {
+                                "@id": "#12"
+                              }
+                            ],
+                            "doc:link-label": [
+                              {
+                                "@value": "Error"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ],
+                "apiContract:tag": [
+                  {
+                    "@id": "#43",
+                    "@type": [
+                      "apiContract:Tag",
+                      "doc:DomainElement"
+                    ],
+                    "core:name": [
+                      {
+                        "@value": "pets"
+                      }
+                    ]
+                  }
+                ],
+                "apiContract:server": [
+                  {
+                    "@id": "#22",
+                    "@type": [
+                      "apiContract:Server",
+                      "doc:DomainElement"
+                    ],
+                    "core:urlTemplate": [
+                      {
+                        "@value": "http://petstore.swagger.io/v1"
+                      }
+                    ]
+                  },
+                  {
+                    "@id": "#23",
+                    "@type": [
+                      "apiContract:Server",
+                      "doc:DomainElement"
+                    ],
+                    "core:urlTemplate": [
+                      {
+                        "@value": "http://dev.petstore.swagger.io/v1"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "apiContract:server": [
+              {
+                "@id": "#22",
+                "@type": [
+                  "apiContract:Server",
+                  "doc:DomainElement"
+                ],
+                "core:urlTemplate": [
+                  {
+                    "@value": "http://petstore.swagger.io/v1"
+                  }
+                ]
+              },
+              {
+                "@id": "#23",
+                "@type": [
+                  "apiContract:Server",
+                  "doc:DomainElement"
+                ],
+                "core:urlTemplate": [
+                  {
+                    "@value": "http://dev.petstore.swagger.io/v1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
+    ],
+    "doc:version": [
+      {
+        "@value": "2.1.0"
+      }
+    ],
+    "doc:root": [
+      {
+        "@value": true
+      }
+    ],
+    "doc:declares": [
+      {
+        "@id": "#1",
+        "@type": [
+          "shacl:NodeShape",
+          "raml-shapes:AnyShape",
+          "shacl:Shape",
+          "raml-shapes:Shape",
+          "doc:DomainElement"
+        ],
+        "shacl:closed": [
+          {
+            "@value": false
+          }
+        ],
+        "shacl:property": [
+          {
+            "@id": "#2",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "shacl:path": [
+              {
+                "@id": "http://a.ml/vocabularies/data#id"
+              }
+            ],
+            "raml-shapes:range": [
+              {
+                "@id": "#3",
+                "@type": [
+                  "raml-shapes:ScalarShape",
+                  "raml-shapes:AnyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "shacl:datatype": [
+                  {
+                    "@id": "http://www.w3.org/2001/XMLSchema#long"
+                  }
+                ],
+                "raml-shapes:format": [
+                  {
+                    "@value": "int64"
+                  }
+                ],
+                "shacl:name": [
+                  {
+                    "@value": "id"
+                  }
+                ]
+              }
+            ],
+            "shacl:minCount": [
+              {
+                "@value": 1
+              }
+            ],
+            "shacl:name": [
+              {
+                "@value": "id"
+              }
+            ]
+          },
+          {
+            "@id": "#4",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "shacl:path": [
+              {
+                "@id": "http://a.ml/vocabularies/data#name"
+              }
+            ],
+            "raml-shapes:range": [
+              {
+                "@id": "#5",
+                "@type": [
+                  "raml-shapes:ScalarShape",
+                  "raml-shapes:AnyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "shacl:datatype": [
+                  {
+                    "@id": "http://www.w3.org/2001/XMLSchema#string"
+                  }
+                ],
+                "shacl:name": [
+                  {
+                    "@value": "name"
+                  }
+                ]
+              }
+            ],
+            "shacl:minCount": [
+              {
+                "@value": 1
+              }
+            ],
+            "shacl:name": [
+              {
+                "@value": "name"
+              }
+            ]
+          },
+          {
+            "@id": "#6",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "shacl:path": [
+              {
+                "@id": "http://a.ml/vocabularies/data#tag"
+              }
+            ],
+            "raml-shapes:range": [
+              {
+                "@id": "#7",
+                "@type": [
+                  "raml-shapes:ScalarShape",
+                  "raml-shapes:AnyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "shacl:datatype": [
+                  {
+                    "@id": "http://www.w3.org/2001/XMLSchema#string"
+                  }
+                ],
+                "shacl:name": [
+                  {
+                    "@value": "tag"
+                  }
+                ]
+              }
+            ],
+            "shacl:minCount": [
+              {
+                "@value": 0
+              }
+            ],
+            "shacl:name": [
+              {
+                "@value": "tag"
+              }
+            ]
+          }
+        ],
+        "doc:recursive": [
+          {
+            "@value": true
+          }
+        ],
+        "shacl:name": [
+          {
+            "@value": "Pet"
+          }
+        ]
+      },
+      {
+        "@id": "#10",
+        "@type": [
+          "raml-shapes:ArrayShape",
+          "raml-shapes:AnyShape",
+          "shacl:Shape",
+          "raml-shapes:Shape",
+          "doc:DomainElement"
+        ],
+        "raml-shapes:items": [
+          {
+            "@id": "#1",
+            "@type": [
+              "shacl:NodeShape",
+              "raml-shapes:AnyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "shacl:closed": [
+              {
+                "@value": false
+              }
+            ],
+            "shacl:property": [
+              {
+                "@id": "#2",
+                "@type": [
+                  "shacl:PropertyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "shacl:path": [
+                  {
+                    "@id": "http://a.ml/vocabularies/data#id"
+                  }
+                ],
+                "raml-shapes:range": [
+                  {
+                    "@id": "#3",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "raml-shapes:AnyShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "shacl:datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#long"
+                      }
+                    ],
+                    "raml-shapes:format": [
+                      {
+                        "@value": "int64"
+                      }
+                    ],
+                    "shacl:name": [
+                      {
+                        "@value": "id"
+                      }
+                    ]
+                  }
+                ],
+                "shacl:minCount": [
+                  {
+                    "@value": 1
+                  }
+                ],
+                "shacl:name": [
+                  {
+                    "@value": "id"
+                  }
+                ]
+              },
+              {
+                "@id": "#4",
+                "@type": [
+                  "shacl:PropertyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "shacl:path": [
+                  {
+                    "@id": "http://a.ml/vocabularies/data#name"
+                  }
+                ],
+                "raml-shapes:range": [
+                  {
+                    "@id": "#5",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "raml-shapes:AnyShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "shacl:datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                      }
+                    ],
+                    "shacl:name": [
+                      {
+                        "@value": "name"
+                      }
+                    ]
+                  }
+                ],
+                "shacl:minCount": [
+                  {
+                    "@value": 1
+                  }
+                ],
+                "shacl:name": [
+                  {
+                    "@value": "name"
+                  }
+                ]
+              },
+              {
+                "@id": "#6",
+                "@type": [
+                  "shacl:PropertyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "shacl:path": [
+                  {
+                    "@id": "http://a.ml/vocabularies/data#tag"
+                  }
+                ],
+                "raml-shapes:range": [
+                  {
+                    "@id": "#7",
+                    "@type": [
+                      "raml-shapes:ScalarShape",
+                      "raml-shapes:AnyShape",
+                      "shacl:Shape",
+                      "raml-shapes:Shape",
+                      "doc:DomainElement"
+                    ],
+                    "shacl:datatype": [
+                      {
+                        "@id": "http://www.w3.org/2001/XMLSchema#string"
+                      }
+                    ],
+                    "shacl:name": [
+                      {
+                        "@value": "tag"
+                      }
+                    ]
+                  }
+                ],
+                "shacl:minCount": [
+                  {
+                    "@value": 0
+                  }
+                ],
+                "shacl:name": [
+                  {
+                    "@value": "tag"
+                  }
+                ]
+              }
+            ],
+            "doc:recursive": [
+              {
+                "@value": true
+              }
+            ],
+            "shacl:name": [
+              {
+                "@value": "Pet"
+              }
+            ]
+          }
+        ],
+        "doc:recursive": [
+          {
+            "@value": true
+          }
+        ],
+        "shacl:name": [
+          {
+            "@value": "Pets"
+          }
+        ]
+      },
+      {
+        "@id": "#12",
+        "@type": [
+          "shacl:NodeShape",
+          "raml-shapes:AnyShape",
+          "shacl:Shape",
+          "raml-shapes:Shape",
+          "doc:DomainElement"
+        ],
+        "shacl:closed": [
+          {
+            "@value": false
+          }
+        ],
+        "shacl:property": [
+          {
+            "@id": "#13",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "shacl:path": [
+              {
+                "@id": "http://a.ml/vocabularies/data#code"
+              }
+            ],
+            "raml-shapes:range": [
+              {
+                "@id": "#14",
+                "@type": [
+                  "raml-shapes:ScalarShape",
+                  "raml-shapes:AnyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "shacl:datatype": [
+                  {
+                    "@id": "http://www.w3.org/2001/XMLSchema#integer"
+                  }
+                ],
+                "raml-shapes:format": [
+                  {
+                    "@value": "int32"
+                  }
+                ],
+                "shacl:name": [
+                  {
+                    "@value": "code"
+                  }
+                ]
+              }
+            ],
+            "shacl:minCount": [
+              {
+                "@value": 1
+              }
+            ],
+            "shacl:name": [
+              {
+                "@value": "code"
+              }
+            ]
+          },
+          {
+            "@id": "#15",
+            "@type": [
+              "shacl:PropertyShape",
+              "shacl:Shape",
+              "raml-shapes:Shape",
+              "doc:DomainElement"
+            ],
+            "shacl:path": [
+              {
+                "@id": "http://a.ml/vocabularies/data#message"
+              }
+            ],
+            "raml-shapes:range": [
+              {
+                "@id": "#16",
+                "@type": [
+                  "raml-shapes:ScalarShape",
+                  "raml-shapes:AnyShape",
+                  "shacl:Shape",
+                  "raml-shapes:Shape",
+                  "doc:DomainElement"
+                ],
+                "shacl:datatype": [
+                  {
+                    "@id": "http://www.w3.org/2001/XMLSchema#string"
+                  }
+                ],
+                "shacl:name": [
+                  {
+                    "@value": "message"
+                  }
+                ]
+              }
+            ],
+            "shacl:minCount": [
+              {
+                "@value": 1
+              }
+            ],
+            "shacl:name": [
+              {
+                "@value": "message"
+              }
+            ]
+          }
+        ],
+        "doc:recursive": [
+          {
+            "@value": true
+          }
+        ],
+        "shacl:name": [
+          {
+            "@value": "Error"
+          }
+        ]
+      }
+    ],
+    "@context": {
+      "@base": "amf://id",
+      "shacl": "http://www.w3.org/ns/shacl#",
+      "raml-shapes": "http://a.ml/vocabularies/shapes#",
+      "doc": "http://a.ml/vocabularies/document#",
+      "apiContract": "http://a.ml/vocabularies/apiContract#",
+      "core": "http://a.ml/vocabularies/core#"
     }
-  ]
-  
+  }
+]
