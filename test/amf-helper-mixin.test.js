@@ -1297,8 +1297,7 @@ describe('AmfHelperMixin', function() {
               });
 
               it('Returns [] if no matching id', () => {
-                const id = AmfLoader.createAmfId(compact, 'foo');
-                const servers = element._getServer({ id });
+                const servers = element._getServer({ id: 'foo' });
                 assert.typeOf(servers, 'array');
                 assert.lengthOf(servers, 0);
               });
