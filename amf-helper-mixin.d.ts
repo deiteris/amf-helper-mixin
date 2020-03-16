@@ -276,6 +276,21 @@ declare namespace ApiElements {
      * @returns The server model
      */
     _computeServer(model: any[]|object|null): object|null;
+    _getServers({
+  endpointId,
+  methodId
+}: any): any;
+
+    /**
+     * Compute values for `server` property based on node an optional selected id.
+     *
+     * @returns The server list or undefined if node has no servers
+     */
+    _getServer({
+  endpointId,
+  methodId,
+  id
+}: any): any|null|undefined;
 
     /**
      * Computes endpoint's URI based on `amf` and `endpoint` models.
@@ -442,6 +457,24 @@ declare namespace ApiElements {
      */
     _resolve(shape: object|null): object|null;
     _getLinkTarget(amf: any, id: any): any;
+
+    /**
+     * Resolves the shape of a given reference.
+     *
+     * @param references References object to search in
+     * @param id Id of the shape to resolve
+     * @returns Resolved shape for given reference, undefined otherwise
+     */
+    _obtainShapeFromReferences(references: object|null, id: object|null): object|null|undefined;
+
+    /**
+     * Searches a node with a given ID in an array
+     *
+     * @param array Array to search for a given ID
+     * @param id Id to search for
+     * @returns Node with the given ID when found, undefined otherwise
+     */
+    _findById(array: any[]|null, id: String|null): object|null|undefined;
     _getReferenceId(amf: any, id: any): any;
     _resolveRecursive(shape: any): void;
   }
