@@ -771,6 +771,12 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       const srv = this._ensureArray(api[key]);
       return srv ? srv[0] : undefined;
     }
+    /**
+     * 
+     * @param {?String} endpointId Optional endpoint to look for the servers in
+     * @param {?String} methodId Optional method to look for the servers in
+     * @return {Array} List of servers for method, if defined, or endpoint, if defined, or root level
+     */
     _getServers({ endpointId, methodId }){
       const { amf } = this;
       let api = this._computeWebApi(amf);
@@ -811,11 +817,10 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     /**
      * Compute values for `server` property based on node an optional selected id.
      *
-     * @param {Object} model AMF model to get servers from
      * @param {?String} endpointId Optional endpoint id, required if method is provided
      * @param {?String} methodId Optional method id
      * @param {?String} id Optional selected server id
-     * @return {undefined|any} The server list or undefined if node has no servers
+     * @return {Array|any} The server list or undefined if node has no servers
      */
     _getServer({ endpointId, methodId, id }) {
       const servers = this._getServers({ endpointId, methodId });

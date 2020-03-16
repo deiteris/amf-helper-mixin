@@ -276,10 +276,14 @@ declare namespace ApiElements {
      * @returns The server model
      */
     _computeServer(model: any[]|object|null): object|null;
+
+    /**
+     * @returns List of servers for method, if defined, or endpoint, if defined, or root level
+     */
     _getServers({
   endpointId,
   methodId
-}: any): any;
+}: any): any[]|null;
 
     /**
      * Compute values for `server` property based on node an optional selected id.
@@ -290,7 +294,7 @@ declare namespace ApiElements {
   endpointId,
   methodId,
   id
-}: any): any|null|undefined;
+}: any): any[]|any|null;
 
     /**
      * Computes endpoint's URI based on `amf` and `endpoint` models.
