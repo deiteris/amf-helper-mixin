@@ -1216,6 +1216,124 @@ describe('AmfHelperMixin', function() {
         });
       });
 
+      describe('_getServers()', () => {
+        beforeEach(async () => {
+          element = await modelFixture(model);
+        });
+
+        describe('RAML', () => {
+          describe('root level', () => {
+            it('Returns all servers', () => {
+              const servers = element._getServers({});
+              assert.typeOf(servers, 'array');
+              assert.lengthOf(servers, 1);
+            });
+          });
+        });
+
+        describe('OAS', () => {
+          const methodId = `${compact ? '' : 'amf://id'}#23`;
+          // TODO uncomment this once AMF model has resolved servers on all levels
+          // const endpointId = `${compact ? '' : 'amf://id'}#22`;
+
+          before(async () => {
+            model = await AmfLoader.load(compact, 'multiple-servers');
+          });
+
+          after(async () => {
+            model = await AmfLoader.load(compact);
+          });
+
+          describe('for operation', () => {
+            beforeEach(async () => {
+              element = await modelFixture(model);
+            });
+
+            it('Returns all servers for method', () => {
+              const servers = element._getServers({ methodId });
+              assert.typeOf(servers, 'array');
+              assert.lengthOf(servers, 2);
+            });
+
+            it('Returns all root servers if method not found and endpoint undefined', () => {
+              const servers = element._getServers({ methodId: 'foo' });
+              assert.typeOf(servers, 'array');
+              assert.lengthOf(servers, 2);
+            });
+
+            // TODO uncomment this once AMF model has resolved servers on all levels
+            /* it('Returns all endpoint servers if method not found and endpoint is defined', () => {
+              const servers = element._getServers({ model, methodId: 'foo', endpointId });
+              assert.typeOf(servers, 'array');
+              assert.lengthOf(servers, 2);
+            }); */
+
+            it('Returns undefined if no model', async () => {
+              element = await modelFixture();
+              assert.isUndefined(element._getServers({}));
+            });
+          });
+        });
+      });
+
+      describe('_getServer()', () => {
+          describe('RAML', () => {
+            beforeEach(async () => {
+              element = await modelFixture(model);
+            });
+
+            describe('root level', () => {
+              it('Returns no servers if id undefined', () => {
+                const servers = element._getServer({});
+                assert.typeOf(servers, 'array');
+                assert.lengthOf(servers, 0);
+              });
+
+              it('Returns all matching servers if id is defined', () => {
+                const id = element._getServers({})[0]['@id'];
+                const servers = element._getServer({ id });
+                assert.typeOf(servers, 'array');
+                assert.lengthOf(servers, 1);
+              });
+
+              it('Returns [] if no matching id', () => {
+                const servers = element._getServer({ id: 'foo' });
+                assert.typeOf(servers, 'array');
+                assert.lengthOf(servers, 0);
+              });
+            });
+          });
+
+        describe('OAS', () => {
+          let methodId;
+
+          before(async () => {
+            model = await AmfLoader.load(compact, 'multiple-servers');
+            const method = AmfLoader.lookupOperation(model, '/pets', 'get');
+            methodId = method['@id'];
+          });
+
+          after(async () => {
+            model = await AmfLoader.load(compact);
+          });
+
+          describe('operation', () => {
+            it('Returns no servers if id undefined', () => {
+              const servers = element._getServer({ methodId });
+              assert.typeOf(servers, 'array');
+              assert.lengthOf(servers, 0);
+            });
+
+            it('Returns all matching servers if id is defined', () => {
+              const id = element._getServers({})[0]['@id'];
+              const servers = element._getServer({ methodId, id });
+              assert.typeOf(servers, 'array');
+              assert.lengthOf(servers, 1);
+            });
+          });
+        });
+      });
+
       describe('_computeProtocols()', () => {
         beforeEach(async () => {
           element = await modelFixture(model);

@@ -772,6 +772,61 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       return srv ? srv[0] : undefined;
     }
     /**
+     * 
+     * @param {?String} endpointId Optional endpoint to look for the servers in
+     * @param {?String} methodId Optional method to look for the servers in
+     * @return {Array} List of servers for method, if defined, or endpoint, if defined, or root level
+     */
+    _getServers({ endpointId, methodId }){
+      const { amf } = this;
+      let api = this._computeWebApi(amf);
+      if (Array.isArray(api)) {
+        api = api[0];
+      }
+      if (!api) {
+        return
+      }
+
+      const serverKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
+
+      const getRootServers = () => {
+        return this._getValueArray(api, serverKey);
+      };
+      const getEndpointServers = () => {
+        const endpoint = this._computeEndpointModel(api, endpointId);
+        if (endpoint) {
+          return this._getValueArray(endpoint, serverKey);
+        }
+        return getRootServers();
+      };
+      const getMethodServers = () => {
+        const method = this._computeMethodModel(api, methodId);
+        if (method) {
+          return this._getValueArray(method, serverKey);
+        }
+        return getEndpointServers()
+      };
+
+      if (methodId) {
+        return getMethodServers()
+      } else if (endpointId) {
+        return getEndpointServers()
+      }
+      return getRootServers()
+    }
+    /**
+     * Compute values for `server` property based on node an optional selected id.
+     *
+     * @param {?String} endpointId Optional endpoint id, required if method is provided
+     * @param {?String} methodId Optional method id
+     * @param {?String} id Optional selected server id
+     * @return {Array|any} The server list or undefined if node has no servers
+     */
+    _getServer({ endpointId, methodId, id }) {
+      const servers = this._getServers({ endpointId, methodId });
+      return servers ? servers.filter(srv => this._getValue(srv, '@id') === id) : undefined;
+    }
+    /**
      * Computes endpoint's URI based on `amf` and `endpoint` models.
      *
      * @param {Object} server Server model of AMF API.
