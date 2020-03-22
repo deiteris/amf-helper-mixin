@@ -108,6 +108,8 @@ ns.aml.vocabularies.apiContract.Example = contractKey + 'Example';
 ns.aml.vocabularies.apiContract.Server = contractKey + 'Server';
 ns.aml.vocabularies.apiContract.ParametrizedResourceType = contractKey + 'ParametrizedResourceType';
 ns.aml.vocabularies.apiContract.ParametrizedTrait = contractKey + 'ParametrizedTrait';
+ns.aml.vocabularies.apiContract.Callback = contractKey + 'Callback';
+ns.aml.vocabularies.apiContract.TemplatedLink = contractKey + 'TemplatedLink';
 ns.aml.vocabularies.apiContract.header = contractKey + 'header';
 ns.aml.vocabularies.apiContract.parameter = contractKey + 'parameter';
 ns.aml.vocabularies.apiContract.paramName = contractKey + 'paramName';
@@ -132,6 +134,11 @@ ns.aml.vocabularies.apiContract.supportedOperation = contractKey + 'supportedOpe
 ns.aml.vocabularies.apiContract.statusCode = contractKey + 'statusCode';
 ns.aml.vocabularies.apiContract.method = contractKey + 'method';
 ns.aml.vocabularies.apiContract.required = contractKey + 'required';
+ns.aml.vocabularies.apiContract.callback = contractKey + 'callback';
+ns.aml.vocabularies.apiContract.expression = contractKey + 'expression';
+ns.aml.vocabularies.apiContract.link = contractKey + 'link';
+ns.aml.vocabularies.apiContract.mapping = contractKey + 'mapping';
+ns.aml.vocabularies.apiContract.operationId = contractKey + 'operationId';
 ns.aml.vocabularies.shapes = {};
 const shapesKey = ns.aml.vocabularies.shapes.key = ns.aml.vocabularies.key + 'shapes#';
 ns.aml.vocabularies.shapes.toString = () => shapesKey;
@@ -772,7 +779,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       return srv ? srv[0] : undefined;
     }
     /**
-     * 
+     *
      * @param {?String} endpointId Optional endpoint to look for the servers in
      * @param {?String} methodId Optional method to look for the servers in
      * @return {Array} List of servers for method, if defined, or endpoint, if defined, or root level

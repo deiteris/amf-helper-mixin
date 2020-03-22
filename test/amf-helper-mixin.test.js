@@ -1,5 +1,5 @@
 import { fixture, assert, html } from '@open-wc/testing';
-import * as sinon from 'sinon/pkg/sinon-esm.js';
+import * as sinon from 'sinon';
 import { AmfLoader } from './amf-loader.js';
 import './test-element.js';
 
@@ -413,6 +413,8 @@ describe('AmfHelperMixin', function() {
           ['Server', key + 'Server'],
           ['ParametrizedResourceType', key + 'ParametrizedResourceType'],
           ['ParametrizedTrait', key + 'ParametrizedTrait'],
+          ['TemplatedLink', key + 'TemplatedLink'],
+          ['Callback', key + 'Callback'],
           ['header', key + 'header'],
           ['parameter', key + 'parameter'],
           ['paramName', key + 'paramName'],
@@ -436,6 +438,11 @@ describe('AmfHelperMixin', function() {
           ['statusCode', key + 'statusCode'],
           ['method', key + 'method'],
           ['required', key + 'required'],
+          ['callback', key + 'callback'],
+          ['expression', key + 'expression'],
+          ['link', key + 'link'],
+          ['mapping', key + 'mapping'],
+          ['operationId', key + 'operationId'],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.apiContract[property];
