@@ -66,12 +66,12 @@ describe('Base URI test', function() {
       }
     };
 
-    it('_getAmfBaseUri uses protocols with the base uri', () => {
+    it('_getAmfBaseUri() uses protocols with the base uri', () => {
       const result = element._getAmfBaseUri(noSchemeServer(element), ['http']);
       assert.equal(result, 'http://api.mulesoft.com/test');
     });
 
-    it('_getAmfBaseUri uses AMF encoded protocols with the base uri', () => {
+    it('_getAmfBaseUri() uses AMF encoded protocols with the base uri', () => {
       const result = element._getAmfBaseUri(noSchemeServer(element));
       assert.equal(result, 'https://api.mulesoft.com/test');
     });
@@ -125,6 +125,36 @@ describe('Base URI test', function() {
       element.amf = undefined;
       const result = element._ensureUrlScheme('domain.com');
       assert.equal(result, 'http://domain.com');
+    });
+
+    it('_computeUri() computes APIs encoded URI', () => {
+      const result = element._computeUri(endpoint, { server });
+      assert.equal(result, 'https://api.mulesoft.com/{version}/files');
+    });
+
+    it('_computeUri() computes version', () => {
+      const result = element._computeUri(endpoint, { server, version: 'v1.0.0' });
+      assert.equal(result, 'https://api.mulesoft.com/v1.0.0/files');
+    });
+
+    it('_computeUri() computes URI for altered baseUri', () => {
+      const result = element._computeUri(endpoint, { server, baseUri: 'https://domain.com' });
+      assert.equal(result, 'https://domain.com/files');
+    });
+
+    it('_computeUri() computes URI for altered baseUri withouth scheme', () => {
+      const result = element._computeUri(endpoint, { server, baseUri: 'domain.com' });
+      assert.equal(result, 'https://domain.com/files');
+    });
+
+    it('_computeUri() computes URI without optional parameters', () => {
+      const result = element._computeUri(endpoint);
+      assert.equal(result, '/files');
+    });
+
+    it('_computeUri() ignores base URI computation', () => {
+      const result = element._computeUri(endpoint, { server, baseUri: 'https://domain.com', ignoreBase: true });
+      assert.equal(result, '/files');
     });
   });
 });

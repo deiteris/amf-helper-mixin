@@ -833,6 +833,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       const servers = this._getServers({ endpointId, methodId });
       return servers ? servers.filter(srv => this._getValue(srv, '@id') === id) : undefined;
     }
+
     /**
      * Computes endpoint's URI based on `amf` and `endpoint` models.
      *
@@ -841,6 +842,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
      * @param {?String} baseUri Current value of `baseUri` property
      * @param {?String} version API current version
      * @return {String} Endpoint's URI
+     * @deprecated Use `_computeUri()` instead
      */
     _computeEndpointUri(server, endpoint, baseUri, version) {
       let base = this._getBaseUri(baseUri, server) || '';
@@ -855,6 +857,38 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       }
       return result;
     }
+
+    /**
+     * Computes endpoint's URI based on `endpoint` model.
+     *
+     * @param {Object} endpoint Model for the endpoint
+     * @param {Object} opts Configuration options
+     * @param {?Object} opts.server Model for current server, if available.
+     * @param {?String} opts.baseUri Base URI to be used with the endpoint's paht.
+     * Note, base URI is ignored when `ignoreBase` is set
+     * @param {?String} version Current version of the API. It is used to replace
+     * `{version}` from the URI template.
+     * @param {?Boolean} [ignoreBase = false] Whether or not to ignore rendering
+     * of the base URI with path.
+     * @return {String} The base uri for the endpoint.
+     */
+    _computeUri(endpoint, { server, baseUri, version, ignoreBase=false } = {}) {
+      let base = '';
+      if (ignoreBase === false) {
+        base = this._getBaseUri(baseUri, server) || '';
+        if (base && base[base.length - 1] === '/') {
+          base = base.substr(0, base.length - 1);
+        }
+        base = this._ensureUrlScheme(base);
+      }
+      const path = this._getValue(endpoint, this.ns.aml.vocabularies.apiContract.path);
+      let result = base + (path || '');
+      if (version && result) {
+        result = result.replace('{version}', version);
+      }
+      return result;
+    }
+
     /**
      * Computes base URI value from either `baseUri`, `iron-meta` with
      * `ApiBaseUri` key or `amf` value (in this order).
