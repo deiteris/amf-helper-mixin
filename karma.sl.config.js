@@ -19,6 +19,7 @@ module.exports = (config) => {
   //   'SL_EDGE',
   //   'SL_EDGE-1',
   // ];
+  // 
   config.set(merge(createBaseConfig(config), slConfig));
   return config;
 };
