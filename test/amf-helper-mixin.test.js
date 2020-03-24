@@ -414,6 +414,7 @@ describe('AmfHelperMixin', function() {
           ['ParametrizedResourceType', key + 'ParametrizedResourceType'],
           ['ParametrizedTrait', key + 'ParametrizedTrait'],
           ['TemplatedLink', key + 'TemplatedLink'],
+          ['IriTemplateMapping', key + 'IriTemplateMapping'],
           ['Callback', key + 'Callback'],
           ['header', key + 'header'],
           ['parameter', key + 'parameter'],
@@ -441,6 +442,8 @@ describe('AmfHelperMixin', function() {
           ['callback', key + 'callback'],
           ['expression', key + 'expression'],
           ['link', key + 'link'],
+          ['linkExpression', key + 'linkExpression'],
+          ['templateVariable', key + 'templateVariable'],
           ['mapping', key + 'mapping'],
           ['operationId', key + 'operationId'],
         ].forEach(([property, value]) => {
