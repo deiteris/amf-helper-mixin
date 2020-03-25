@@ -14,6 +14,33 @@ the License.
 import { dedupingMixin } from '@polymer/polymer/lib/utils/mixin.js';
 import { IronMeta } from '@polymer/iron-meta/iron-meta.js';
 
+/**
+ * @typedef Namespace
+ * @property {Object} aml - AMF namespace
+ * @property {string} aml.key - AMF's key
+ * @property {Object} aml.vocabularies - AMF's vocabularies
+ * @property {string} aml.vocabularies.key - AMF's vocabularies key
+ * @property {Object} aml.vocabularies.document - AMF's vocabularies document namespace
+ * @property {Object} aml.vocabularies.core - AMF's vocabularies core namespace
+ * @property {Object} aml.vocabularies.security - AMF's vocabularies security namespace
+ * @property {Object} aml.vocabularies.apiContract - AMF's vocabularies apiContract namespace
+ * @property {Object} aml.vocabularies.shapes - AMF's vocabularies shapes namespace
+ * @property {Object} aml.vocabularies.data - AMF's vocabularies data namespace
+ * @property {Object} aml.vocabularies.docSourceMaps - AMF's vocabularies docSourceMaps namespace
+ * @property {Object} w3 - W3 namespace
+ * @property {string} w3.key - W3 namespace's key
+ * @property {Object} w3.rdfSyntax - W3's RDF Syntax namespace
+ * @property {Object} w3.rdfSchema - W3's RDF Schema namespace
+ * @property {Object} w3.hydra - W3's Hydra namespace
+ * @property {Object} w3.xmlSchema - W3's xml namespace
+ * @property {Object} w3.shacl - W3's shacl namespace
+ * @property {Object} schema - Schema namespace. The same as ns.aml.vocabularies
+ */
+
+/**
+ * A namespace for AMF properties.
+ * @type {Object}
+ */
 const ns = {};
 // RAML namespace
 ns.aml = {};
@@ -323,7 +350,6 @@ Object.freeze(ns);
  *
  * @polymer
  * @mixinFunction
- * @memberof ApiElements
  */
 export const AmfHelperMixin = dedupingMixin((base) => {
   /**
@@ -348,7 +374,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
     }
     /**
      * A namespace for AMF model.
-     * @return {Object}
+     * @return {Namespace}
      */
     get ns() {
       return ns;
