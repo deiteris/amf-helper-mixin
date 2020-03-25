@@ -14,7 +14,7 @@ For compatibility with previous model version use `3.x.x` version of the compone
 
 ## Updating API's base URI
 
-(Only applies when using `_computeEndpointUri()` function)
+(Only applies when using `_computeUri()` function)
 
 By default the component render the documentation as it is defined
 in the AMF model. Sometimes, however, you may need to replace the base URI
@@ -51,13 +51,10 @@ const key = shape[this.ns.aml.vocabularies.document + 'encodes'];
 **do this**
 ```javascript
 const key = this._getAmfKey(this.ns.aml.vocabularies.document.encodes);
+const value = model[key];
 // acceptable only if AMF model is not compact.
-const key = shape[this.ns.aml.vocabularies.document.encodes];
+const value = model[this.ns.aml.vocabularies.document.encodes];
 ```
-
-### API components
-
-This components is a part of [API components ecosystem](https://elements.advancedrestclient.com/)
 
 ## Installation
 

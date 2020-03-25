@@ -326,7 +326,7 @@ Object.freeze(ns);
  *
  * ## Updating API's base URI
  *
- * (Only applies when using `_computeEndpointUri()` function)
+ * (Only applies when using `_computeUri()` function)
  *
  * By default the component render the documentation as it is defined
  * in the AMF model. Sometimes, however, you may need to replace the base URI
