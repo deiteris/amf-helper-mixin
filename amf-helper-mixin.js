@@ -830,25 +830,27 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       };
       const getEndpointServers = () => {
         const endpoint = this._computeEndpointModel(api, endpointId);
-        if (endpoint) {
-          return this._getValueArray(endpoint, serverKey);
+        const servers = this._getValueArray(endpoint, serverKey);
+        if (servers) {
+          return servers;
         }
         return getRootServers();
       };
       const getMethodServers = () => {
         const method = this._computeMethodModel(api, methodId);
-        if (method) {
-          return this._getValueArray(method, serverKey);
+        const servers = this._getValueArray(method, serverKey);
+        if (servers) {
+          return servers;
         }
-        return getEndpointServers()
+        return getEndpointServers();
       };
 
       if (methodId) {
-        return getMethodServers()
+        return getMethodServers();
       } else if (endpointId) {
-        return getEndpointServers()
+        return getEndpointServers();
       }
-      return getRootServers()
+      return getRootServers();
     }
     /**
      * Compute values for `server` property based on node an optional selected id.
