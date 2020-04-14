@@ -93,6 +93,7 @@ ns.aml.vocabularies.core.url = coreKey + 'url';
 ns.aml.vocabularies.core.termsOfService = coreKey + 'termsOfService';
 ns.aml.vocabularies.core.license = coreKey + 'license';
 ns.aml.vocabularies.core.mediaType = coreKey + 'mediaType';
+ns.aml.vocabularies.core.extensionName = coreKey + 'extensionName';
 ns.aml.vocabularies.security = {};
 const secKey = ns.aml.vocabularies.security.key = ns.aml.vocabularies.key + 'security#';
 ns.aml.vocabularies.security.toString = () => secKey;
