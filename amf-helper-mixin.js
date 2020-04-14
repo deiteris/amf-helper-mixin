@@ -831,7 +831,7 @@ export const AmfHelperMixin = dedupingMixin((base) => {
       const getEndpointServers = () => {
         const endpoint = this._computeEndpointModel(api, endpointId);
         const servers = this._getValueArray(endpoint, serverKey);
-        if (endpoint) {
+        if (servers) {
           return servers;
         }
         return getRootServers();
