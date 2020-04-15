@@ -386,6 +386,7 @@ describe('AmfHelperMixin', function() {
           ['termsOfService', key + 'termsOfService'],
           ['license', key + 'license'],
           ['mediaType', key + 'mediaType'],
+          ['extensionName', key + 'extensionName'],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.core[property];
