@@ -1,5 +1,4 @@
 import { fixture, assert } from '@open-wc/testing';
-import { IronMeta } from '@polymer/iron-meta/iron-meta.js';
 import { AmfLoader } from './amf-loader.js';
 import './test-element.js';
 
@@ -24,10 +23,6 @@ describe('Base URI test', function() {
       server = element._computeServer(model);
       const webApi = element._computeWebApi(model);
       endpoint = element._computeEndpointByPath(webApi, '/files');
-    });
-
-    afterEach(() => {
-      new IronMeta({ key: 'ApiBaseUri' }).value = undefined;
     });
 
     it('_getAmfBaseUri returns servers base uri', () => {
@@ -78,20 +73,6 @@ describe('Base URI test', function() {
 
     it('_getBaseUri() returns baseUri argument if set', () => {
       const value = 'https://api.domain.com';
-      const result = element._getBaseUri(value, server);
-      assert.equal(result, value);
-    });
-
-    it('_getBaseUri() returns baseUri argument IronMeta', () => {
-      const value = 'https://meta.com/base';
-      new IronMeta({ key: 'ApiBaseUri' }).value = value;
-      const result = element._getBaseUri(undefined, server);
-      assert.equal(result, value);
-    });
-
-    it('_getBaseUri() prefers baseUri over IronMeta', () => {
-      const value = 'https://api.domain.com';
-      new IronMeta({ key: 'ApiBaseUri' }).value = 'https://meta.com/base';
       const result = element._getBaseUri(value, server);
       assert.equal(result, value);
     });

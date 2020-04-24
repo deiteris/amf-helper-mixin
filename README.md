@@ -22,18 +22,12 @@ of the API with something else. It is useful when the API does not
 have base URI property defined (therefore this component render relative
 paths instead of URIs) or when you want to manage different environments.
 
-To update base URI value either update `baseUri` property or use
-`iron-meta` with key `ApiBaseUri`. First method is easier but the second
-gives much more flexibility since it use a
-[monostate pattern](http://wiki.c2.com/?MonostatePattern)
-to manage base URI property.
+To update base URI value update the `baseUri` property.
 
 When the component constructs the final URI for the endpoint it does the following:
 -   if `baseUri` is set it uses this value as a base URI for the endpoint
--   else if `iron-meta` with key `ApiBaseUri` exists and contains a value it uses it uses this value as a base URI for the endpoint
 -   else if `amf` is set then it computes base URI value from main model document
 Then it concatenates computed base URI with `endpoint`'s path property.
-
 
 ## Using AMF keys
 

@@ -1,9 +1,10 @@
 {
   "name": "@api-components/amf-helper-mixin",
   "description": "A mixin with common functions user by most AMF components to compyte AMF values",
-  "version": "4.0.26",
+  "version": "4.1.0",
   "license": "Apache-2.0",
-  "main": "amf-helper-mixin.js",
+  "main": "index.js",
+  "module": "index.js",
   "keywords": [
     "api-components",
     "amf",
@@ -25,10 +26,7 @@
     "url": "https://github.com/advanced-rest-client/amf-helper-mixin/issues",
     "email": "arc@mulesoft.com"
   },
-  "dependencies": {
-    "@polymer/iron-meta": "^3.0.0",
-    "@polymer/polymer": "^3.3.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@advanced-rest-client/eslint-config": "^1.1.5",
     "@advanced-rest-client/prettier-config": "^0.1.0",
@@ -38,18 +36,18 @@
     "@commitlint/config-conventional": "^8.3.4",
     "@open-wc/testing": "^2.5.13",
     "@open-wc/testing-karma": "^3.3.15",
-    "@polymer/gen-typescript-declarations": "^1.6.2",
     "deepmerge": "^4.2.2",
     "es-dev-server": "^1.46.5",
     "husky": "^4.2.5",
     "lint-staged": "^10.1.7",
     "lit-element": "^2.3.1",
     "lit-html": "^1.2.1",
-    "sinon": "^9.0.2"
+    "sinon": "^9.0.2",
+    "typescript-lit-html-plugin": "^0.9.0"
   },
   "scripts": {
     "test": "karma start --coverage",
-    "update-types": "gen-typescript-declarations --deleteExisting --outDir .",
+    "update-types": "echo \"Types are now edited manually!\"",
     "start": "es-dev-server --app-index demo/index.html --node-resolve --open --watch",
     "start:compatibility": "es-dev-server --app-index demo/index.html --compatibility auto --node-resolve --open --watch",
     "lint:eslint": "eslint --ext .js,.html .",
