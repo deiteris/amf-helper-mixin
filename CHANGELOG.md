@@ -1955,3 +1955,107 @@
 * updating tests models and a test [acbb672](https://github.com/advanced-rest-client/amf-helper-mixin/commit/acbb67212571d8c6aff08a2f4c6b8f55f3d23401) by Pawel Psztyc
 
 
+<a name="4.1.0"></a>
+## [4.1.0](https://github.com/advanced-rest-client/amf-helper-mixin/compare/4.0.8...4.1.0) (2020-04-24)
+
+### Build
+
+* bump version [a2ddd3b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/a2ddd3b7285240ca0e46be6ccaa94b64565f422c) by Francisco Di Giandomenico
+* bump version [c1e868b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/c1e868b51ee8f997164edc2b6b2dcd0f79becb06) by Francisco Di Giandomenico
+* bumping version [bc29f3b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/bc29f3b52f648e884b0601107657421f914e3b65) by Pawel Psztyc
+* bumping version [99db876](https://github.com/advanced-rest-client/amf-helper-mixin/commit/99db8766dcbd212a4ac463750cc5e48b7cfeb400) by Pawel
+* bumping version [b7e9261](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b7e92616883b1ae944d94d7cb61688963576f74b) by Pawel
+* update version [b1b0fd0](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b1b0fd094ac3b58d53f71412c3d785f73346292e) by Francisco Di Giandomenico
+* bumping version [11062e6](https://github.com/advanced-rest-client/amf-helper-mixin/commit/11062e60c47b2be06629314293bb9dbde5f3940e) by Leandro Bauret
+* bumping version [5359322](https://github.com/advanced-rest-client/amf-helper-mixin/commit/53593227d08ff3f0601bff31ecce6b6330f350e9) by Pawel Psztyc
+* bumping version [099791a](https://github.com/advanced-rest-client/amf-helper-mixin/commit/099791a1a160e0193fa047727c09fff66a07a942) by Pawel Psztyc
+* bumping version [939d207](https://github.com/advanced-rest-client/amf-helper-mixin/commit/939d2073aaada705a098ae74c6db019fb85a99d6) by Francisco Di Giandomenico
+* bumping version [9ed16ec](https://github.com/advanced-rest-client/amf-helper-mixin/commit/9ed16ec565a86e64472a8b4a1480c51919f6b2d6) by Francisco Di Giandomenico
+* Merge pull request #6 from advanced-rest-client/security-flows-model-change [2881a92](https://github.com/advanced-rest-client/amf-helper-mixin/commit/2881a924694420ed398cef39064776b1f279d732) by Francisco Di Giandomenico
+* bumping version [599fd7b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/599fd7ba6755e58f631a1195b033783b5933808f) by Pawel Psztyc
+* bumping version [15b0c3e](https://github.com/advanced-rest-client/amf-helper-mixin/commit/15b0c3e7a9b9268b6e17d0dd433eb4826d12efea) by Pawel
+* bumping version [61eb516](https://github.com/advanced-rest-client/amf-helper-mixin/commit/61eb516e80cf49f78c0ab51b024dcea61b999543) by Pawel
+
+
+### Update
+
+* upgrading dependencies [f5c795e](https://github.com/advanced-rest-client/amf-helper-mixin/commit/f5c795e2775072ecfc3e62db740d5708e03adaa5) by Pawel
+* add core extension name [9220152](https://github.com/advanced-rest-client/amf-helper-mixin/commit/9220152ac13c3e2a4228bb834a3f51182ac690fd) by Francisco Di Giandomenico
+* [ci skip] automated merge master->stage. syncing main branches [a5bfd9d](https://github.com/advanced-rest-client/amf-helper-mixin/commit/a5bfd9ddb3d2534cc0383adbd7585c475a3917ef) by ARC CI agent
+* updating types [4120e0f](https://github.com/advanced-rest-client/amf-helper-mixin/commit/4120e0fea0a32a97ef92ec118911bc09d76deb35) by Pawel Psztyc
+* commiting anything to trigger build [7dca56b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/7dca56b33677f30d4c37ef75114fc7adccb1b705) by Pawel Psztyc
+* upgrading dependencies [1728178](https://github.com/advanced-rest-client/amf-helper-mixin/commit/1728178df1bd0fe746aa6ebe0a32baceb2c20a35) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [b6dd7c6](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b6dd7c6821f305721c7e6f3e32c304aa59111b92) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [e099fb2](https://github.com/advanced-rest-client/amf-helper-mixin/commit/e099fb27782f09ffb859415d0fefedf338f0b2d7) by Ci agent
+* updating package contributors [da25c72](https://github.com/advanced-rest-client/amf-helper-mixin/commit/da25c7243008cff079ad752c86325d5f95109a19) by Pawel
+* removing AMF model files from the repository [9c2a402](https://github.com/advanced-rest-client/amf-helper-mixin/commit/9c2a40225e51016600b718729bc015b73bd9adae) by Pawel
+* adding OAS api to the model generation list [9336309](https://github.com/advanced-rest-client/amf-helper-mixin/commit/933630998ea5fd45e8ff138f94f1cd544f8b5f63) by Pawel
+* upgrading dependencies [2e8ca77](https://github.com/advanced-rest-client/amf-helper-mixin/commit/2e8ca7712f7accf9ea7980fde2934f8c4b596747) by Pawel
+* [ci skip] automated merge master->stage. syncing main branches [8a06348](https://github.com/advanced-rest-client/amf-helper-mixin/commit/8a0634814b571b1781dbc3fc321b5c4d51549357) by Ci agent
+* update types [d986642](https://github.com/advanced-rest-client/amf-helper-mixin/commit/d9866429f65e79bfebc9cdceed18784236c7bc7e) by Francisco Di Giandomenico
+* update types [366bd97](https://github.com/advanced-rest-client/amf-helper-mixin/commit/366bd970d3989e3fb5c328b423f7963c0937c58a) by Francisco Di Giandomenico
+* remove unnecessary function [6c861da](https://github.com/advanced-rest-client/amf-helper-mixin/commit/6c861daeb9d0b5149be44caeaa4d14f566f19c0a) by Francisco Di Giandomenico
+* merge stage [706d6df](https://github.com/advanced-rest-client/amf-helper-mixin/commit/706d6dfcc8805a027bda46ae91a8ea2456f1a18a) by Francisco Di Giandomenico
+* [ci skip] automated merge master->stage. syncing main branches [3994bf2](https://github.com/advanced-rest-client/amf-helper-mixin/commit/3994bf282a2e903b39a11f59b32199347e9e3b24) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [1927e4f](https://github.com/advanced-rest-client/amf-helper-mixin/commit/1927e4f92faca6ee044eb90193f9c4978342f28e) by Ci agent
+* remove commented code [77ea2be](https://github.com/advanced-rest-client/amf-helper-mixin/commit/77ea2be5a2025e8ca7d36e9c66e9902d25361d2d) by Francisco Di Giandomenico
+* [ci skip] automated merge master->stage. syncing main branches [c8177a8](https://github.com/advanced-rest-client/amf-helper-mixin/commit/c8177a822d470b95799b29565c87be96e6690567) by Ci agent
+* upgrading dependencies [f0fbb82](https://github.com/advanced-rest-client/amf-helper-mixin/commit/f0fbb82e812f05734b1b082f3eb3fa4748e5ed7f) by Pawel Psztyc
+* adding `flow` to security namespace [c082991](https://github.com/advanced-rest-client/amf-helper-mixin/commit/c0829911277f11e7aadd25de6144c64fa1aea753) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [af2ff92](https://github.com/advanced-rest-client/amf-helper-mixin/commit/af2ff923eb0fe3b234a64cdd46d14d143485db9d) by Ci agent
+* updating travis configuration [a7f81fe](https://github.com/advanced-rest-client/amf-helper-mixin/commit/a7f81feb508ecbdce5e495ff16e14dd5445c2518) by Pawel Psztyc
+* upgrading dependencies [9db789b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/9db789b8e30e8565f873fb3e2e7bc846ea2fa51f) by Pawel Psztyc
+* updating depdenencies and the test  models [b74b9e1](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b74b9e12e59206fb2896677389537ca8a25f4b98) by Pawel Psztyc
+* storing some propertiers on .document NS [67d9264](https://github.com/advanced-rest-client/amf-helper-mixin/commit/67d926493a6e04b86ae3a6084ac78ad9b76d4ad0) by Pawel
+* updating changed list [5bc6fbb](https://github.com/advanced-rest-client/amf-helper-mixin/commit/5bc6fbb4d21bd632533446dbc363f3e4de769a83) by Pawel
+* updating changed list [223e898](https://github.com/advanced-rest-client/amf-helper-mixin/commit/223e898a60ffab31132a39acd5352fad4c03ad78) by Pawel
+* adding `security` properties [2ac5ec1](https://github.com/advanced-rest-client/amf-helper-mixin/commit/2ac5ec1f10ccf12c3e60e9901bf2c14ca94ad780) by Pawel
+* updating changed list [aebdf7a](https://github.com/advanced-rest-client/amf-helper-mixin/commit/aebdf7a89b4f6789c092d7726937b46255039771) by Pawel
+* adding another `SchemaShape` proeprty to shapes [12233c4](https://github.com/advanced-rest-client/amf-helper-mixin/commit/12233c4c102625313f06ccb4e42cc828f3fde52b) by Pawel
+* adding `apiContract.Server` proeprty [a629678](https://github.com/advanced-rest-client/amf-helper-mixin/commit/a6296785cdd9af3955648d3bb34e2e2d1c84d835) by Pawel
+* updating changed list [8f166c4](https://github.com/advanced-rest-client/amf-helper-mixin/commit/8f166c453e7daa90b99372dd40b0670e86f6e383) by Pawel
+* adding missing properties [bfb3800](https://github.com/advanced-rest-client/amf-helper-mixin/commit/bfb3800f88b67766320d7c2c322c69887b5b2c55) by Pawel
+
+
+### Documentation
+
+* updating readme file [2d957ca](https://github.com/advanced-rest-client/amf-helper-mixin/commit/2d957caf685807ec4da7ba10236b34597e9003ba) by Pawel Psztyc
+* remove unused doc value in _computeServer [70a1d6e](https://github.com/advanced-rest-client/amf-helper-mixin/commit/70a1d6ef372c56bbf5a7590ff459eba1d7babf9c) by Francisco Di Giandomenico
+
+
+### Features
+
+* adding mapping related variables [c9deaae](https://github.com/advanced-rest-client/amf-helper-mixin/commit/c9deaae4d434160cd5c566eeef6823b54dcc1221) by Pawel Psztyc
+* adding _computeUri() and deprecating _computeEndpointUri() [f4b77aa](https://github.com/advanced-rest-client/amf-helper-mixin/commit/f4b77aa05a9e69caab8fbf845c1583b995ec4587) by Pawel
+* adding Links and Callback releated properties [4fb8dfa](https://github.com/advanced-rest-client/amf-helper-mixin/commit/4fb8dfa10ff81c175ee2e2fe3dec69bd9f6c345a) by Pawel
+* adding `in` property to the security namespace [5bc96eb](https://github.com/advanced-rest-client/amf-helper-mixin/commit/5bc96eb91d8843f68812b17b6d14f366f4452b11) by Pawel Psztyc
+* add support for OAuth2Flow and flows namespaces [2b34b2b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/2b34b2b7ca3fd9e5d792c898db8027bd67c9e98d) by TwoPlusTwoOne
+
+
+### Bug Fixes
+
+* condition check [b374010](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b3740102df68aff171787f3617c8824ed4343de5) by Francisco Di Giandomenico
+* update tests to not rely on literal node ids [fda6a48](https://github.com/advanced-rest-client/amf-helper-mixin/commit/fda6a483de2714a472d106b6f6706e0063414c9e) by Francisco Di Giandomenico
+* changes in links resolution for amf 4.0.6 model [6920486](https://github.com/advanced-rest-client/amf-helper-mixin/commit/6920486304c9456e8e80a7c64f1f519e13b4d2fb) by Leandro Bauret
+* add _getServers and change _getServer [77b0774](https://github.com/advanced-rest-client/amf-helper-mixin/commit/77b0774a223ecc83c9ff6cf472fed88a8b64932c) by Francisco Di Giandomenico
+* add security:schemes key [9514f7a](https://github.com/advanced-rest-client/amf-helper-mixin/commit/9514f7aef8b9fba0e02b71bd00935c11da7a9c89) by Francisco Di Giandomenico
+* fixing placement of `ParametrizedTrait` [b7b3cd0](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b7b3cd0539ba2c880a3def5fc04989ec91e70403) by Pawel
+
+
+### Refactor
+
+* moving code to src/ folder [306ee46](https://github.com/advanced-rest-client/amf-helper-mixin/commit/306ee466d4c03c04ddfbff739f23301894a8d55d) by Pawel
+* renaming OAS file for better syntax formatting [59fbd51](https://github.com/advanced-rest-client/amf-helper-mixin/commit/59fbd510deae4113ff1661e77e33f582e5788e9a) by Pawel
+
+
+### Testing
+
+* updating test configuration [a2e09a9](https://github.com/advanced-rest-client/amf-helper-mixin/commit/a2e09a984cf4ed8ee7a0d9ac65c37517044be127) by Pawel
+* add test for extensionName [b234aca](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b234acaae84f6b15e7e190264113e209b0ee21bc) by Francisco Di Giandomenico
+* increasing timeout [3888810](https://github.com/advanced-rest-client/amf-helper-mixin/commit/3888810cae2c5c7cf6ebd2b712776d86eaac1e70) by Pawel
+* updating karma configuration [6ebae36](https://github.com/advanced-rest-client/amf-helper-mixin/commit/6ebae367f2dc3a5e9efed9e08989d1368e482ec0) by Pawel
+* removing compatibility tests [a01ea51](https://github.com/advanced-rest-client/amf-helper-mixin/commit/a01ea51222168b8261e94a6c119312eb19caf97a) by Pawel
+* add tests for raml [0aeb648](https://github.com/advanced-rest-client/amf-helper-mixin/commit/0aeb6481f2f66d42d20ef0e1b56fc4b5c0479026) by Francisco Di Giandomenico
+* updating tests models and a test [acbb672](https://github.com/advanced-rest-client/amf-helper-mixin/commit/acbb67212571d8c6aff08a2f4c6b8f55f3d23401) by Pawel Psztyc
+
+
