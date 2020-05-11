@@ -510,6 +510,17 @@ export const AmfHelperMixin = (base) => class extends base {
     const srv = this._ensureArray(api[key]);
     return srv ? srv[0] : undefined;
   }
+
+  /**
+   * Determines whether a partial model is valid for reading servers from
+   * Current valid values:
+   * - Operation
+   * - Endpoint
+   * @param {Object} model The partial model to evaluate
+   * @return {boolean} Whether the model's type is part of the array of valid node types from which
+   * to read servers
+   * @private
+   */
   _isValidServerPartial(model) {
     if (!model) {
       return false;
@@ -525,6 +536,7 @@ export const AmfHelperMixin = (base) => class extends base {
     }
     return false;
   }
+
   /**
    * @param {Object} options
    * @param {string=} options.endpointId Optional endpoint to look for the servers in
