@@ -1,4 +1,4 @@
-import { fixture, assert, html } from '@open-wc/testing';
+import { assert, fixture, html } from '@open-wc/testing';
 import * as sinon from 'sinon';
 import { AmfLoader } from './amf-loader.js';
 import './test-element.js';
@@ -1243,12 +1243,13 @@ describe('AmfHelperMixin', function() {
         });
 
         describe('OAS', () => {
-          const methodId = `${compact ? '' : 'amf://id'}#23`;
+          let methodId;
           // TODO uncomment this once AMF model has resolved servers on all levels
           // const endpointId = `${compact ? '' : 'amf://id'}#22`;
 
           before(async () => {
             model = await AmfLoader.load(compact, 'multiple-servers');
+            methodId = AmfLoader.lookupOperation(model, '/pets', 'get')['@id'];
           });
 
           after(async () => {
@@ -1282,6 +1283,15 @@ describe('AmfHelperMixin', function() {
             it('Returns undefined if no model', async () => {
               element = await modelFixture();
               assert.isUndefined(element._getServers({}));
+            });
+
+            it('Returns all method servers for partial model', () => {
+              const operation = { ...AmfLoader.lookupOperation(model, '/pets', 'get') };
+              operation['@context'] = (model[0] || model)['@context'];
+              element.amf = operation;
+              const servers = element._getServers({ methodId });
+              assert.typeOf(servers, 'array');
+              assert.lengthOf(servers, 2);
             });
           });
         });

@@ -510,7 +510,21 @@ export const AmfHelperMixin = (base) => class extends base {
     const srv = this._ensureArray(api[key]);
     return srv ? srv[0] : undefined;
   }
-
+  _isValidServerPartial(model) {
+    if (!model) {
+      return false;
+    }
+    const oKey = this.ns.aml.vocabularies.apiContract.Operation;
+    const eKey = this.ns.aml.vocabularies.apiContract.EndPoint;
+    const allowedPartialModelTypes = [this._getAmfKey(oKey), this._getAmfKey(eKey)];
+    const types = model['@type'];
+    for (const type of types) {
+      if (allowedPartialModelTypes.indexOf(type) !== -1) {
+        return true;
+      }
+    }
+    return false;
+  }
   /**
    * @param {Object} options
    * @param {string=} options.endpointId Optional endpoint to look for the servers in
@@ -519,12 +533,19 @@ export const AmfHelperMixin = (base) => class extends base {
    */
   _getServers({ endpointId, methodId }){
     const { amf } = this;
+    if (!amf) {
+      return;
+    }
     let api = this._computeWebApi(amf);
     if (Array.isArray(api)) {
       api = api[0];
     }
     if (!api) {
-      return
+      if (this._isValidServerPartial(amf)) {
+        api = amf;
+      } else {
+        return;
+      }
     }
 
     const serverKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
