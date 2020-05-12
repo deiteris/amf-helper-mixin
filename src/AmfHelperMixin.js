@@ -512,6 +512,32 @@ export const AmfHelperMixin = (base) => class extends base {
   }
 
   /**
+   * Determines whether a partial model is valid for reading servers from
+   * Current valid values:
+   * - Operation
+   * - Endpoint
+   * @param {Object} model The partial model to evaluate
+   * @return {boolean} Whether the model's type is part of the array of valid node types from which
+   * to read servers
+   * @private
+   */
+  _isValidServerPartial(model) {
+    if (!model) {
+      return false;
+    }
+    const oKey = this.ns.aml.vocabularies.apiContract.Operation;
+    const eKey = this.ns.aml.vocabularies.apiContract.EndPoint;
+    const allowedPartialModelTypes = [this._getAmfKey(oKey), this._getAmfKey(eKey)];
+    const types = model['@type'];
+    for (const type of types) {
+      if (allowedPartialModelTypes.indexOf(type) !== -1) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /**
    * @param {Object} options
    * @param {string=} options.endpointId Optional endpoint to look for the servers in
    * @param {string=} options.methodId Optional method to look for the servers in
@@ -519,12 +545,19 @@ export const AmfHelperMixin = (base) => class extends base {
    */
   _getServers({ endpointId, methodId }){
     const { amf } = this;
+    if (!amf) {
+      return;
+    }
     let api = this._computeWebApi(amf);
     if (Array.isArray(api)) {
       api = api[0];
     }
     if (!api) {
-      return
+      if (this._isValidServerPartial(amf)) {
+        api = amf;
+      } else {
+        return;
+      }
     }
 
     const serverKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
