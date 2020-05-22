@@ -2164,3 +2164,28 @@
 * updating tests models and a test [acbb672](https://github.com/advanced-rest-client/amf-helper-mixin/commit/acbb67212571d8c6aff08a2f4c6b8f55f3d23401) by Pawel Psztyc
 
 
+<a name="4.1.4"></a>
+## [4.1.4](https://github.com/advanced-rest-client/amf-helper-mixin/compare/4.1.0...4.1.4) (2020-05-22)
+
+### Build
+
+* bump version [01e0b6e](https://github.com/advanced-rest-client/amf-helper-mixin/commit/01e0b6e29092536fe986cb7ed8a923ce5deb0887) by Francisco Di Giandomenico
+* bumping version [f0267ae](https://github.com/advanced-rest-client/amf-helper-mixin/commit/f0267ae7952cedd2a3c09dd5ac71c1bf4a6a8276) by Pawel
+
+
+### Update
+
+* [ci skip] automated merge master->stage. syncing main branches [41bb69d](https://github.com/advanced-rest-client/amf-helper-mixin/commit/41bb69d33427022d7c326a9a86cf34df3403b89c) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [e78f488](https://github.com/advanced-rest-client/amf-helper-mixin/commit/e78f4889b6960babe7fe42a3ed14857e31e7037e) by Ci agent
+
+
+### Documentation
+
+* updating types [67e560c](https://github.com/advanced-rest-client/amf-helper-mixin/commit/67e560c3d515b1868723fb52907c490da9cd0c41) by Pawel
+
+
+### Bug Fixes
+
+* fixing ts declaration for namespace [eb19d40](https://github.com/advanced-rest-client/amf-helper-mixin/commit/eb19d406230456e0f7a2b78bbe96574d3005a177) by Pawel
+
+
