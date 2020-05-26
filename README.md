@@ -1,6 +1,6 @@
 [![Published on NPM](https://img.shields.io/npm/v/@api-components/amf-helper-mixin.svg)](https://www.npmjs.com/package/@api-components/amf-helper-mixin)
 
-[![Build Status](https://travis-ci.org/advanced-rest-client/amf-helper-mixin.svg?branch=stage)](https://travis-ci.org/advanced-rest-client/amf-helper-mixin)
+[![Build Status](https://travis-ci.com/advanced-rest-client/amf-helper-mixin.svg)](https://travis-ci.com/advanced-rest-client/amf-helper-mixin)
 
 # amf-helper-mixin
 
