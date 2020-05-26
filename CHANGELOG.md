@@ -2189,3 +2189,32 @@
 * fixing ts declaration for namespace [eb19d40](https://github.com/advanced-rest-client/amf-helper-mixin/commit/eb19d406230456e0f7a2b78bbe96574d3005a177) by Pawel
 
 
+<a name="4.1.5"></a>
+## [4.1.5](https://github.com/advanced-rest-client/amf-helper-mixin/compare/4.1.1...4.1.5) (2020-05-26)
+
+### Build
+
+* bump version [01e0b6e](https://github.com/advanced-rest-client/amf-helper-mixin/commit/01e0b6e29092536fe986cb7ed8a923ce5deb0887) by Francisco Di Giandomenico
+
+
+### Update
+
+* [ci skip] automated merge master->stage. syncing main branches [76926f2](https://github.com/advanced-rest-client/amf-helper-mixin/commit/76926f2693a5d027e70d5e8baf154e064eee7c9d) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [41bb69d](https://github.com/advanced-rest-client/amf-helper-mixin/commit/41bb69d33427022d7c326a9a86cf34df3403b89c) by Ci agent
+
+
+### Documentation
+
+* updating readme file [23d3e7b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/23d3e7bce0bd063d2d720275ac643e949d1bd388) by Pawel Psztyc
+
+
+### Bug Fixes
+
+* fixing ts declaration for namespace [eb19d40](https://github.com/advanced-rest-client/amf-helper-mixin/commit/eb19d406230456e0f7a2b78bbe96574d3005a177) by Pawel
+
+
+### Refactor
+
+* upgrading to open-wc standard [e1457d4](https://github.com/advanced-rest-client/amf-helper-mixin/commit/e1457d42b6b1f2846517376e4daf53317599d99a) by Pawel Psztyc
+
+
