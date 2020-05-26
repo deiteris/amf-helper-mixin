@@ -1,10 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const merge = require('deepmerge');
-const slSettings = require('@advanced-rest-client/testing-karma-sl/sl-settings.js');
+const {slSettings} = require('@advanced-rest-client/testing-karma-sl');
 const createBaseConfig = require('./karma.conf.js');
 
 module.exports = (config) => {
-  const slConfig = merge(slSettings(config), {
+  const slConfig = merge(slSettings(), {
     sauceLabs: {
       testName: 'amf-helper-mixin',
     },
@@ -19,7 +19,7 @@ module.exports = (config) => {
   //   'SL_EDGE',
   //   'SL_EDGE-1',
   // ];
-  // 
+  //
   config.set(merge(createBaseConfig(config), slConfig));
   return config;
 };

@@ -1,1 +1,1 @@
-export { AmfHelperMixin } from './src/AmfHelperMixin.js';
+export { AmfHelperMixin } from './src/AmfHelperMixin';
