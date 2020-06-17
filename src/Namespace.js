@@ -165,6 +165,7 @@ ns.aml.vocabularies.shapes.xmlSerialization = shapesKey + 'xmlSerialization';
 ns.aml.vocabularies.shapes.xmlName = shapesKey + 'xmlName';
 ns.aml.vocabularies.shapes.xmlAttribute = shapesKey + 'xmlAttribute';
 ns.aml.vocabularies.shapes.xmlWrapped = shapesKey + 'xmlWrapped';
+ns.aml.vocabularies.shapes.readOnly = shapesKey + 'readOnly';
 ns.aml.vocabularies.data = {};
 const dataKey = ns.aml.vocabularies.data.key = ns.aml.vocabularies.key + 'data#';
 ns.aml.vocabularies.data.toString = () => dataKey;
@@ -256,6 +257,9 @@ ns.w3.shacl.name = n2shaclName + 'name';
 ns.w3.shacl.raw = n2shaclName + 'raw';
 ns.w3.shacl.datatype = n2shaclName + 'datatype';
 ns.w3.shacl.minCount = n2shaclName + 'minCount';
+ns.w3.shacl.xone = n2shaclName + 'xone'
+ns.w3.shacl.not = n2shaclName + 'not'
+ns.w3.shacl.or = n2shaclName + 'or'
 // Hydra shortcuts
 ns.w3.hydra.supportedOperation = contractKey + 'supportedOperation';
 // Schema org namespace
