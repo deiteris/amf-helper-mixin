@@ -1580,7 +1580,7 @@ describe('AmfHelperMixin', () => {
           const result = element._computeType(undefined, references, id);
           assert.typeOf(result, 'object');
           const type = element._getAmfKey(element.ns.w3.shacl.NodeShape);
-          assert.equal(result['@type'][0], type);
+          assert.isTrue(result['@type'].includes(type));
         });
       });
 
