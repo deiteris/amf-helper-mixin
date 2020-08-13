@@ -542,6 +542,7 @@ describe('AmfHelperMixin', () => {
           ['declaredElement', `${key  }declared-element`],
           ['trackedElement', `${key  }tracked-element`],
           ['parsedJsonSchema', `${key  }parsed-json-schema`],
+          ['lexical', `${key  }lexical`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.docSourceMaps[property];
