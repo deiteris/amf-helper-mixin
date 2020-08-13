@@ -2252,3 +2252,29 @@
 * improve [57387b4](https://github.com/advanced-rest-client/amf-helper-mixin/commit/57387b45be8c8c61f147d77cf58931e0ba243376) by Carolina Wright
 
 
+<a name="4.1.8"></a>
+## [4.1.8](https://github.com/advanced-rest-client/amf-helper-mixin/compare/4.1.5...4.1.8) (2020-08-13)
+
+### Build
+
+* bump version [225bb81](https://github.com/advanced-rest-client/amf-helper-mixin/commit/225bb81b1005c1f9387b0537402741050888f646) by Carolina Wright
+* bump version [9c09f66](https://github.com/advanced-rest-client/amf-helper-mixin/commit/9c09f660e362001e657587ceb24af74b6af39678) by Carolina Wright
+
+
+### Update
+
+* [ci skip] automated merge master->stage. syncing main branches [b8c4cbd](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b8c4cbdce7683ac2e5536c438aeaa88a3c049f06) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [fa2b2e9](https://github.com/advanced-rest-client/amf-helper-mixin/commit/fa2b2e95dfe0598b7ade3ac96abbad114b51d74d) by Ci agent
+
+
+### Bug Fixes
+
+* remove extra spaces added by lint [612aeb6](https://github.com/advanced-rest-client/amf-helper-mixin/commit/612aeb6390029e141d5063ed40462373181fe708) by Carolina Wright
+* apic-439 when no declarations find type in references [b8b7836](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b8b7836d0ed431fd95b3ee74f10b386c99866598) by Carolina Wright
+
+
+### Testing
+
+* improve [57387b4](https://github.com/advanced-rest-client/amf-helper-mixin/commit/57387b45be8c8c61f147d77cf58931e0ba243376) by Carolina Wright
+
+
