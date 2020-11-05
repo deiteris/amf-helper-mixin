@@ -2297,3 +2297,12 @@
 * remove extra spaces added by lint [612aeb6](https://github.com/advanced-rest-client/amf-helper-mixin/commit/612aeb6390029e141d5063ed40462373181fe708) by Carolina Wright
 
 
+<a name="4.2.0"></a>
+## [4.2.0](https://github.com/advanced-rest-client/amf-helper-mixin/compare/4.1.8...4.2.0) (2020-11-05)
+
+### Update
+
+* [ci skip] automated merge master->stage. syncing main branches [f2d861d](https://github.com/advanced-rest-client/amf-helper-mixin/commit/f2d861dc6ddb651d1e21159366dc8311802490c3) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [176919a](https://github.com/advanced-rest-client/amf-helper-mixin/commit/176919a77773f9e297bc9888b87f8c5b3b71b762) by Ci agent
+
+
