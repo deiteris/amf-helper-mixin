@@ -82,6 +82,8 @@ interface ApiContract {
   Parameter: string;
   Operation: string;
   WebAPI: string;
+  AsyncAPI: string;
+  API: string;
   UserDocumentationFragment: string;
   Example: string;
   Server: string;

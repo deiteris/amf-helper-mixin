@@ -18,11 +18,14 @@ describe('AmfHelperMixin', () => {
     ['Regular model', false]
   ].forEach(([label, compact]) => {
     describe(label, () => {
+      const asyncApi = 'async-api';
       let element;
       let model;
+      let asyncModel;
 
       before(async () => {
         model = await AmfLoader.load(compact);
+        asyncModel = await AmfLoader.load(compact, asyncApi);
       });
 
       describe('amf setter/getter', () => {
@@ -404,6 +407,8 @@ describe('AmfHelperMixin', () => {
           ['Parameter', `${key  }Parameter`],
           ['Operation', `${key  }Operation`],
           ['WebAPI', `${key  }WebAPI`],
+          ['AsyncAPI', `${key  }AsyncAPI`],
+          ['API', `${key  }API`],
           ['UserDocumentationFragment', `${key  }UserDocumentationFragment`],
           ['Example', `${key  }Example`],
           ['Server', `${key  }Server`],
@@ -1198,6 +1203,126 @@ describe('AmfHelperMixin', () => {
         it('Returns an object from AMF model', () => {
           const result = element._computeWebApi(model);
           assert.typeOf(result, 'object');
+        });
+
+        it('should return undefined for AsyncAPI model', async () => {
+          element = await modelFixture(asyncModel);
+          assert.isUndefined(element._computeWebApi(asyncModel));
+        })
+      });
+
+      describe('_computeApi()', () => {
+        beforeEach(async () => {
+          element = await basicFixture();
+        });
+
+        it('should return undefined if no argument', () => {
+          assert.isUndefined(element._computeApi());
+        });
+
+        it('should return undefined if no encodes', () => {
+          assert.isUndefined(element._computeApi({}));
+        });
+
+        it('should return undefined if not API', () => {
+          const key = element._getAmfKey(element.ns.aml.vocabularies.document.encodes);
+          const amfModel = {};
+          amfModel[key] = {};
+          assert.isUndefined(element._computeApi(amfModel));
+        });
+
+        describe('WebAPI', () => {
+          beforeEach(async () => {
+            element = await modelFixture(model);
+          });
+
+          it('should return encodes node from AMF model', () => {
+            const result = element._computeApi(asyncModel);
+            assert.typeOf(result, 'object');
+          });
+        });
+
+        describe('AsyncAPI', () => {
+          beforeEach(async () => {
+            element = await modelFixture(asyncModel);
+          });
+
+          it('should return encodes node from AMF model', () => {
+            const result = element._computeApi(asyncModel);
+            assert.typeOf(result, 'object');
+          });
+        });
+      });
+
+      describe('_isWebAPI()', () => {
+        beforeEach(async () => {
+          element = await basicFixture();
+        });
+
+        it('should return false if no argument', () => {
+          assert.isFalse(element._isWebAPI());
+        });
+
+        it('should return false if no encodes', () => {
+          assert.isFalse(element._isWebAPI({}));
+        });
+
+        it('should return false for AsyncAPI', async () => {
+          element = await modelFixture(asyncModel);
+          assert.isFalse(element._isWebAPI(asyncModel));
+        });
+
+        it('should return true for WebAPI', async () => {
+          element = await modelFixture(model);
+          assert.isTrue(element._isWebAPI(model));
+        });
+      });
+
+      describe('_isAsyncAPI()', () => {
+        beforeEach(async () => {
+          element = await basicFixture();
+        });
+
+        it('should return false if no argument', () => {
+          assert.isFalse(element._isAsyncAPI());
+        });
+
+        it('should return false if no encodes', () => {
+          assert.isFalse(element._isAsyncAPI({}));
+        });
+
+        it('should return true for AsyncAPI', async () => {
+          element = await modelFixture(asyncModel);
+          assert.isTrue(element._isAsyncAPI(asyncModel));
+        });
+
+        it('should return false for WebAPI', async () => {
+          element = await modelFixture(model);
+          assert.isFalse(element._isAsyncAPI(model));
+        });
+      });
+
+      describe('_isAPI()', () => {
+        beforeEach(async () => {
+          element = await basicFixture();
+        });
+
+        it('should return false if no argument', () => {
+          assert.isFalse(element._isAPI());
+        });
+
+        it('should return false if no encodes', () => {
+          assert.isFalse(element._isAPI({}));
+        });
+
+        it('should return true for AsyncAPI', async () => {
+          element = await modelFixture(asyncModel);
+          assert.isTrue(element._isAPI(asyncModel));
+        });
+
+        it('should return true for WebAPI', async () => {
+          element = await modelFixture(model);
+          assert.isTrue(element._isAPI(model));
         });
       });
 
@@ -2176,6 +2301,73 @@ describe('AmfHelperMixin', () => {
 					});
 				})
 			});
+
+
+      describe('_mergeShapes()', () => {
+        let sourcesKey;
+
+        before(async () => {
+          element = await modelFixture(model);
+          sourcesKey = element._getAmfKey(element.ns.aml.vocabularies.docSourceMaps.sources);
+        });
+
+        it('should merge two objects together', () => {
+          const a = { foo: 'foo', a: 1 };
+          const b = { bar: 'bar', a: 2, b: 3 };
+          const merged = element._mergeShapes(a, b);
+          assert.deepEqual(merged, { foo: 'foo', bar: 'bar', a: 2, b: 3 });
+        });
+
+        it('should merge sources from both nodes', () => {
+          const a = { foo: 'foo', a: 1, [sourcesKey]: [{ s1: 1, s2: 2 }] };
+          const b = { bar: 'bar', a: 2, b: 3, [sourcesKey]: [{ s2: 20, s3: 30 }] };
+          const merged = element._mergeShapes(a, b);
+          assert.deepEqual(merged, {
+            foo: 'foo',
+            bar: 'bar',
+            a: 2,
+            b: 3,
+            [sourcesKey]: [{ s1: 1, s2: 20, s3: 30 }]
+          });
+        });
+
+        describe('special merges', () => {
+          describe('_mergeSourceMapsSources()', () => {
+            before(async () => {
+              element = await modelFixture(model)
+            })
+
+            it('should merge sources from both nodes', () => {
+              const a = { foo: 'foo', a: 1, [sourcesKey]: [{ s1: 1, s2: 2 }] };
+              const b = { bar: 'bar', a: 2, b: 3, [sourcesKey]: [{ s2: 20, s3: 30 }] };
+              const result = element._mergeSourceMapsSources(a, b);
+              assert.deepEqual(result, [{ s1: 1, s2: 20, s3: 30 }]);
+            });
+
+            it('should merge nodes when only A has sources', () => {
+              const a = { foo: 'foo', a: 1, [sourcesKey]: [{ s2: 20, s3: 30 }] };
+              const b = { bar: 'bar', a: 2, b: 3 };
+              const merged = element._mergeSourceMapsSources(a, b);
+              assert.deepEqual(merged, [{ s2: 20, s3: 30 }]);
+            });
+
+            it('should merge nodes when only B has sources', () => {
+              const a = { foo: 'foo', a: 1 };
+              const b = { bar: 'bar', a: 2, b: 3, [sourcesKey]: [{ s2: 20, s3: 30 }] };
+              const merged = element._mergeSourceMapsSources(a, b);
+              assert.deepEqual(merged, [{ s2: 20, s3: 30 }]);
+            });
+
+
+            it('should return empty object when neither node has sources', () => {
+              const a = { foo: 'foo', a: 1 };
+              const b = { bar: 'bar', a: 2, b: 3 };
+              const merged = element._mergeSourceMapsSources(a, b);
+              assert.deepEqual(merged, [{}]);
+            });
+          });
+        });
+      });
       // Keys caching is only enabled for compact model that requires additional
       // computations.
       (compact ? describe : describe.skip)('keys computation caching', () => {

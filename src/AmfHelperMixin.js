@@ -448,7 +448,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * @return {string}
    */
   _computeApiVersion(amf) {
-    const api = this._computeWebApi(amf);
+    const api = this._computeApi(amf);
     if (!api) {
       return undefined;
     }
@@ -539,13 +539,72 @@ export const AmfHelperMixin = (base) => class extends base {
   }
 
   /**
+   * Computes AMF's `http://schema.org/API` model
+   *
+   * @param {Array<Object>|Object} model AMF json/ld model for an API
+   * @return {Object} API declaration.
+   */
+  _computeApi(model) {
+    const enc = this._computeEncodes(model);
+    if (!enc) {
+      return undefined;
+    }
+    if (this._hasType(enc, this.ns.aml.vocabularies.apiContract.API)) {
+      return enc;
+    }
+    return undefined;
+  }
+
+  /**
+   * Returns whether an AMF node is a WebAPI node
+   * 
+   * @param {Array<Object>|Object} model  AMF json/ld model for an API
+   * @return {Boolean}
+   */
+  _isWebAPI(model) {
+    const enc = this._computeEncodes(model);
+    if (!enc) {
+      return false;
+    }
+    return this._hasType(enc, this.ns.aml.vocabularies.apiContract.WebAPI);
+  }
+
+  /**
+   * Returns whether an AMF node is an AsyncAPI node
+   * 
+   * @param {Array<Object>|Object} model  AMF json/ld model for an API
+   * @return {Boolean}
+   */
+  _isAsyncAPI(model) {
+    const enc = this._computeEncodes(model);
+    if (!enc) {
+      return false;
+    }
+    return this._hasType(enc, this.ns.aml.vocabularies.apiContract.AsyncAPI);
+  }
+
+  /**
+   * Returns whether an AMF node is an API node
+   * 
+   * @param {Array<Object>|Object} model  AMF json/ld model for an API
+   * @return {Boolean}
+   */
+  _isAPI(model) {
+    const enc = this._computeEncodes(model);
+    if (!enc) {
+      return false;
+    }
+    return this._hasType(enc, this.ns.aml.vocabularies.apiContract.API);
+  }
+
+  /**
    * Computes value for `server` property that is later used with other computations.
    *
    * @param {Array<Object>|Object} model AMF model for an API
    * @return {Object|undefined} The server model
    */
   _computeServer(model) {
-    const api = this._computeWebApi(model);
+    const api = this._computeApi(model);
     if (!api) {
       return undefined;
     }
@@ -595,7 +654,7 @@ export const AmfHelperMixin = (base) => class extends base {
     if (!amf) {
       return undefined;
     }
-    let api = this._computeWebApi(amf);
+    let api = this._computeApi(amf);
     if (Array.isArray(api)) {
       [api] = api;
     }
@@ -711,8 +770,8 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Appends endpoint's path to url
-   * @param {string} url 
-   * @param {Object} endpoint 
+   * @param {string} url
+   * @param {Object} endpoint
    * @return {string}
    */
   _appendPath(url, endpoint) {
@@ -791,7 +850,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * @return {Array<string>|undefined}
    */
   _computeProtocols(model) {
-    const api = this._computeWebApi(model);
+    const api = this._computeApi(model);
     if (!api) {
       return undefined;
     }
@@ -1127,7 +1186,7 @@ export const AmfHelperMixin = (base) => class extends base {
       }
       delete copy['@type'];
     }
-    Object.assign(shape, copy);
+    this._mergeShapes(shape, copy);
     /* eslint-disable-next-line no-param-reassign */
     shape.__apicResolved = true;
     this._resolveRecursive(shape);
@@ -1238,5 +1297,50 @@ export const AmfHelperMixin = (base) => class extends base {
         shape[key] = this._resolve(currentShape);
       }
     });
+  }
+
+  /**
+   * Merge two shapes together. If the resulting shape has one of the "special merge" keys,
+   * then the special merge function for that key will be used to match that property
+   * @param shapeA AMF node
+   * @param shapeB AMF node
+   * @return {*} Merged AMF node
+   * @private
+   */
+  _mergeShapes(shapeA, shapeB) {
+    const merged = { ...shapeA, ...shapeB };
+    const specialMerges = [
+      { key: this._getAmfKey(this.ns.aml.vocabularies.docSourceMaps.sources), merger: this._mergeSourceMapsSources.bind(this) },
+    ];
+    specialMerges.forEach(({ key, merger }) => {
+      if (this._hasProperty(merged, key)) {
+        merged[key] = merger(shapeA, shapeB);
+      }
+    });
+    return Object.assign(shapeA, merged);
+  }
+
+  /**
+   * Obtains source map sources value from two shapes and returns the merged result
+   * If neither shape has a sources node, then an empty object will be returned.
+   * Result is wrapped in an array as per AMF model standard
+   * @param shapeA AMF node
+   * @param shapeB AMF node
+   * @return {(*|{})[]} Empty object or resulting merge, wrapped in an array
+   * @private
+   */
+  _mergeSourceMapsSources(shapeA, shapeB) {
+    const sourcesKey = this._getAmfKey(this.ns.aml.vocabularies.docSourceMaps.sources);
+    let aSources = shapeA[sourcesKey] || {};
+    if (Array.isArray(aSources)) {
+      /* eslint-disable prefer-destructuring */
+      aSources = aSources[0];
+    }
+    let bSources = shapeB[sourcesKey] || {};
+    if (Array.isArray(bSources)) {
+      /* eslint-disable prefer-destructuring */
+      bSources = bSources[0];
+    }
+    return [Object.assign(aSources, bSources)];
   }
 };
