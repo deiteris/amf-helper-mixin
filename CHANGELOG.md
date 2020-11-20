@@ -2306,3 +2306,12 @@
 * [ci skip] automated merge master->stage. syncing main branches [176919a](https://github.com/advanced-rest-client/amf-helper-mixin/commit/176919a77773f9e297bc9888b87f8c5b3b71b762) by Ci agent
 
 
+<a name="4.3.0"></a>
+## [4.3.0](https://github.com/advanced-rest-client/amf-helper-mixin/compare/4.1.9...4.3.0) (2020-11-20)
+
+### Update
+
+* [ci skip] automated merge master->stage. syncing main branches [190c521](https://github.com/advanced-rest-client/amf-helper-mixin/commit/190c5210ddb97f4068d1d970ac7ca97df64fa459) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [f2d861d](https://github.com/advanced-rest-client/amf-helper-mixin/commit/f2d861dc6ddb651d1e21159366dc8311802490c3) by Ci agent
+
+
