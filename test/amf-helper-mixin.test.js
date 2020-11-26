@@ -1952,22 +1952,32 @@ describe('AmfHelperMixin', () => {
           element = await modelFixture(model);
         });
 
-        afterEach(() => {
-          element._computePropertyArray.restore();
+        describe('spies', () => {
+          afterEach(() => {
+            element._computePropertyArray.restore();
+          });
+
+          it('Calls _computePropertyArray() with passed shape', () => {
+            const spy = sinon.spy(element, '_computePropertyArray');
+            const shape = {};
+            element._computeHeaders(shape);
+            assert.isTrue(spy.called);
+            assert.isTrue(spy.args[0][0] === shape);
+          });
+
+          it('Calls _computePropertyArray() with proper key', () => {
+            const spy = sinon.spy(element, '_computePropertyArray');
+            element._computeHeaders({});
+            assert.equal(spy.args[0][1], element.ns.aml.vocabularies.apiContract.header);
+          });
         });
 
-        it('Calls _computePropertyArray() with passed shape', () => {
-          const spy = sinon.spy(element, '_computePropertyArray');
-          const shape = {};
-          element._computeHeaders(shape);
-          assert.isTrue(spy.called);
-          assert.isTrue(spy.args[0][0] === shape);
-        });
-
-        it('Calls _computePropertyArray() with proper key', () => {
-          const spy = sinon.spy(element, '_computePropertyArray');
-          element._computeHeaders({});
-          assert.equal(spy.args[0][1], element.ns.aml.vocabularies.apiContract.header);
+        it('returns header schema object for async api message', async () => {
+          element = await modelFixture(asyncModel);
+          const operation = AmfLoader.lookupOperation(asyncModel, 'hello', 'publish');
+          const eKey = element._getAmfKey(element.ns.aml.vocabularies.apiContract.expects);
+          const expects = operation[eKey];
+          assert.isDefined(element._computeHeaders(expects[0]));
         });
       });
 
