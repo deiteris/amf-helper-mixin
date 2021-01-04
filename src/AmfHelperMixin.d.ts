@@ -306,7 +306,7 @@ interface AmfHelperMixin {
    * @param version API current version
    * @returns Endpoint's URI
    */
-  _computeEndpointUri(server: object, endpoint: object, baseUri?: string, version?: string): string|undefined;
+  _computeEndpointUri(server?: object, endpoint?: object, baseUri?: string, version?: string): string|undefined;
 
   /**
    * Computes endpoint's URI based on `endpoint` model.
@@ -501,4 +501,14 @@ interface AmfHelperMixin {
   _isAsyncAPI(model: object): boolean;
   _isAPI(model: object): boolean;
   _computeHeaderSchema(shape: object): object | undefined
+
+  /**
+   * This is an abstract method to be implemented by the components.
+   * If, instead, the component uses `amf` setter you must use `super.amf` to
+   * set the value.
+   * @param {Array|Object} amf Current AMF model. Can be undefined.
+   * @abstract
+   */
+  /* eslint-disable-next-line no-unused-vars */
+  __amfChanged(amf: object | object[]): void
 }
