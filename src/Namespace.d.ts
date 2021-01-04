@@ -123,6 +123,7 @@ interface ApiContract {
   mapping: string;
   operationId: string;
   headerSchema: string;
+  contentType: string;
 }
 
 interface Shapes {

@@ -143,6 +143,7 @@ ns.aml.vocabularies.apiContract.protocol = `${contractKey}protocol`;
 ns.aml.vocabularies.apiContract.protocolVersion = `${contractKey}protocolVersion`;
 ns.aml.vocabularies.apiContract.Message = `${contractKey}Message`;
 ns.aml.vocabularies.apiContract.headerSchema = `${contractKey}headerSchema`;
+ns.aml.vocabularies.apiContract.contentType = `${contractKey}contentType`;
 ns.aml.vocabularies.shapes = {};
 ns.aml.vocabularies.shapes.key = `${ns.aml.vocabularies.key}shapes#`;
 const shapesKey = ns.aml.vocabularies.shapes.key;
