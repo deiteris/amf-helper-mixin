@@ -2343,3 +2343,23 @@
 * update amfHelperMixin declarations [42692aa](https://github.com/advanced-rest-client/amf-helper-mixin/commit/42692aadee5d7b2f57c37e0986a4740b6d583a33) by Carolina Wright
 
 
+<a name="4.3.3"></a>
+## [4.3.3](https://github.com/advanced-rest-client/amf-helper-mixin/compare/4.3.1...4.3.3) (2021-01-11)
+
+### Build
+
+* bump version [3a85c72](https://github.com/advanced-rest-client/amf-helper-mixin/commit/3a85c72500ab35ab42c288362a3a3b4f298629b5) by Carolina Wright
+
+
+### Update
+
+* updating dependencies and types [b79d79b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b79d79b42d18c1de0d1c54ac3a25666bd0fe9153) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [fd9da52](https://github.com/advanced-rest-client/amf-helper-mixin/commit/fd9da523e50bedbe9f3db14c890481a857dfc0a0) by Ci agent
+* [ci skip] automated merge master->stage. syncing main branches [df0d2ed](https://github.com/advanced-rest-client/amf-helper-mixin/commit/df0d2ed4504fae387ae9fe8819721f969966eb7c) by Ci agent
+
+
+### Features
+
+* update amfHelperMixin declarations [42692aa](https://github.com/advanced-rest-client/amf-helper-mixin/commit/42692aadee5d7b2f57c37e0986a4740b6d583a33) by Carolina Wright
+
+
