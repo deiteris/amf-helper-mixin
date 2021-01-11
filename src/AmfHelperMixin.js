@@ -53,7 +53,7 @@ export const AmfHelperMixin = (base) => class extends base {
        * type of `"http://raml.org/vocabularies/document#Document`
        * on AMF vocabulary.
        *
-       * It is only usefult for the element to resolve references.
+       * It is only useful for the element to resolve references.
        *
        * @type {Object|Array<Object>}
        */
@@ -100,7 +100,7 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Returns compact model key for given value.
-   * @param {string} property AMF orioginal property
+   * @param {string} property AMF original property
    * @return {string} Compact model property name or the same value if
    * value not found in the context.
    */
@@ -189,7 +189,7 @@ export const AmfHelperMixin = (base) => class extends base {
   }
 
   /**
-   * Gets a signle scalar value from a model.
+   * Gets a single scalar value from a model.
    * @param {Object} model Amf model to extract the value from.
    * @param {string} key Model key to search for the value
    * @return {string|number|boolean|undefined|null} Value for key
@@ -300,7 +300,7 @@ export const AmfHelperMixin = (base) => class extends base {
   }
 
   /**
-   * Tests if a passed argumet exists.
+   * Tests if a passed argument exists.
    *
    * @param {string|Object|number} value A value to test
    * @return {boolean}
@@ -356,7 +356,7 @@ export const AmfHelperMixin = (base) => class extends base {
   }
 
   /**
-   * In OAS URI parmaeters can be defined on an operation level under `uriParameter` proeprty.
+   * In OAS URI parameters can be defined on an operation level under `uriParameter` property.
    * Normally `_computeQueryParameters()` function would be used to extract parameters from an endpoint.
    * This is a fallback option to test when an API is OAS.
    * @param {Object} shape Method or Expects model
@@ -398,7 +398,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * Computes value for `endpointVariables` property.
    *
    * @param {Object} endpoint Endpoint model
-   * @param {Object=} method Optional method to be used to llokup the parameters from
+   * @param {Object=} method Optional method to be used to lookup the parameters from
    * This is used for OAS model which can defined path parameters on a method level.
    * @return {Array<Object>|undefined} Parameters if defined.
    */
@@ -677,9 +677,7 @@ export const AmfHelperMixin = (base) => class extends base {
 
     const serverKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
 
-    const getRootServers = () => {
-      return this._getValueArray(api, serverKey);
-    };
+    const getRootServers = () => this._getValueArray(api, serverKey);
     const getEndpointServers = () => {
       const endpoint = this._computeEndpointModel(api, endpointId);
       const servers = this._getValueArray(endpoint, serverKey);
@@ -749,13 +747,13 @@ export const AmfHelperMixin = (base) => class extends base {
    * @param {Object} endpoint Model for the endpoint
    * @param {Object} opts Configuration options
    * @param {Object=} opts.server Model for current server, if available.
-   * @param {string=} opts.baseUri Base URI to be used with the endpoint's paht.
+   * @param {string=} opts.baseUri Base URI to be used with the endpoint's path.
    * Note, base URI is ignored when `ignoreBase` is set
    * @param {string=} opts.version Current version of the API. It is used to replace
    * `{version}` from the URI template.
    * @param {boolean=} [opts.ignoreBase = false] Whether or not to ignore rendering
-   * @param {string[]=} [opts.protocols] List of available protocols
-   * of the base URI with path.
+   * @param {string[]=} [opts.protocols] List of available protocols of the base URI with path.
+   * @param {boolean=} [opts.ignorePath]
    * @return {string} The base uri for the endpoint.
    */
   _computeUri(endpoint, { server, baseUri, version, ignoreBase=false, protocols, ignorePath = false } = {}) {
@@ -807,7 +805,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * Computes base URI from AMF model.
    *
    * @param {Object} server AMF API model for Server.
-   * @param {?Array<string>} protocols Listy of supporte dprotocols. If not
+   * @param {?Array<string>} protocols The list of supported protocols. If not
    * provided and required to compute the url it uses `amf` to compute
    * protocols
    * @return {string|undefined} Base uri value if exists.
@@ -896,8 +894,8 @@ export const AmfHelperMixin = (base) => class extends base {
     const exKey = this.ns.aml.vocabularies.apiContract.examples;
     const schemaKey = this.ns.aml.vocabularies.shapes.schema;
     const rawKey = this.ns.aml.vocabularies.document.raw;
-    const skey = this._getAmfKey(schemaKey);
-    let schema = item && item[skey];
+    const sKey = this._getAmfKey(schemaKey);
+    let schema = item && item[sKey];
     if (!schema) {
       return undefined;
     }
@@ -937,7 +935,7 @@ export const AmfHelperMixin = (base) => class extends base {
    *
    * @param {Object} webApi Current value of `webApi` property
    * @param {string} id Selected shape ID
-   * @return {Object} An endponit definition
+   * @return {Object} An endpoint definition
    */
   _computeEndpointModel(webApi, id) {
     const endpoints = this._computeEndpoints(webApi);
@@ -952,7 +950,7 @@ export const AmfHelperMixin = (base) => class extends base {
    *
    * @param {Object} webApi Current value of `webApi` property
    * @param {string} path Endpoint path
-   * @return {Object|undefined} An endponit definition
+   * @return {Object|undefined} An endpoint definition
    */
   _computeEndpointByPath(webApi, path) {
     if (!path || !webApi) {
@@ -1311,8 +1309,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Merge two shapes together. If the resulting shape has one of the "special merge" keys,
    * then the special merge function for that key will be used to match that property
-   * @param shapeA AMF node
-   * @param shapeB AMF node
+   * @param {any} shapeA AMF node
+   * @param {any} shapeB AMF node
    * @return {*} Merged AMF node
    * @private
    */

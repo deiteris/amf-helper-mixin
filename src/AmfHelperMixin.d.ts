@@ -7,7 +7,7 @@ export {AmfHelperMixin};
  *
  * ## Updating API's base URI
  *
- * (Only applies when using `_computeEndpointUri()` function)
+ * (Only applies when using `_computeUri()` function)
  *
  * By default the component render the documentation as it is defined
  * in the AMF model. Sometimes, however, you may need to replace the base URI
@@ -15,16 +15,10 @@ export {AmfHelperMixin};
  * have base URI property defined (therefore this component render relative
  * paths instead of URIs) or when you want to manage different environments.
  *
- * To update base URI value either update `baseUri` property or use
- * `iron-meta` with key `ApiBaseUri`. First method is easier but the second
- * gives much more flexibility since it use a
- * [monostate pattern](http://wiki.c2.com/?MonostatePattern)
- * to manage base URI property.
+ * To update base URI value update the `baseUri` property.
  *
  * When the component constructs the final URI for the endpoint it does the following:
  * - if `baseUri` is set it uses this value as a base uri for the endpoint
- * - else if `iron-meta` with key `ApiBaseUri` exists and contains a value
- * it uses it uses this value as a base uri for the endpoint
  * - else if `amf` is set then it computes base uri value from main
  * model document
  * Then it concatenates computed base URI with `endpoint`'s path property.
@@ -66,14 +60,22 @@ interface AmfHelperMixin {
    * type of `"http://raml.org/vocabularies/document#Document`
    * on AMF vocabulary.
    *
-   * It is only usefult for the element to resolve references.
+   * It is only useful for the element to resolve references.
    */
   amf: object|object[]|undefined;
 
   /**
+   * This is an abstract method to be implemented by the components.
+   * If, instead, the component uses `amf` setter you must use `super.amf` to
+   * set the value.
+   * @param amf Current AMF model. Can be undefined.
+   */
+  __amfChanged(amf: any): void
+
+  /**
    * Returns compact model key for given value.
    *
-   * @param property AMF orioginal property
+   * @param property AMF original property
    * @returns Compact model property name or the same value if
    * value not found in the context.
    */
@@ -85,7 +87,7 @@ interface AmfHelperMixin {
    * @param amf AMF json/ld model
    * @returns API spec
    */
-  _ensureAmfModel(amf: object|object[]): object|undefined;
+  _ensureAmfModel(amf: any): object|undefined;
 
   /**
    * Ensures that the value is an array.
@@ -98,7 +100,7 @@ interface AmfHelperMixin {
   _ensureArray(value: any[]|any): any[]|undefined;
 
   /**
-   * Gets a signle scalar value from a model.
+   * Gets a single scalar value from a model.
    *
    * @param model Amf model to extract the value from.
    * @param key Model key to search for the value
@@ -150,7 +152,7 @@ interface AmfHelperMixin {
   _computePropertyObject(shape: object, key: string): string|number|boolean|null|Object|undefined;
 
   /**
-   * Tests if a passed argumet exists.
+   * Tests if a passed argument exists.
    *
    * @param value A value to test
    */
@@ -175,19 +177,22 @@ interface AmfHelperMixin {
    * Computes a list of headers
    */
   _computeHeaders(shape: object): object[]|undefined|object;
+
+  _computeHeaderSchema(shape: object): object|undefined;
+  
   /**
    * Computes a list of query parameters
    */
   _computeQueryParameters(shape: object): object[]|undefined;
 
   /**
-   * In OAS URI parmaeters can be defined on an operation level under `uriParameter` proeprty.
+   * In OAS URI parameters can be defined on an operation level under `uriParameter` property.
    * Normally `_computeQueryParameters()` function would be used to extract parameters from an endpoint.
    * This is a fallback option to test when an API is OAS.
    *
    * @param shape Method or Expects model
    */
-  _computeUriParameters(shape: object): Array<object>|undefined;
+  _computeUriParameters(shape: object): object[]|undefined;
   /**
    * Computes a list of responses
    */
@@ -205,7 +210,7 @@ interface AmfHelperMixin {
    * Computes value for `endpointVariables` property.
    *
    * @param endpoint Endpoint model
-   * @param method Optional method to be used to llokup the parameters from
+   * @param method Optional method to be used to lookup the parameters from
    * This is used for OAS model which can defined path parameters on a method level.
    * @returns Parameters if defined.
    */
@@ -278,12 +283,51 @@ interface AmfHelperMixin {
   _computeWebApi(model: object[]|object): object|undefined;
 
   /**
+   * Computes AMF's `http://schema.org/API` model
+   *
+   * @param model AMF json/ld model for an API
+   * @return The API declaration.
+   */
+  _computeApi(model: any): object;
+
+  /**
+   * Returns whether an AMF node is a WebAPI node
+   * 
+   * @param model  AMF json/ld model for an API
+   */
+  _isWebAPI(model: any): boolean;
+
+  /**
+   * Returns whether an AMF node is an AsyncAPI node
+   * 
+   * @param model  AMF json/ld model for an API
+   */
+  _isAsyncAPI(model: any): boolean;
+
+  /**
+   * Returns whether an AMF node is an API node
+   * 
+   * @param model  AMF json/ld model for an API
+   */
+  _isAPI(model: any): boolean;
+
+  /**
    * Computes value for `server` property that is later used with other computations.
    *
    * @param model AMF model for an API
    * @returns The server model
    */
   _computeServer(model: object[]|object): object|undefined;
+
+  /**
+   * Determines whether a partial model is valid for reading servers from
+   * Current valid values:
+   * - Operation
+   * - Endpoint
+   * @param model The partial model to evaluate
+   * @returns Whether the model's type is part of the array of valid node types from which to read servers
+   */
+  _isValidServerPartial(model: any): boolean;
 
   /**
    * @returns List of servers for method, if defined, or endpoint, if defined, or root level
@@ -321,6 +365,11 @@ interface AmfHelperMixin {
   _computeUri(endpoint: object, opts: ComputeUriOptions): string;
 
   /**
+   * Appends endpoint's path to the url
+   */
+  _appendPath(url: string, endpoint: any): string;
+
+  /**
    * Computes base URI value from either `baseUri`, `iron-meta` with
    * `ApiBaseUri` key or `amf` value (in this order).
    *
@@ -335,7 +384,7 @@ interface AmfHelperMixin {
    * Computes base URI from AMF model.
    *
    * @param server AMF API model for Server.
-   * @param protocols Listy of supporte dprotocols. If not
+   * @param protocols List of supported protocols. If not
    * provided and required to compute the url it uses `amf` to compute
    * protocols
    * @returns Base uri value if exists.
@@ -389,7 +438,7 @@ interface AmfHelperMixin {
    *
    * @param webApi Current value of `webApi` property
    * @param id Selected shape ID
-   * @returns An endponit definition
+   * @returns An endpoint definition
    */
   _computeEndpointModel(webApi: object, id: string): object|undefined;
 
@@ -398,7 +447,7 @@ interface AmfHelperMixin {
    *
    * @param webApi Current value of `webApi` property
    * @param path Endpoint path
-   * @returns An endponit definition
+   * @returns An endpoint definition
    */
   _computeEndpointByPath(webApi: object, path: string): object|undefined;
 
@@ -428,6 +477,16 @@ interface AmfHelperMixin {
    * @returns An endpoint model of undefined.
    */
   _computeMethodEndpoint(webApi: object, methodId: string): object|undefined;
+
+  /**
+   * Computes a list of methods for an endpoint that contains a method with
+   * given id.
+   *
+   * @param webApi WebApi model
+   * @param methodId Method id.
+   * @returns A list of sibling methods or undefined.
+   */
+  __computeMethodsListForMethod(webApi: any, methodId: string): any[]|undefined;
 
   /**
    * Computes a type documentation model.
@@ -464,7 +523,7 @@ interface AmfHelperMixin {
    * @param selected Selected shape
    * @returns A method definition
    */
-  _computeDocument(webApi: object|null, selected: string|null): object|undefined;
+  _computeDocument(webApi: any, selected: string): any|undefined;
 
   /**
    * Resolves a reference to an external fragment.
@@ -494,21 +553,23 @@ interface AmfHelperMixin {
   _findById(array: object[], id: string): object|undefined;
   _getReferenceId(amf: object, id: string): object|undefined;
   _resolveRecursive(shape: object): void;
-  _mergeShapes(shapeA: object, shapeB: object): object;
-  _mergeSourceMapsSources(shapeA: object, shapeB: object): object[];
-  _computeApi(model: object): object | undefined;
-  _isWebAPI(model: object): boolean;
-  _isAsyncAPI(model: object): boolean;
-  _isAPI(model: object): boolean;
-  _computeHeaderSchema(shape: object): object | undefined
 
   /**
-   * This is an abstract method to be implemented by the components.
-   * If, instead, the component uses `amf` setter you must use `super.amf` to
-   * set the value.
-   * @param {Array|Object} amf Current AMF model. Can be undefined.
-   * @abstract
+   * Merge two shapes together. If the resulting shape has one of the "special merge" keys,
+   * then the special merge function for that key will be used to match that property
+   * @param shapeA AMF node
+   * @param shapeB AMF node
+   * @returns Merged AMF node
    */
-  /* eslint-disable-next-line no-unused-vars */
-  __amfChanged(amf: object | object[]): void
+  _mergeShapes(shapeA: object, shapeB: object): object;
+
+  /**
+   * Obtains source map sources value from two shapes and returns the merged result
+   * If neither shape has a sources node, then an empty object will be returned.
+   * Result is wrapped in an array as per AMF model standard
+   * @param AMF node
+   * @param AMF node
+   * @returns Empty object or resulting merge, wrapped in an array
+   */
+  _mergeSourceMapsSources(shapeA: object, shapeB: object): object[];
 }
