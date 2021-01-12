@@ -2363,3 +2363,14 @@
 * update amfHelperMixin declarations [42692aa](https://github.com/advanced-rest-client/amf-helper-mixin/commit/42692aadee5d7b2f57c37e0986a4740b6d583a33) by Carolina Wright
 
 
+<a name="4.3.4"></a>
+## [4.3.4](https://github.com/advanced-rest-client/amf-helper-mixin/compare/4.3.2...4.3.4) (2021-01-12)
+
+### Update
+
+* adding missing types definition [ba21f1f](https://github.com/advanced-rest-client/amf-helper-mixin/commit/ba21f1fad0ae0403032bd20657802c19c86aef93) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [4eea384](https://github.com/advanced-rest-client/amf-helper-mixin/commit/4eea384bfe00fb8821fa59f2e6859c78a7750634) by Ci agent
+* updating dependencies and types [b79d79b](https://github.com/advanced-rest-client/amf-helper-mixin/commit/b79d79b42d18c1de0d1c54ac3a25666bd0fe9153) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [fd9da52](https://github.com/advanced-rest-client/amf-helper-mixin/commit/fd9da523e50bedbe9f3db14c890481a857dfc0a0) by Ci agent
+
+
