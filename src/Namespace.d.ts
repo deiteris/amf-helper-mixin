@@ -122,6 +122,9 @@ interface ApiContract {
   templateVariable: string;
   mapping: string;
   operationId: string;
+  protocol: string;
+  protocolVersion: string;
+  Message: string;
   headerSchema: string;
   contentType: string;
 }
