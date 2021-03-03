@@ -2374,3 +2374,13 @@
 * [ci skip] automated merge master->stage. syncing main branches [fd9da52](https://github.com/advanced-rest-client/amf-helper-mixin/commit/fd9da523e50bedbe9f3db14c890481a857dfc0a0) by Ci agent
 
 
+<a name="4.3.5"></a>
+## [4.3.5](https://github.com/advanced-rest-client/amf-helper-mixin/compare/4.3.3...4.3.5) (2021-03-03)
+
+### Update
+
+* [ci skip] automated merge master->stage. syncing main branches [ada240d](https://github.com/advanced-rest-client/amf-helper-mixin/commit/ada240d0cfa9a4d333cb08f5fe3a91a790082a1a) by Ci agent
+* adding missing types definition [ba21f1f](https://github.com/advanced-rest-client/amf-helper-mixin/commit/ba21f1fad0ae0403032bd20657802c19c86aef93) by Pawel Psztyc
+* [ci skip] automated merge master->stage. syncing main branches [4eea384](https://github.com/advanced-rest-client/amf-helper-mixin/commit/4eea384bfe00fb8821fa59f2e6859c78a7750634) by Ci agent
+
+
