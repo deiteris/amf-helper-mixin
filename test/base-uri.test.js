@@ -12,6 +12,7 @@ describe('Base URI test', () => {
     let model;
     let server;
     let endpoint;
+    let gavEndpoint;
 
     before(async () => {
       model = await AmfLoader.load();
@@ -23,6 +24,7 @@ describe('Base URI test', () => {
       server = element._computeServer(model);
       const webApi = element._computeWebApi(model);
       endpoint = element._computeEndpointByPath(webApi, '/files');
+      gavEndpoint = element._computeEndpointByPath(webApi, '/{groupId}/{assetId}/{version}');
     });
 
     it('_getAmfBaseUri returns servers base uri', () => {
@@ -158,6 +160,11 @@ describe('Base URI test', () => {
     it('_computeUri() ignores base URI computation', () => {
       const result = element._computeUri(endpoint, { server, baseUri: 'https://domain.com', ignoreBase: true });
       assert.equal(result, '/files');
+    });
+
+    it('_computeUri() computes version only in base value', () => {
+      const result = element._computeUri(gavEndpoint, { server, baseUri: 'https://domain.com/{version}', version: 'v1' });
+      assert.equal(result, 'https://domain.com/v1/{groupId}/{assetId}/{version}');
     });
   });
 });
