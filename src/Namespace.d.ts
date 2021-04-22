@@ -78,6 +78,7 @@ interface ApiContract {
   key: string;
   Payload: string;
   Request: string;
+  Response: string;
   EndPoint: string;
   Parameter: string;
   Operation: string;
