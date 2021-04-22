@@ -94,6 +94,7 @@ const contractKey = ns.aml.vocabularies.apiContract.key;
 ns.aml.vocabularies.apiContract.toString = () => contractKey;
 ns.aml.vocabularies.apiContract.Payload = `${contractKey}Payload`;
 ns.aml.vocabularies.apiContract.Request = `${contractKey}Request`;
+ns.aml.vocabularies.apiContract.Response = `${contractKey}Response`;
 ns.aml.vocabularies.apiContract.EndPoint = `${contractKey}EndPoint`;
 ns.aml.vocabularies.apiContract.Parameter = `${contractKey}Parameter`;
 ns.aml.vocabularies.apiContract.Operation = `${contractKey}Operation`;
