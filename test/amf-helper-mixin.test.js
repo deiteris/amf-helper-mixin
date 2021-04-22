@@ -403,6 +403,7 @@ describe('AmfHelperMixin', () => {
         [
           ['Payload', `${key  }Payload`],
           ['Request', `${key  }Request`],
+          ['Response', `${key}Response`],
           ['EndPoint', `${key  }EndPoint`],
           ['Parameter', `${key  }Parameter`],
           ['Operation', `${key  }Operation`],
