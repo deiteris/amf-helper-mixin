@@ -765,12 +765,12 @@ export const AmfHelperMixin = (base) => class extends base {
       }
       baseValue = this._ensureUrlScheme(baseValue, protocols);
     }
-    let result = baseValue
-    if (!ignorePath) {
-      result = this._appendPath(result, endpoint);
-    }
+    let result = baseValue;
     if (version && result) {
       result = result.replace('{version}', version);
+    }
+    if (!ignorePath) {
+      result = this._appendPath(result, endpoint);
     }
     return result;
   }

@@ -1549,10 +1549,10 @@ describe('AmfHelperMixin', () => {
           webApi = element._computeWebApi(model);
         });
 
-        it('Returns a loist of endpoints', () => {
+        it('Returns a list of endpoints', () => {
           const result = element._computeEndpoints(webApi);
           assert.typeOf(result, 'array');
-          assert.lengthOf(result, 35);
+          assert.lengthOf(result, 36);
         });
       });
 
