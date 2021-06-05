@@ -70,6 +70,10 @@ ns.aml.vocabularies.security.OAuth1Settings = `${secKey}OAuth1Settings`;
 ns.aml.vocabularies.security.OAuth2Settings = `${secKey}OAuth2Settings`;
 ns.aml.vocabularies.security.OAuth2Flow = `${secKey}OAuth2Flow`;
 ns.aml.vocabularies.security.Scope = `${secKey}Scope`;
+ns.aml.vocabularies.security.Settings = `${secKey}Settings`;
+ns.aml.vocabularies.security.HttpSettings = `${secKey}HttpSettings`;
+ns.aml.vocabularies.security.ApiKeySettings = `${secKey}ApiKeySettings`;
+ns.aml.vocabularies.security.OpenIdConnectSettings = `${secKey}OpenIdConnectSettings`;
 ns.aml.vocabularies.security.security = `${secKey}security`;
 ns.aml.vocabularies.security.scheme = `${secKey}scheme`;
 ns.aml.vocabularies.security.schemes = `${secKey}schemes`;
@@ -86,6 +90,8 @@ ns.aml.vocabularies.security.signature = `${secKey}signature`;
 ns.aml.vocabularies.security.tokenCredentialsUri = `${secKey}tokenCredentialsUri`;
 ns.aml.vocabularies.security.requestTokenUri = `${secKey}requestTokenUri`;
 ns.aml.vocabularies.security.securityRequirement = `${secKey}SecurityRequirement`;
+ns.aml.vocabularies.security.openIdConnectUrl = `${secKey}openIdConnectUrl`;
+ns.aml.vocabularies.security.bearerFormat = `${secKey}bearerFormat`;
 ns.aml.vocabularies.security.in = `${secKey}in`;
 ns.aml.vocabularies.apiContract = {};
 ns.aml.vocabularies.http = ns.aml.vocabularies.apiContract;
@@ -222,7 +228,7 @@ ns.w3.key = 'http://www.w3.org/';
 ns.w3.rdfSyntax = {};
 ns.w3.rdfSyntax.key = `${ns.w3.key}1999/02/22-rdf-syntax-ns#`;
 ns.w3.rdfSyntax.toString = () => ns.w3.rdfSyntax.key;
-// TODO: is this unescesary?
+// TODO: is this unnecessary?
 ns.w3.rdfSyntax.member = `${ns.w3.rdfSyntax.key}member`;
 ns.w3.rdfSyntax.Seq = `${ns.w3.rdfSyntax.key}Seq`;
 ns.w3.rdfSchema = {};

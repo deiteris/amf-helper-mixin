@@ -1,13 +1,21 @@
 import { assert, fixture, html } from '@open-wc/testing';
-import * as sinon from 'sinon';
+import sinon from 'sinon';
 import { AmfLoader } from './amf-loader.js';
 import './test-element.js';
 
+/** @typedef {import('./test-element').TestElement} TestElement */
+
 describe('AmfHelperMixin', () => {
+  /**
+   * @returns {Promise<TestElement>}
+   */
   async function basicFixture() {
     return fixture(`<test-element></test-element>`);
   }
 
+  /**
+   * @returns {Promise<TestElement>}
+   */
   async function modelFixture(amf) {
     return fixture(html`<test-element
       .amf="${amf}"></test-element>`);
@@ -17,9 +25,9 @@ describe('AmfHelperMixin', () => {
     ['Compact model', true],
     ['Regular model', false]
   ].forEach(([label, compact]) => {
-    describe(label, () => {
+    describe(String(label), () => {
       const asyncApi = 'async-api';
-      let element;
+      let element = /** @type TestElement */ (null);
       let model;
       let asyncModel;
 
@@ -78,7 +86,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined when no argument', () => {
-          const result = element._getAmfKey();
+          const result = element._getAmfKey(undefined);
           assert.isUndefined(result);
         });
 
@@ -150,6 +158,7 @@ describe('AmfHelperMixin', () => {
 
         it('aml cannot be changed', () => {
           assert.throws(() => {
+            // @ts-ignore
             element.ns.aml = 'test';
           });
         });
@@ -165,28 +174,28 @@ describe('AmfHelperMixin', () => {
           const key = 'http://a.ml/vocabularies/';
           assert.equal(v.key, key, 'key is set');
           assert.typeOf(v.document, 'object', 'document is set');
-          assert.equal(v.document.toString(), `${key  }document#`, 'document namespace as string is the key');
-          assert.equal(v.document.key, `${key  }document#`, 'document key is set');
+          assert.equal(v.document.toString(), `${key}document#`, 'document namespace as string is the key');
+          assert.equal(v.document.key, `${key}document#`, 'document key is set');
           assert.typeOf(v.core, 'object', 'core is set');
-          assert.equal(v.core.toString(), `${key  }core#`, 'core namespace as string is the key');
-          assert.equal(v.core.key, `${key  }core#`, 'core key is set');
+          assert.equal(v.core.toString(), `${key}core#`, 'core namespace as string is the key');
+          assert.equal(v.core.key, `${key}core#`, 'core key is set');
           assert.typeOf(v.apiContract, 'object', 'apiContract is set');
-          assert.equal(v.apiContract.toString(), `${key  }apiContract#`, 'apiContract namespace as string is the key');
-          assert.equal(v.apiContract.key, `${key  }apiContract#`, 'apiContract.key is set');
-          assert.equal(v.http, v.apiContract, 'apiContract is old http');
+          assert.equal(v.apiContract.toString(), `${key}apiContract#`, 'apiContract namespace as string is the key');
+          assert.equal(v.apiContract.key, `${key}apiContract#`, 'apiContract.key is set');
           assert.typeOf(v.security, 'object', 'security is set');
-          assert.equal(v.security.toString(), `${key  }security#`, 'security namespace as string is the key');
-          assert.equal(v.security.key, `${key  }security#`, 'security.key is set');
+          assert.equal(v.security.toString(), `${key}security#`, 'security namespace as string is the key');
+          assert.equal(v.security.key, `${key}security#`, 'security.key is set');
           assert.typeOf(v.shapes, 'object', 'shapes is set');
-          assert.equal(v.shapes.toString(), `${key  }shapes#`, 'shapes namespace as string is the key');
-          assert.equal(v.shapes.key, `${key  }shapes#`, 'shapes.key is set');
+          assert.equal(v.shapes.toString(), `${key}shapes#`, 'shapes namespace as string is the key');
+          assert.equal(v.shapes.key, `${key}shapes#`, 'shapes.key is set');
           assert.typeOf(v.data, 'object', 'data is set');
-          assert.equal(v.data.toString(), `${key  }data#`, 'data namespace as string is the key');
-          assert.equal(v.data.key, `${key  }data#`, 'data.key is set');
+          assert.equal(v.data.toString(), `${key}data#`, 'data namespace as string is the key');
+          assert.equal(v.data.key, `${key}data#`, 'data.key is set');
         });
 
         it('vocabularies cannot be changed', () => {
           assert.throws(() => {
+            // @ts-ignore
             element.ns.aml.vocabularies = 'test';
           });
         });
@@ -196,24 +205,25 @@ describe('AmfHelperMixin', () => {
           const {key} = r;
           assert.equal(r.key, 'http://www.w3.org/', 'key is set');
           assert.typeOf(r.rdfSyntax, 'object', 'rdfSyntax is set');
-          assert.equal(r.rdfSyntax.toString(), `${key  }1999/02/22-rdf-syntax-ns#`, 'rdfSyntax namespace as string is the key');
-          assert.equal(r.rdfSyntax.key, `${key  }1999/02/22-rdf-syntax-ns#`, 'rdfSyntax.key is set');
+          assert.equal(r.rdfSyntax.toString(), `${key}1999/02/22-rdf-syntax-ns#`, 'rdfSyntax namespace as string is the key');
+          assert.equal(r.rdfSyntax.key, `${key}1999/02/22-rdf-syntax-ns#`, 'rdfSyntax.key is set');
           assert.typeOf(r.rdfSchema, 'object', 'rdfSchema is set');
-          assert.equal(r.rdfSchema.toString(), `${key  }2000/01/rdf-schema#`, 'rdfSchema namespace as string is the key');
-          assert.equal(r.rdfSchema.key, `${key  }2000/01/rdf-schema#`, 'rdfSchema.key is set');
+          assert.equal(r.rdfSchema.toString(), `${key}2000/01/rdf-schema#`, 'rdfSchema namespace as string is the key');
+          assert.equal(r.rdfSchema.key, `${key}2000/01/rdf-schema#`, 'rdfSchema.key is set');
           assert.typeOf(r.hydra, 'object', 'hydra is set');
-          assert.equal(r.hydra.toString(), `${key  }ns/hydra/`, 'hydra namespace as string is the key');
-          assert.equal(r.hydra.key, `${key  }ns/hydra/`, 'hydra.key is set');
+          assert.equal(r.hydra.toString(), `${key}ns/hydra/`, 'hydra namespace as string is the key');
+          assert.equal(r.hydra.key, `${key}ns/hydra/`, 'hydra.key is set');
           assert.typeOf(r.xmlSchema, 'object', 'xmlSchema is set');
-          assert.equal(r.xmlSchema.toString(), `${key  }2001/XMLSchema#`, 'xmlSchema namespace as string is the key');
-          assert.equal(r.xmlSchema.key, `${key  }2001/XMLSchema#`, 'xmlSchema.key is set');
+          assert.equal(r.xmlSchema.toString(), `${key}2001/XMLSchema#`, 'xmlSchema namespace as string is the key');
+          assert.equal(r.xmlSchema.key, `${key}2001/XMLSchema#`, 'xmlSchema.key is set');
           assert.typeOf(r.shacl, 'object', 'shacl is set');
-          assert.equal(r.shacl.toString(), `${key  }ns/shacl#`, 'shacl namespace as string is the key');
-          assert.equal(r.shacl.key, `${key  }ns/shacl#`, 'shacl.key is set');
+          assert.equal(r.shacl.toString(), `${key}ns/shacl#`, 'shacl namespace as string is the key');
+          assert.equal(r.shacl.key, `${key}ns/shacl#`, 'shacl.key is set');
         });
 
         it('w3 cannot be changed', () => {
           assert.throws(() => {
+            // @ts-ignore
             element.ns.w3 = 'test';
           });
         });
@@ -224,11 +234,13 @@ describe('AmfHelperMixin', () => {
           assert.equal(h.toString(), key, 'the namespace as string is the key');
           assert.equal(h.key, key);
           assert.equal(h.core, element.ns.aml.vocabularies.apiContract);
+          // @ts-ignore
           assert.equal(h.supportedOperation, 'http://a.ml/vocabularies/apiContract#supportedOperation');
         });
 
         it('hydra cannot be changed', () => {
           assert.throws(() => {
+            // @ts-ignore
             element.ns.w3.hydra = 'test';
           });
         });
@@ -268,6 +280,7 @@ describe('AmfHelperMixin', () => {
 
         it('shacl cannot be changed', () => {
           assert.throws(() => {
+            // @ts-ignore
             element.ns.w3.shacl = 'test';
           });
         });
@@ -276,11 +289,11 @@ describe('AmfHelperMixin', () => {
           const s = element.ns.schema;
           const {key} = element.ns.aml.vocabularies.core;
           assert.equal(s.key, key, 'key is set');
-          assert.equal(s.name, `${key  }name`, 'name is set');
-          assert.equal(s.desc, `${key  }description`);
-          assert.equal(s.doc, `${key  }documentation`);
+          assert.equal(s.name, `${key}name`, 'name is set');
+          assert.equal(s.desc, `${key}description`);
+          assert.equal(s.doc, `${key}documentation`);
           assert.equal(s.webApi, `${element.ns.aml.vocabularies.apiContract.key  }WebAPI`);
-          assert.equal(s.creativeWork, `${key  }CreativeWork`);
+          assert.equal(s.creativeWork, `${key}CreativeWork`);
           ['displayName', 'title'].forEach((name) => {
             assert.equal(s[name], key + name);
           });
@@ -288,6 +301,7 @@ describe('AmfHelperMixin', () => {
 
         it('schema cannot be changed', () => {
           assert.throws(() => {
+            // @ts-ignore
             element.ns.schema = 'test';
           });
         });
@@ -300,25 +314,25 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['Module', `${key  }Module`],
-          ['Document', `${key  }Document`],
-          ['SecuritySchemeFragment', `${key  }SecuritySchemeFragment`],
-          ['UserDocumentation', `${key  }UserDocumentation`],
-          ['DataType', `${key  }DataType`],
-          ['NamedExamples', `${key  }NamedExamples`],
-          ['DomainElement', `${key  }DomainElement`],
-          ['customDomainProperties', `${key  }customDomainProperties`],
-          ['encodes', `${key  }encodes`],
-          ['declares', `${key  }declares`],
-          ['references', `${key  }references`],
-          ['examples', `${key  }examples`],
-          ['linkTarget', `${key  }link-target`],
-          ['referenceId', `${key  }reference-id`],
-          ['structuredValue', `${key  }structuredValue`],
-          ['raw', `${key  }raw`],
-          ['extends', `${key  }extends`],
-          ['value', `${key  }value`],
-          ['name', `${key  }name`],
+          ['Module', `${key}Module`],
+          ['Document', `${key}Document`],
+          ['SecuritySchemeFragment', `${key}SecuritySchemeFragment`],
+          ['UserDocumentation', `${key}UserDocumentation`],
+          ['DataType', `${key}DataType`],
+          ['NamedExamples', `${key}NamedExamples`],
+          ['DomainElement', `${key}DomainElement`],
+          ['customDomainProperties', `${key}customDomainProperties`],
+          ['encodes', `${key}encodes`],
+          ['declares', `${key}declares`],
+          ['references', `${key}references`],
+          ['examples', `${key}examples`],
+          ['linkTarget', `${key}link-target`],
+          ['referenceId', `${key}reference-id`],
+          ['structuredValue', `${key}structuredValue`],
+          ['raw', `${key}raw`],
+          ['extends', `${key}extends`],
+          ['value', `${key}value`],
+          ['name', `${key}name`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.document[property];
@@ -334,27 +348,34 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['ParametrizedSecurityScheme', `${key  }ParametrizedSecurityScheme`],
-          ['SecuritySchemeFragment', `${key  }SecuritySchemeFragment`],
-          ['SecurityScheme', `${key  }SecurityScheme`],
-          ['OAuth1Settings', `${key  }OAuth1Settings`],
-          ['OAuth2Settings', `${key  }OAuth2Settings`],
-          ['Scope', `${key  }Scope`],
-          ['security', `${key  }security`],
-          ['scheme', `${key  }scheme`],
-          ['settings', `${key  }settings`],
-          ['name', `${key  }name`],
-          ['type', `${key  }type`],
-          ['scope', `${key  }scope`],
-          ['accessTokenUri', `${key  }accessTokenUri`],
-          ['authorizationUri', `${key  }authorizationUri`],
-          ['authorizationGrant', `${key  }authorizationGrant`],
-          ['signature', `${key  }signature`],
-          ['tokenCredentialsUri', `${key  }tokenCredentialsUri`],
-          ['requestTokenUri', `${key  }requestTokenUri`],
-          ['in', `${key  }in`],
-          ['flows', `${key  }flows`],
-          ['flow', `${key  }flow`],
+          ['ParametrizedSecurityScheme', `${key}ParametrizedSecurityScheme`],
+          ['SecuritySchemeFragment', `${key}SecuritySchemeFragment`],
+          ['SecurityScheme', `${key}SecurityScheme`],
+          ['OAuth1Settings', `${key}OAuth1Settings`],
+          ['OAuth2Settings', `${key}OAuth2Settings`],
+          ['Scope', `${key}Scope`],
+          ['Settings', `${key}Settings`],
+          ['HttpSettings', `${key}HttpSettings`],
+          ['ApiKeySettings', `${key}ApiKeySettings`],
+          ['OpenIdConnectSettings', `${key}OpenIdConnectSettings`],
+          ['security', `${key}security`],
+          ['scheme', `${key}scheme`],
+          ['settings', `${key}settings`],
+          ['name', `${key}name`],
+          ['type', `${key}type`],
+          ['scope', `${key}scope`],
+          ['accessTokenUri', `${key}accessTokenUri`],
+          ['authorizationUri', `${key}authorizationUri`],
+          ['authorizationGrant', `${key}authorizationGrant`],
+          ['flows', `${key}flows`],
+          ['flow', `${key}flow`],
+          ['signature', `${key}signature`],
+          ['tokenCredentialsUri', `${key}tokenCredentialsUri`],
+          ['requestTokenUri', `${key}requestTokenUri`],
+          ['securityRequirement', `${key}SecurityRequirement`],
+          ['openIdConnectUrl', `${key}openIdConnectUrl`],
+          ['bearerFormat', `${key}bearerFormat`],
+          ['in', `${key}in`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.security[property];
@@ -370,22 +391,22 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['CreativeWork', `${key  }CreativeWork`],
-          ['version', `${key  }version`],
-          ['urlTemplate', `${key  }urlTemplate`],
-          ['displayName', `${key  }displayName`],
-          ['title', `${key  }title`],
-          ['name', `${key  }name`],
-          ['description', `${key  }description`],
-          ['documentation', `${key  }documentation`],
-          ['version', `${key  }version`],
-          ['provider', `${key  }provider`],
-          ['email', `${key  }email`],
-          ['url', `${key  }url`],
-          ['termsOfService', `${key  }termsOfService`],
-          ['license', `${key  }license`],
-          ['mediaType', `${key  }mediaType`],
-          ['extensionName', `${key  }extensionName`],
+          ['CreativeWork', `${key}CreativeWork`],
+          ['version', `${key}version`],
+          ['urlTemplate', `${key}urlTemplate`],
+          ['displayName', `${key}displayName`],
+          ['title', `${key}title`],
+          ['name', `${key}name`],
+          ['description', `${key}description`],
+          ['documentation', `${key}documentation`],
+          ['version', `${key}version`],
+          ['provider', `${key}provider`],
+          ['email', `${key}email`],
+          ['url', `${key}url`],
+          ['termsOfService', `${key}termsOfService`],
+          ['license', `${key}license`],
+          ['mediaType', `${key}mediaType`],
+          ['extensionName', `${key}extensionName`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.core[property];
@@ -401,57 +422,57 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['Payload', `${key  }Payload`],
-          ['Request', `${key  }Request`],
+          ['Payload', `${key}Payload`],
+          ['Request', `${key}Request`],
           ['Response', `${key}Response`],
-          ['EndPoint', `${key  }EndPoint`],
-          ['Parameter', `${key  }Parameter`],
-          ['Operation', `${key  }Operation`],
-          ['WebAPI', `${key  }WebAPI`],
-          ['AsyncAPI', `${key  }AsyncAPI`],
-          ['API', `${key  }API`],
-          ['UserDocumentationFragment', `${key  }UserDocumentationFragment`],
-          ['Example', `${key  }Example`],
-          ['Server', `${key  }Server`],
-          ['ParametrizedResourceType', `${key  }ParametrizedResourceType`],
-          ['ParametrizedTrait', `${key  }ParametrizedTrait`],
-          ['TemplatedLink', `${key  }TemplatedLink`],
-          ['IriTemplateMapping', `${key  }IriTemplateMapping`],
-          ['Callback', `${key  }Callback`],
-          ['header', `${key  }header`],
-          ['parameter', `${key  }parameter`],
-          ['paramName', `${key  }paramName`],
-          ['uriParameter', `${key  }uriParameter`],
-          ['variable', `${key  }variable`],
-          ['payload', `${key  }payload`],
-          ['path', `${key  }path`],
-          ['url', `${key  }url`],
-          ['scheme', `${key  }scheme`],
-          ['endpoint', `${key  }endpoint`],
-          ['queryString', `${key  }queryString`],
+          ['EndPoint', `${key}EndPoint`],
+          ['Parameter', `${key}Parameter`],
+          ['Operation', `${key}Operation`],
+          ['WebAPI', `${key}WebAPI`],
+          ['AsyncAPI', `${key}AsyncAPI`],
+          ['API', `${key}API`],
+          ['UserDocumentationFragment', `${key}UserDocumentationFragment`],
+          ['Example', `${key}Example`],
+          ['Server', `${key}Server`],
+          ['ParametrizedResourceType', `${key}ParametrizedResourceType`],
+          ['ParametrizedTrait', `${key}ParametrizedTrait`],
+          ['TemplatedLink', `${key}TemplatedLink`],
+          ['IriTemplateMapping', `${key}IriTemplateMapping`],
+          ['Callback', `${key}Callback`],
+          ['header', `${key}header`],
+          ['parameter', `${key}parameter`],
+          ['paramName', `${key}paramName`],
+          ['uriParameter', `${key}uriParameter`],
+          ['variable', `${key}variable`],
+          ['payload', `${key}payload`],
+          ['path', `${key}path`],
+          ['url', `${key}url`],
+          ['scheme', `${key}scheme`],
+          ['endpoint', `${key}endpoint`],
+          ['queryString', `${key}queryString`],
           // ['mediaType', key + 'mediaType'],
-          ['accepts', `${key  }accepts`],
-          ['guiSummary', `${key  }guiSummary`],
-          ['binding', `${key  }binding`],
-          ['response', `${key  }response`],
-          ['returns', `${key  }returns`],
-          ['expects', `${key  }expects`],
-          ['examples', `${key  }examples`],
-          ['supportedOperation', `${key  }supportedOperation`],
-          ['statusCode', `${key  }statusCode`],
-          ['method', `${key  }method`],
-          ['required', `${key  }required`],
-          ['callback', `${key  }callback`],
-          ['expression', `${key  }expression`],
-          ['link', `${key  }link`],
-          ['linkExpression', `${key  }linkExpression`],
-          ['templateVariable', `${key  }templateVariable`],
-          ['mapping', `${key  }mapping`],
-          ['operationId', `${key  }operationId`],
-          ['protocol', `${key  }protocol`],
-          ['protocolVersion', `${key  }protocolVersion`],
-          ['Message', `${key  }Message`],
-          ['contentType', `${key  }contentType`],
+          ['accepts', `${key}accepts`],
+          ['guiSummary', `${key}guiSummary`],
+          ['binding', `${key}binding`],
+          ['response', `${key}response`],
+          ['returns', `${key}returns`],
+          ['expects', `${key}expects`],
+          ['examples', `${key}examples`],
+          ['supportedOperation', `${key}supportedOperation`],
+          ['statusCode', `${key}statusCode`],
+          ['method', `${key}method`],
+          ['required', `${key}required`],
+          ['callback', `${key}callback`],
+          ['expression', `${key}expression`],
+          ['link', `${key}link`],
+          ['linkExpression', `${key}linkExpression`],
+          ['templateVariable', `${key}templateVariable`],
+          ['mapping', `${key}mapping`],
+          ['operationId', `${key}operationId`],
+          ['protocol', `${key}protocol`],
+          ['protocolVersion', `${key}protocolVersion`],
+          ['Message', `${key}Message`],
+          ['contentType', `${key}contentType`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.apiContract[property];
@@ -467,36 +488,36 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['ScalarShape', `${key  }ScalarShape`],
-          ['ArrayShape', `${key  }ArrayShape`],
-          ['UnionShape', `${key  }UnionShape`],
-          ['NilShape', `${key  }NilShape`],
-          ['FileShape', `${key  }FileShape`],
-          ['AnyShape', `${key  }AnyShape`],
-          ['SchemaShape', `${key  }SchemaShape`],
-          ['MatrixShape', `${key  }MatrixShape`],
-          ['TupleShape', `${key  }TupleShape`],
-          ['DataTypeFragment', `${key  }DataTypeFragment`],
-          ['RecursiveShape', `${key  }RecursiveShape`],
-          ['range', `${key  }range`],
-          ['items', `${key  }items`],
-          ['anyOf', `${key  }anyOf`],
-          ['fileType', `${key  }fileType`],
-          ['number', `${key  }number`],
-          ['integer', `${key  }integer`],
-          ['long', `${key  }long`],
-          ['double', `${key  }double`],
-          ['boolean', `${key  }boolean`],
-          ['float', `${key  }float`],
-          ['nil', `${key  }nil`],
-          ['dateTimeOnly', `${key  }dateTimeOnly`],
-          ['password', `${key  }password`],
-          ['schema', `${key  }schema`],
-          ['xmlSerialization', `${key  }xmlSerialization`],
-          ['xmlName', `${key  }xmlName`],
-          ['xmlAttribute', `${key  }xmlAttribute`],
-          ['xmlWrapped', `${key  }xmlWrapped`],
-          ['readOnly', `${key  }readOnly`],
+          ['ScalarShape', `${key}ScalarShape`],
+          ['ArrayShape', `${key}ArrayShape`],
+          ['UnionShape', `${key}UnionShape`],
+          ['NilShape', `${key}NilShape`],
+          ['FileShape', `${key}FileShape`],
+          ['AnyShape', `${key}AnyShape`],
+          ['SchemaShape', `${key}SchemaShape`],
+          ['MatrixShape', `${key}MatrixShape`],
+          ['TupleShape', `${key}TupleShape`],
+          ['DataTypeFragment', `${key}DataTypeFragment`],
+          ['RecursiveShape', `${key}RecursiveShape`],
+          ['range', `${key}range`],
+          ['items', `${key}items`],
+          ['anyOf', `${key}anyOf`],
+          ['fileType', `${key}fileType`],
+          ['number', `${key}number`],
+          ['integer', `${key}integer`],
+          ['long', `${key}long`],
+          ['double', `${key}double`],
+          ['boolean', `${key}boolean`],
+          ['float', `${key}float`],
+          ['nil', `${key}nil`],
+          ['dateTimeOnly', `${key}dateTimeOnly`],
+          ['password', `${key}password`],
+          ['schema', `${key}schema`],
+          ['xmlSerialization', `${key}xmlSerialization`],
+          ['xmlName', `${key}xmlName`],
+          ['xmlAttribute', `${key}xmlAttribute`],
+          ['xmlWrapped', `${key}xmlWrapped`],
+          ['readOnly', `${key}readOnly`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.shapes[property];
@@ -512,25 +533,25 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['Scalar', `${key  }Scalar`],
-          ['Object', `${key  }Object`],
-          ['Array', `${key  }Array`],
-          ['value', `${key  }value`],
-          ['description', `${key  }description`],
-          ['required', `${key  }required`],
-          ['displayName', `${key  }displayName`],
-          ['minLength', `${key  }minLength`],
-          ['maxLength', `${key  }maxLength`],
-          ['default', `${key  }default`],
-          ['multipleOf', `${key  }multipleOf`],
-          ['minimum', `${key  }minimum`],
-          ['maximum', `${key  }maximum`],
-          ['enum', `${key  }enum`],
-          ['pattern', `${key  }pattern`],
-          ['items', `${key  }items`],
-          ['format', `${key  }format`],
-          ['example', `${key  }example`],
-          ['examples', `${key  }examples`],
+          ['Scalar', `${key}Scalar`],
+          ['Object', `${key}Object`],
+          ['Array', `${key}Array`],
+          ['value', `${key}value`],
+          ['description', `${key}description`],
+          ['required', `${key}required`],
+          ['displayName', `${key}displayName`],
+          ['minLength', `${key}minLength`],
+          ['maxLength', `${key}maxLength`],
+          ['default', `${key}default`],
+          ['multipleOf', `${key}multipleOf`],
+          ['minimum', `${key}minimum`],
+          ['maximum', `${key}maximum`],
+          ['enum', `${key}enum`],
+          ['pattern', `${key}pattern`],
+          ['items', `${key}items`],
+          ['format', `${key}format`],
+          ['example', `${key}example`],
+          ['examples', `${key}examples`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.data[property];
@@ -546,13 +567,13 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['sources', `${key  }sources`],
-          ['element', `${key  }element`],
-          ['value', `${key  }value`],
-          ['declaredElement', `${key  }declared-element`],
-          ['trackedElement', `${key  }tracked-element`],
-          ['parsedJsonSchema', `${key  }parsed-json-schema`],
-          ['lexical', `${key  }lexical`],
+          ['sources', `${key}sources`],
+          ['element', `${key}element`],
+          ['value', `${key}value`],
+          ['declaredElement', `${key}declared-element`],
+          ['trackedElement', `${key}tracked-element`],
+          ['parsedJsonSchema', `${key}parsed-json-schema`],
+          ['lexical', `${key}lexical`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.aml.vocabularies.docSourceMaps[property];
@@ -568,26 +589,26 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['Shape', `${key  }Shape`],
-          ['NodeShape', `${key  }NodeShape`],
-          ['SchemaShape', `${key  }SchemaShape`],
-          ['PropertyShape', `${key  }PropertyShape`],
-          ['in', `${key  }in`],
-          ['defaultValue', `${key  }defaultValue`],
-          ['defaultValueStr', `${key  }defaultValueStr`],
-          ['pattern', `${key  }pattern`],
-          ['minInclusive', `${key  }minInclusive`],
-          ['maxInclusive', `${key  }maxInclusive`],
-          ['multipleOf', `${key  }multipleOf`],
-          ['minLength', `${key  }minLength`],
-          ['maxLength', `${key  }maxLength`],
-          ['fileType', `${key  }fileType`],
-          ['and', `${key  }and`],
-          ['property', `${key  }property`],
-          ['name', `${key  }name`],
-          ['raw', `${key  }raw`],
-          ['datatype', `${key  }datatype`],
-          ['minCount', `${key  }minCount`],
+          ['Shape', `${key}Shape`],
+          ['NodeShape', `${key}NodeShape`],
+          ['SchemaShape', `${key}SchemaShape`],
+          ['PropertyShape', `${key}PropertyShape`],
+          ['in', `${key}in`],
+          ['defaultValue', `${key}defaultValue`],
+          ['defaultValueStr', `${key}defaultValueStr`],
+          ['pattern', `${key}pattern`],
+          ['minInclusive', `${key}minInclusive`],
+          ['maxInclusive', `${key}maxInclusive`],
+          ['multipleOf', `${key}multipleOf`],
+          ['minLength', `${key}minLength`],
+          ['maxLength', `${key}maxLength`],
+          ['fileType', `${key}fileType`],
+          ['and', `${key}and`],
+          ['property', `${key}property`],
+          ['name', `${key}name`],
+          ['raw', `${key}raw`],
+          ['datatype', `${key}datatype`],
+          ['minCount', `${key}minCount`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.w3.shacl[property];
@@ -603,18 +624,18 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['boolean', `${key  }boolean`],
-          ['string', `${key  }string`],
-          ['number', `${key  }number`],
-          ['integer', `${key  }integer`],
-          ['long', `${key  }long`],
-          ['double', `${key  }double`],
-          ['float', `${key  }float`],
-          ['nil', `${key  }nil`],
-          ['dateTime', `${key  }dateTime`],
-          ['time', `${key  }time`],
-          ['date', `${key  }date`],
-          ['base64Binary', `${key  }base64Binary`],
+          ['boolean', `${key}boolean`],
+          ['string', `${key}string`],
+          ['number', `${key}number`],
+          ['integer', `${key}integer`],
+          ['long', `${key}long`],
+          ['double', `${key}double`],
+          ['float', `${key}float`],
+          ['nil', `${key}nil`],
+          ['dateTime', `${key}dateTime`],
+          ['time', `${key}time`],
+          ['date', `${key}date`],
+          ['base64Binary', `${key}base64Binary`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.w3.xmlSchema[property];
@@ -630,8 +651,8 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['member', `${key  }member`],
-          ['Seq', `${key  }Seq`],
+          ['member', `${key}member`],
+          ['Seq', `${key}Seq`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.w3.rdfSyntax[property];
@@ -647,8 +668,8 @@ describe('AmfHelperMixin', () => {
         });
 
         [
-          ['member', `${key  }member`],
-          ['Seq', `${key  }Seq`],
+          ['member', `${key}member`],
+          ['Seq', `${key}Seq`],
         ].forEach(([property, value]) => {
           it(`has value for ${property}`, () => {
             const result = element.ns.w3.rdfSchema[property];
@@ -663,7 +684,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no arguments', () => {
-          assert.isUndefined(element._getValue());
+          assert.isUndefined(element._getValue(undefined, undefined));
         });
 
         it('Returns undefined if no model argument', () => {
@@ -671,7 +692,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no key argument', () => {
-          assert.isUndefined(element._getValue({}));
+          assert.isUndefined(element._getValue({}, undefined));
         });
 
         it('Returns undefined if no key in object', () => {
@@ -732,7 +753,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no arguments', () => {
-          assert.isUndefined(element._getValueArray());
+          assert.isUndefined(element._getValueArray(undefined, undefined));
         });
 
         it('Returns undefined if no model argument', () => {
@@ -740,7 +761,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no key argument', () => {
-          assert.isUndefined(element._getValueArray({}));
+          assert.isUndefined(element._getValueArray({}, undefined));
         });
 
         it('Returns undefined if no key in object', () => {
@@ -805,7 +826,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns false if no arguments', () => {
-          assert.isFalse(element._hasType());
+          assert.isFalse(element._hasType(undefined, undefined));
         });
 
         it('Returns false if no model argument', () => {
@@ -813,7 +834,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns false if no key argument', () => {
-          assert.isFalse(element._hasType({}));
+          assert.isFalse(element._hasType({}, undefined));
         });
 
         it('Returns false if type does not match', () => {
@@ -845,7 +866,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns false if no arguments', () => {
-          assert.isFalse(element._hasProperty());
+          assert.isFalse(element._hasProperty(undefined, undefined));
         });
 
         it('Returns false if no model argument', () => {
@@ -853,7 +874,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns false if no key argument', () => {
-          assert.isFalse(element._hasProperty({}));
+          assert.isFalse(element._hasProperty({}, undefined));
         });
 
         it('Returns false if type does not have property', () => {
@@ -888,7 +909,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no arguments', () => {
-          assert.isUndefined(element._computePropertyArray());
+          assert.isUndefined(element._computePropertyArray(undefined, undefined));
         });
 
         it('Returns undefined if no model argument', () => {
@@ -896,7 +917,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no key argument', () => {
-          assert.isUndefined(element._computePropertyArray({}));
+          assert.isUndefined(element._computePropertyArray({}, undefined));
         });
 
         it('Returns array', () => {
@@ -918,7 +939,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no arguments', () => {
-          assert.isUndefined(element._computePropertyObject());
+          assert.isUndefined(element._computePropertyObject(undefined, undefined));
         });
 
         it('Returns undefined if no model argument', () => {
@@ -926,7 +947,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no key argument', () => {
-          assert.isUndefined(element._computePropertyObject({}));
+          assert.isUndefined(element._computePropertyObject({}, undefined));
         });
 
         it('Returns bolean value', () => {
@@ -1004,7 +1025,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns false if no argument', () => {
-          assert.isFalse(element._computeHasStringValue());
+          assert.isFalse(element._computeHasStringValue(undefined));
         });
 
         it('Returns false if empty string', () => {
@@ -1031,7 +1052,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns false if no argument', () => {
-          assert.isFalse(element._computeHasStringValue());
+          assert.isFalse(element._computeHasStringValue(undefined));
         });
 
         it('Returns false if empty string', () => {
@@ -1058,7 +1079,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns false if no argument', () => {
-          assert.isFalse(element._computeHasArrayValue());
+          assert.isFalse(element._computeHasArrayValue(undefined));
         });
 
         it('Returns false if empty array', () => {
@@ -1066,6 +1087,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns false if not array', () => {
+          // @ts-ignore
           assert.isFalse(element._computeHasArrayValue('a'));
         });
 
@@ -1080,7 +1102,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no argument', () => {
-          assert.isUndefined(element._computeDescription());
+          assert.isUndefined(element._computeDescription(undefined));
         });
 
         it('Returns undefined if empty object', () => {
@@ -1113,7 +1135,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no argument', () => {
-          assert.isUndefined(element._computeEncodes());
+          assert.isUndefined(element._computeEncodes(undefined));
         });
 
         it('Returns undefined if no encodes', () => {
@@ -1132,7 +1154,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no argument', () => {
-          assert.isUndefined(element._computeDeclares());
+          assert.isUndefined(element._computeDeclares(undefined));
         });
 
         it('Returns undefined if no declares', () => {
@@ -1160,7 +1182,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no argument', () => {
-          assert.isUndefined(element._computeReferences());
+          assert.isUndefined(element._computeReferences(undefined));
         });
 
         it('Returns undefined argument is empty array', () => {
@@ -1188,7 +1210,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no argument', () => {
-          assert.isUndefined(element._computeWebApi());
+          assert.isUndefined(element._computeWebApi(undefined));
         });
 
         it('Returns undefined if no encodes', () => {
@@ -1354,7 +1376,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no argument', () => {
-          assert.isUndefined(element._computeServer());
+          assert.isUndefined(element._computeServer(undefined));
         });
 
         it('Returns undefined if no encodes', () => {
@@ -1501,7 +1523,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no argument', () => {
-          assert.isUndefined(element._computeProtocols());
+          assert.isUndefined(element._computeProtocols(undefined));
         });
 
         it('Returns array with values', () => {
@@ -1525,7 +1547,7 @@ describe('AmfHelperMixin', () => {
 
         it('Returns undefined if no path argument', () => {
           const webApi = element._computeWebApi(model);
-          const result = element._computeEndpointByPath(webApi);
+          const result = element._computeEndpointByPath(webApi, undefined);
           assert.isUndefined(result);
         });
 
@@ -1571,7 +1593,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no argument', () => {
-          assert.isUndefined(element._computeExpects());
+          assert.isUndefined(element._computeExpects(undefined));
         });
 
         it('Returns undefined if operation does not have "expects"', () => {
@@ -1592,7 +1614,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no arguments', () => {
-          assert.isUndefined(element._computeEndpointModel());
+          assert.isUndefined(element._computeEndpointModel(undefined, undefined));
         });
 
         it('Returns undefined if no model argument', () => {
@@ -1600,7 +1622,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no selected argument', () => {
-          assert.isUndefined(element._computeEndpointModel(webApi));
+          assert.isUndefined(element._computeEndpointModel(webApi, undefined));
         });
 
         it('Returns undefined if selection does not exists', () => {
@@ -1625,7 +1647,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no arguments', () => {
-          assert.isUndefined(element._computeMethodModel());
+          assert.isUndefined(element._computeMethodModel(undefined, undefined));
         });
 
         it('Returns undefined if no model argument', () => {
@@ -1633,7 +1655,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no selected argument', () => {
-          assert.isUndefined(element._computeMethodModel(webApi));
+          assert.isUndefined(element._computeMethodModel(webApi, undefined));
         });
 
         it('Returns undefined if selection does not exists', () => {
@@ -1644,6 +1666,7 @@ describe('AmfHelperMixin', () => {
           const endpoint = element._computeEndpointByPath(webApi, '/permissionIds/{email}');
           let op = element._computeOperations(webApi, endpoint['@id']);
           if (op instanceof Array) {
+            // @ts-ignore
             // eslint-disable-next-line prefer-destructuring
             op = op[0];
           }
@@ -1664,7 +1687,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no arguments', () => {
-          assert.isUndefined(element._computeType());
+          assert.isUndefined(element._computeType(undefined, undefined, undefined));
         });
 
         it('Returns undefined if no model argument', () => {
@@ -1672,7 +1695,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined if no selected argument', () => {
-          assert.isUndefined(element._computeType(declares, references));
+          assert.isUndefined(element._computeType(declares, references, undefined));
         });
 
         it('Returns undefined if selection does not exists', () => {
@@ -1753,12 +1776,12 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined when no amf argument', () => {
-          const result = element._getLinkTarget();
+          const result = element._getLinkTarget(undefined, undefined);
           assert.isUndefined(result);
         });
 
         it('Returns undefined when no id argument', () => {
-          const result = element._getLinkTarget(model);
+          const result = element._getLinkTarget(model, undefined);
           assert.isUndefined(result);
         });
 
@@ -1786,17 +1809,17 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined when no amf argument', () => {
-          const result = element._getReferenceId();
+          const result = element._getReferenceId(undefined, undefined);
           assert.isUndefined(result);
         });
 
         it('Returns undefined when no id argument', () => {
-          const result = element._getReferenceId(model);
+          const result = element._getReferenceId(model, undefined);
           assert.isUndefined(result);
         });
 
         it('Returns undefined when no references in the model', () => {
-          const result = element._getReferenceId({});
+          const result = element._getReferenceId({}, undefined);
           assert.isUndefined(result);
         });
       });
@@ -1845,12 +1868,12 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined when no declares', () => {
-          const result = element._computeSecurityModel();
+          const result = element._computeSecurityModel(undefined, undefined);
           assert.isUndefined(result);
         });
 
         it('Returns undefined when no id', () => {
-          const result = element._computeSecurityModel([]);
+          const result = element._computeSecurityModel([], undefined);
           assert.isUndefined(result);
         });
 
@@ -1879,12 +1902,12 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined when no webApi', () => {
-          const result = element._computeDocument();
+          const result = element._computeDocument(undefined, undefined);
           assert.isUndefined(result);
         });
 
         it('Returns undefined when no id', () => {
-          const result = element._computeDocument(obj);
+          const result = element._computeDocument(obj, undefined);
           assert.isUndefined(result);
         });
 
@@ -1910,7 +1933,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined when no argument', () => {
-          const result = element._computePropertyValue();
+          const result = element._computePropertyValue(undefined);
           assert.isUndefined(result);
         });
 
@@ -1970,6 +1993,7 @@ describe('AmfHelperMixin', () => {
 
         describe('spies', () => {
           afterEach(() => {
+            // @ts-ignore
             element._computePropertyArray.restore();
           });
 
@@ -2003,6 +2027,7 @@ describe('AmfHelperMixin', () => {
         });
 
         afterEach(() => {
+          // @ts-ignore
           element._computePropertyArray.restore();
         });
 
@@ -2027,6 +2052,7 @@ describe('AmfHelperMixin', () => {
         });
 
         afterEach(() => {
+          // @ts-ignore
           element._computePropertyArray.restore();
         });
 
@@ -2051,6 +2077,7 @@ describe('AmfHelperMixin', () => {
         });
 
         afterEach(() => {
+          // @ts-ignore
           element._computePropertyArray.restore();
         });
 
@@ -2075,6 +2102,7 @@ describe('AmfHelperMixin', () => {
         });
 
         afterEach(() => {
+          // @ts-ignore
           element._computePropertyArray.restore();
         });
 
@@ -2099,6 +2127,7 @@ describe('AmfHelperMixin', () => {
         });
 
         afterEach(() => {
+          // @ts-ignore
           element._computeQueryParameters.restore();
         });
 
@@ -2117,6 +2146,7 @@ describe('AmfHelperMixin', () => {
         });
 
         afterEach(() => {
+          // @ts-ignore
           element._computePropertyArray.restore();
         });
 
@@ -2141,6 +2171,7 @@ describe('AmfHelperMixin', () => {
         });
 
         afterEach(() => {
+          // @ts-ignore
           element._computePropertyArray.restore();
         });
 
@@ -2165,6 +2196,7 @@ describe('AmfHelperMixin', () => {
         });
 
         afterEach(() => {
+          // @ts-ignore
           element._computePropertyArray.restore();
         });
 
@@ -2189,6 +2221,7 @@ describe('AmfHelperMixin', () => {
         });
 
         afterEach(() => {
+          // @ts-ignore
           element._hasProperty.restore();
         });
 
@@ -2252,7 +2285,7 @@ describe('AmfHelperMixin', () => {
         });
 
         it('Returns undefined when no argument', () => {
-          const result = element._findById();
+          const result = element._findById(undefined, undefined);
           assert.isUndefined(result);
         });
 
@@ -2404,6 +2437,7 @@ describe('AmfHelperMixin', () => {
         it('caches a key value', () => {
           const prop = element.ns.aml.vocabularies.document.encodes;
           const key = element._getAmfKey(prop);
+          // @ts-ignore
           assert.equal(element.__cachedKeys[prop], key);
         });
 
@@ -2417,6 +2451,7 @@ describe('AmfHelperMixin', () => {
         it('uses cached value', () => {
           const prop = element.ns.aml.vocabularies.document.encodes;
           element._getAmfKey(prop);
+          // @ts-ignore
           element.__cachedKeys[prop] = 'test';
           const key = element._getAmfKey(prop);
           assert.equal(key, 'test');
@@ -2426,6 +2461,7 @@ describe('AmfHelperMixin', () => {
           const prop = element.ns.aml.vocabularies.document.encodes;
           element._getAmfKey(prop);
           element.amf = undefined;
+          // @ts-ignore
           assert.deepEqual(element.__cachedKeys, {});
         });
       });
