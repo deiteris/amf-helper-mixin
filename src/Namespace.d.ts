@@ -54,6 +54,10 @@ interface Security {
   OAuth2Settings: string;
   OAuth2Flow: string;
   Scope: string;
+  Settings: string;
+  HttpSettings: string;
+  ApiKeySettings: string;
+  OpenIdConnectSettings: string;
   security: string;
   scheme: string;
   schemes: string;
@@ -70,6 +74,8 @@ interface Security {
   tokenCredentialsUri: string;
   requestTokenUri: string;
   securityRequirement: string;
+  openIdConnectUrl: string;
+  bearerFormat: string;
   in: string;
 }
 

@@ -1,12 +1,7 @@
 import { LitElement, html, css } from 'lit-element';
 import { AmfHelperMixin } from '../amf-helper-mixin.js';
-/**
- * @customElement
- * @polymer
- * @demo demo/index.html
- * @appliesMixin AmfHelperMixin
- */
-class TestElement extends AmfHelperMixin(LitElement) {
+
+export class TestElement extends AmfHelperMixin(LitElement) {
   static get styles() {
     return css`
     :host {

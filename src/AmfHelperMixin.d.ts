@@ -63,6 +63,7 @@ interface AmfHelperMixin {
    * It is only useful for the element to resolve references.
    */
   amf: object|object[]|undefined;
+  _amf: object|object[]|undefined;
 
   /**
    * This is an abstract method to be implemented by the components.
