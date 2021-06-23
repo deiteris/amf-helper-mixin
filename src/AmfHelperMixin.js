@@ -11,6 +11,8 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations under
 the License.
 */
+// @ts-ignore
+import { AmfModelExpander, JsonLdOptions, JsonLd } from 'amf-json-ld-lib'
 import { ns } from './Namespace.js';
 
 /** @typedef {import('./Namespace').ns} Namespace */
@@ -78,11 +80,23 @@ export const AmfHelperMixin = (base) => class extends base {
     if (old === value) {
       return;
     }
+    let expanded;
+    if (!value || AmfModelExpander.isInExpandedForm(value)) {
+      this._flattenedAmf = undefined;
+      expanded = value;
+    } else {
+      const oldFlattened = this._flattenedAmf;
+      if (oldFlattened === value) {
+        return;
+      }
+      this._flattenedAmf = value;
+      expanded = this._expand(value);
+    }
     // Cached keys cannot be static as this element can be using in the sane
     // document with different AMF models
     this.__cachedKeys = {};
-    this._amf = value;
-    this.__amfChanged(value);
+    this._amf = expanded;
+    this.__amfChanged(expanded);
     if (this.requestUpdate) {
       this.requestUpdate('amf', old);
     }
@@ -97,6 +111,22 @@ export const AmfHelperMixin = (base) => class extends base {
    */
   /* eslint-disable-next-line no-unused-vars */
   __amfChanged(amf) {}
+
+  /**
+   * Expands flattened AMF model
+   * @param {Object} amf 
+   */
+  _expand(amf) {
+    AmfModelExpander.preprocessLegacyRootNodeId(amf)
+    const linkEmbeddingFilter = key => !key.endsWith("fixPoint")
+    const rootNode = amf['@context'] ? '' : "amf://id";
+    const options = JsonLdOptions.apply()
+      .withEmbeddedLinks(linkEmbeddingFilter)
+      .withCompactedIris()
+      .withExpandedStructure()
+      .withRootNode(rootNode)
+    return JsonLd.process(amf, options)
+  }
 
   /**
    * Returns compact model key for given value.

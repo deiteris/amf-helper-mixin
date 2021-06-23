@@ -1,4 +1,4 @@
-import { assert, fixture, html } from '@open-wc/testing';
+import { assert, fixture, html, nextFrame } from '@open-wc/testing';
 import sinon from 'sinon';
 import { AmfLoader } from './amf-loader.js';
 import './test-element.js';
@@ -2464,6 +2464,38 @@ describe('AmfHelperMixin', () => {
           element.amf = undefined;
           // @ts-ignore
           assert.deepEqual(element.__cachedKeys, {});
+        });
+      });
+
+      describe('Expander', async () => {
+        const flattenedApi = 'flattened-api'
+        const expandedApi = 'expanded-api'
+        let flattenedModel;
+        let expandedModel;
+
+        before(async () => {
+          flattenedModel = await AmfLoader.load(compact, flattenedApi);
+          expandedModel = await AmfLoader.load(compact, expandedApi);
+        });
+
+        beforeEach(async () => {
+          element = await basicFixture();
+        });
+
+        it('should not call __amfChanged again if same flattened model is set', async () => {
+          element.amf = flattenedModel;
+          await nextFrame();
+          const spy = sinon.spy(element, '__amfChanged');
+          element.amf = flattenedModel;
+          await nextFrame();
+          assert.isTrue(spy.notCalled);
+        });
+
+        it('should create same object for flattened as originial expanded', async () => {
+          const expandedElement = await modelFixture(expandedModel);
+          element.amf = flattenedModel;
+          await nextFrame();
+          assert.deepEqual(element.amf, expandedElement.amf)
         });
       });
     });
