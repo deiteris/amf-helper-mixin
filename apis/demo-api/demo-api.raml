@@ -1,0 +1,938 @@
+#%RAML 1.0
+title: Navigation demo API
+
+version: v2
+baseUri: https://api.mulesoft.com/{version}
+mediaType: application/json
+protocols: [HTTPS]
+
+uses:
+  myLib: library.raml
+  CommentLib: libraries/comment-lib.raml
+
+traits:
+  Paginated: !include traits/pagination.raml
+  results: !include traits/results.raml
+  visibility: !include traits/visibility.raml
+  file: !include traits/file.raml
+
+annotationTypes:
+  deprecated: string
+  annotationTest: nil
+  clearanceLevel:
+    properties:
+      level:
+        enum: [ low, medium, high ]
+        required: true
+      signature:
+        pattern: "\\d{3}-\\w{12}"
+        required: true
+
+securitySchemes:
+  basic:
+    type: Basic Authentication
+    description: |
+      Test basic auth method
+  other:
+    displayName: Digest
+    type: Digest Authentication
+  OAuth:
+    type: OAuth 2.0
+    displayName: Regular OAuth 2.0 definition
+    settings:
+      accessTokenUri: https://token.com
+      authorizationUri: https://auth.com
+      scopes: [profile, email]
+    describedBy:
+      queryParameters:
+        access_token:
+          type: string
+          description: Apply access token here.
+      headers:
+        Authorization:
+          type: string
+
+resourceTypes:
+  standardRequest: !include types/standard-request.raml
+
+documentation:
+  - title: How to begin
+    content: |
+      Example content
+  - title: Other documentation entry
+    content: |
+      Example content
+types:
+  Image: !include types/image.raml
+  Resource: !include types/resource.raml
+  AppPerson: !include types/app-person.raml
+  Product: !include types/product.raml
+  Dimension: !include types/dimensions.raml
+  SchemaPerson:
+    type: !include schemas/person.json
+    example: !include examples/person.json
+  Picture:
+    displayName: Pic
+    type: Resource
+    description: The user's profile picture.
+    properties:
+      url:
+        (annotationTest):
+        type: string
+        required: false
+        description: A URL that points to a profile picture of this user.
+      dimension: Dimension
+  ComplexInclusion:
+    type: Product
+    properties:
+      dimension: !include types/dimensions.raml
+  Property:
+    type: object
+    properties:
+      kind:
+        type: string
+        description: This is always drive#property.
+        default: drive#property
+        enum: [drive#property]
+      etag:
+        type: string
+        description: ETag of the property.
+      selfLink:
+        type: string
+        description: The link back to this property.
+      key:
+        type: string
+        description: The key of this property.
+      visibility:
+        type: string
+        description: The visibility of this property.
+      value:
+        type: string
+        description: The value of this property.
+  ImportFormat:
+    properties:
+      source:
+        type: string
+        description: The imported file's content type to convert from.
+        required: true
+      targets:
+        description: The possible content types to convert to.
+        type: string[]
+        required: true
+  Unionable:
+    type: ImportFormat | Picture
+  Arrable:
+    type: array
+    items: Picture
+  RecursiveShape:
+    (deprecated): This type is deprecated bauses it throws errors.
+    type: object
+    properties: 
+      id: string
+      relatedTo:
+        type: RecursiveShape
+        description: This is recursive.
+  Person:
+    type: object
+    discriminator: kind
+    properties:
+      kind: string
+      name: string
+  Employee:
+    type: Person
+    properties:
+      employeeId: string
+  User:
+    type: Person
+    properties:
+      userId: string
+  Feature:
+    description: |
+      A feature to test enum values in the URI parameters.
+    type: string
+    enum:
+      - A
+      - B
+      - C
+  HasHome:
+     type: object
+     properties:
+       homeAddress: string
+  IsOnFarm:
+     type: object
+     properties:
+       farmAddress: string
+  Mamal:
+    type: object
+    properties:
+      gender: string
+      name: string
+  Cat:
+    type: Mamal
+    properties:
+      color: string
+  Dog:
+    type: Mamal
+    properties:
+      fangs: string 
+  Parrot:
+    type: Mamal
+    properties:
+      tail: string 
+  MaFile:
+    type: file
+    displayName: My file
+    description: This is a file description
+    minLength: 1
+    maxLength: 10
+    # required: true
+    # pattern: test
+    # multipleOf: 20
+    fileTypes: 
+      - image/png
+      - image/jpeg
+      - image/jpg
+      - image/gif
+  lat-long:
+    properties:
+      lat: number
+      long: number
+  loc:
+    properties:
+      location: string
+  paging:
+    properties:
+      start?: number
+      page-size?: number
+
+/files:
+  type: standardRequest
+  (deprecated): This resource is deprecated and will be removed.
+  displayName: Files
+  securedBy: [OAuth]
+  description: The files endpoint
+  post:
+    (deprecated): This operation is deprecated and will be removed.
+    displayName: Insert
+    description: |
+      Insert a new file.
+      This method supports an /upload URI and accepts uploaded media with the following characteristics:
+
+      - Maximum file size: 5120GB
+      - Accepted Media MIME types: */*
+
+      Note: Apps creating shortcuts with files.insert must specify the MIME type `application/vnd.google-apps.drive-sdk`.
+
+      Apps should specify a file extension in the title property when inserting files with the API. For example, an operation to insert a JPEG file should specify something like `"title": "cat.jpg"` in the metadata.
+
+      Subsequent GET requests include the read-only fileExtension property populated with the extension originally specified in the title property. When a Google Drive user requests to download a file, or when the file is downloaded through the sync client, Drive builds a full filename (with extension) based on the title. In cases where the extension is missing, Google Drive attempts to determine the extension based on the file's MIME type.
+
+      ### HTTP request
+
+      This method provides media upload functionality through two separate URIs. For more details, see the document on media upload.
+
+      - Upload URI, for media upload requests: `POST https://www.googleapis.com/upload/drive/v2/files`
+      - Metadata URI, for metadata-only requests: `POST https://www.googleapis.com/drive/v2/files`
+  get:
+    securedBy: [basic]
+    displayName: list
+    description: |
+      Lists the user's files. Try it now or see an example.
+
+      Requests with `files.list` accept the `q` parameter, which is a search query combining one or more search terms. For more information, see Search for files.
+
+      Note: Note: This method returns all files by default. This includes files with trashed=true in the results. Use the trashed=false query parameter to filter these from the results.
+  /{fileId}:
+    displayName: A file
+    type: standardRequest
+    securedBy: [OAuth]
+    description: The file endpoint
+    uriParameters: 
+      fileId: 
+        type: string
+    get:
+      description: "Gets a file's metadata by ID."
+    patch:
+      description: Updates file metadata. This method supports patch semantics.
+    put:
+      description: Updates file metadata and/or content.
+    delete:
+      description: Permanently deletes a file by ID. Skips the trash. The currently authenticated user must own the file.
+    /copy:
+      post:
+        description: Creates a copy of the specified file.
+    /touch:
+      post:
+        description: "Set the file's updated time to the current server time."
+    /trash:
+      post:
+        description: Moves a file to the trash. The currently authenticated user must own the file.
+    /untrash:
+      post:
+        description: Restores a file from the trash.
+    /parents:
+      get:
+        description: "Lists a file's parents."
+      post:
+        description: Adds a parent folder for a file.
+      /{parentId}:
+        uriParameters:
+          parentId:
+            type: string
+            description: The ID of the parent.
+        get:
+          description: Gets a specific parent reference.
+        delete:
+          description: Removes a parent from a file.
+    /permissions:
+      get:
+        description: "Lists a file's permissions."
+      post:
+        description: |
+          Inserts a permission for a file.
+
+          Warning: Concurrent permissions operations on the same file are not supported; only the last update is applied.
+      /{permissionId}:
+        uriParameters:
+          permissionId:
+            type: string
+            description: The ID for the permission.
+        get:
+          description: Gets a permission by ID.
+        put:
+          description: |
+            Updates a permission.
+
+            **Warning**: Concurrent permissions operations on the same file are not supported; only the last update is applied.
+        delete:
+          description: |
+            Deletes a permission from a file.
+
+            Warning: Concurrent permissions operations on the same file are not supported; only the last update is applied.
+          responses:
+            204:
+        patch:
+          description: |
+            Updates a permission. This method supports patch semantics.
+
+            **Warning**: Concurrent permissions operations on the same file are not supported; only the last update is applied.
+    /revisions:
+      get:
+      /{revisionId}:
+        uriParameters:
+          revisionId:
+            type: string
+            description: The ID of the revision.
+            default: defaultRevision
+        get:
+
+        put:
+
+        delete:
+
+        patch:
+
+    /comments:
+      get:
+        is: [ results ]
+        description: Lists a file's comments.
+        queryParameters:
+          updatedMin:
+            type: datetime
+            required: false
+            description: Only discussions that were updated after this timestamp will be returned. Formatted as an RFC 3339 timestamp.
+        responses:
+          200:
+            body:
+              application/json:
+                type: CommentLib.CommentList
+                example: !include examples/commentList-example.json
+        
+      post:
+        description: Creates a new comment on the given file.
+        body:
+          application/json:
+            type: CommentLib.CommentWritable
+            example: !include examples/commentCreateRequest-example.json
+        responses:
+          201:
+            body:
+              application/json:
+                type: CommentLib.Comment
+                example: !include examples/comment-example.json
+      /{commentId}:
+        uriParameters:
+          commentId:
+            type: string
+            example: commant-id
+        get:
+          description: Gets a comment by ID.
+
+        put:
+
+        delete:
+          description: Deletes a comment.
+
+        patch:
+
+        /replies:
+          get:
+
+          post:
+
+          /{replyId}:
+            uriParameters:
+              replyId:
+                type: string
+                description: The ID of the reply.
+            get:
+              description: Gets a reply.
+
+            put:
+              description: Updates an existing reply.
+
+            delete:
+              description: Deletes a reply.
+
+            patch:
+              description: Updates an existing reply. This method supports patch semantics.
+
+    /realtime:
+
+      get:
+        description: Exports the contents of the Realtime API data model associated with this file as JSON.
+
+      put:
+        displayName: update
+        description: |
+          Overwrites the Realtime API data model associated with this file with the provided JSON data model.
+
+          This method supports an /upload URI and accepts uploaded media with the following characteristics:
+
+          - **Maximum file size**: 10MB
+          - **Accepted Media MIME** types: */*
+
+    /properties:
+      get:
+        description: "Lists a file's properties."
+
+      post:
+        description: Adds a property to a file.
+
+      /{propertyKey}:
+        uriParameters:
+          propertyKey:
+            type: string
+            description: The key of the property.
+        get:
+
+        put:
+
+        delete:
+
+        patch:
+
+  /trash:
+    delete:
+      description: "Permanently deletes all of the user's trashed files."
+  /{folderId}/children:
+    post:
+      description: Inserts a file into a folder.
+
+    get:
+      description: "Lists a folder's children. To list all children of the root folder, use the alias root for the folderId value."
+
+    /{childId}:
+      delete:
+        description: Removes a child from a folder.
+      get:
+        description: Gets a specific child reference.
+/about:
+  displayName: About
+  get:
+    (clearanceLevel):
+      level: high
+      signature: 230-ghtwvfrs1itr
+    description: Gets the information about the current user along with Drive API settings.
+
+/changes:
+  displayName: Changes
+  get:
+
+  /{changeId}:
+    uriParameters:
+      changeId:
+        type: string
+        description: The ID of the change.
+    get:
+      description: Gets a specific change.
+
+  /watch:
+    post:
+      queryParameters:
+        spaces:
+          type: string
+          required: false
+          description: |
+            A comma-separated list of spaces to query. Supported values are:
+
+            - **drive**
+            - **appDataFolder**
+            - **photos**
+      description: "Watch for all changes to a user's Drive."
+      headers:
+        x-test: string
+    get:
+      description: Dummy function
+/permissionIds/{email}:
+  uriParameters:
+    email:
+      type: string
+      description: The email address for which to return a permission ID
+  get:
+    description: Returns the permission ID for an email address.
+
+/apps:
+  displayName: Apps
+  get:
+    description: "Lists a user's installed apps."
+  /{appId}:
+    uriParameters:
+      appId:
+        type: string
+        description: The ID of the app.
+    get:
+      description: Gets a specific app.
+/channels/stop:
+  post:
+    description: |
+      Stop watching for changes to a resource.
+      If successful, this method returns an empty response body.
+/teamdrives:
+  displayName: Teamdrives
+  post:
+    displayName: insert
+    description: Creates a new Team Drive.
+
+  get:
+    displayName: list
+    description: Lists the user's Team Drives.
+  /{teamDriveId}:
+    uriParameters:
+      teamDriveId:
+        description: The ID of the Team Drive
+    delete:
+      description: |
+        Permanently deletes a Team Drive for which the user is an organizer. The Team Drive cannot contain any untrashed items.
+    get:
+      description: Gets a Team Drive's metadata by ID.
+    put:
+      description: Updates a Team Drive's metadata
+/typeFromLibraryEndpoint:
+  post:
+    body:
+      type: myLib.TypeFromLibray
+    responses:
+      200:
+/referenceId:
+  post:
+    body:
+      application/json:
+        type: SchemaPerson
+/external-data-type:
+  post:
+    body:
+      application/json:
+        type: !include types/external-type.raml
+/{groupId}/{assetId}/{version}:
+  uriParameters: 
+    assetId: string
+    groupId: string
+    version: number
+  get:
+/test-data-types:
+  post:
+    body: 
+      application/json:
+        properties: 
+          file:
+            displayName: A file
+            description: This is a file description
+            maxLength: 10
+            minLength: 1
+            required: true
+            # pattern: test
+            type: file
+            # multipleOf: 20
+            fileTypes: 
+              - image/png
+              - image/jpeg
+              - image/jpg
+              - image/gif
+    responses: 
+      200:
+        description: Any body
+  put:
+    body: 
+      application/json:
+        properties: 
+          homeAnimal: [HasHome | IsOnFarm,  Dog | Cat | Parrot]
+/parameters:
+  get:
+    displayName: All parameter types
+    headers: 
+      Accept:
+        default: application/json
+        description: Selects the response's media type, when supported.
+        enum: 
+          - application/json
+          - application/xml
+          - text/csv
+        required: false
+      x-required:
+        required: true
+      x-object-header:
+        type: object
+        properties: 
+          key: string
+          value:
+            type: any
+            description: Any value
+      If-Modified-Since:
+        type: datetime
+        example: Sun, 28 Feb 2016 16:41:41 GMT
+        format: rfc2616 # this time it's required, otherwise, the example format is invalid
+    queryParameters: 
+      unionable:
+        type: string | number
+        description: One of the two
+        example: 25
+        default: no
+      complexUnionable:
+        type: Feature | Product
+        description: Super confusing for a query param
+        examples:
+          One: 
+            - id: test value
+      mixedUnionable:
+        type: Feature | string
+        description: At least one should work
+      combo:
+        type: string
+        default: Some value
+        description: A combo of all string properties
+        displayName: Combo (string)
+        enum: 
+          - value 1
+          - value 2
+          - value 3
+          - value 4
+          - value 5
+          - value 6
+          - value 7
+          - value 8
+          - value 9
+          - value 10
+        examples:
+          Example 1: value 1
+          Example 2: value 2
+        maxLength: 100
+        minLength: 1
+        pattern: .*
+        required: true
+      comboNum:
+        type: number
+        default: 20
+        description: A combo with a number type
+        displayName: Combo (number)
+        enum: 
+          - 5
+          - 10
+          - 20
+          - 40
+          - 50
+          - 75
+          - 100
+        examples:
+          Minimum: 5
+          Maximum: 100
+        minimum: 5
+        maximum: 100
+        multipleOf: 5
+        format: int64
+      birthday:
+        type: date-only
+        example: 2015-05-23
+      lunchtime:
+        type: time-only
+        example: 12:30:00
+      fireworks:
+        type: datetime-only
+        example: 2015-07-04T21:00:00
+      created:
+        type: datetime
+        example: 2016-02-28T16:41:41.090Z
+        format: rfc3339
+      userPicture:
+        type: file
+        fileTypes: ['image/jpeg', 'image/png']
+        maxLength: 307200
+      customFile:
+        type: file
+        fileTypes: ['*/*'] # any file type allowed
+        maxLength: 1048576
+      aBoolean:
+        type: boolean
+        description: This is a boolean value without a default value.
+        displayName: Boolean
+      aBooleanWithDefault:
+        type: boolean
+        default: true
+        displayName: Boolean with default
+        description: This is a boolean value with default value.
+      nillable:
+        type: nil
+        description: This can be null
+      nillableUnion:
+        type: string | nil
+/query-params:
+  /bool:
+    get:
+      queryParameters: 
+        aBoolean:
+          type: boolean
+          description: This is a boolean value without a default value.
+          displayName: Boolean
+        aBooleanWithDefault:
+          type: boolean
+          default: true
+          displayName: Boolean with default
+          description: This is a boolean value with default value.
+        nillableBoolean:
+          type: boolean | nil
+          displayName: Boolean with nil
+          description: This is a boolean value with a nil union value.
+        stringBoolean:
+          type: boolean | string
+          displayName: Boolean with string
+          description: This is a boolean value with a string union value.
+  /string:
+    get:
+      queryParameters: 
+        string:
+          type: string
+          description: Simple string
+        enum:
+          type: string
+          enum: [development, staging, qa, production]
+          description: Enum string
+        minMaxLnegth:
+          type: string
+          minLength: 5
+          maxLength: 15
+          description: Min 5 max 15
+        patternLettersOnly:
+          type: string
+          pattern: '[a-zA-Z]*'
+          description: Letters only pattern
+        patternNumbersOnly:
+          type: string
+          pattern: '[0-9]*'
+          description: Number only pattern
+        displayName:
+          type: string
+          displayName: String 6
+          description: With display name
+        notRequired:
+          type: string
+          required: false
+          description: Optional value
+        withDefault:
+          type: string
+          default: This is a default
+          description: Default value
+        withDefaultNotRequired:
+          type: string
+          default: This is a default
+          required: false
+          description: Default value and not required
+        stringUnionNumber:
+          type: string | number
+          description: Either string or number
+        withExamples:
+          type: string
+          examples:
+            Word 1: Option 1
+            Word 2: Option 2
+            Word 3: 123456
+          description: String with examples.
+        anArray:
+          type: string[]
+          description: Array of strings.
+  /dates:
+    get:
+      queryParameters: 
+        dateOnly:
+          type: date-only
+          description: Date only, like "2015-05-23"
+        timeOnly:
+          type: time-only
+          description: Time only, like "12:30:00"
+        dateTimeOnly:
+          type: datetime-only
+          description: Date and time only, like "2015-07-04T21:00:00"
+        rfc3339:
+          type: datetime
+          format: rfc3339
+          description: Date and time, rfc3339 format, like "2016-02-28T16:41:41.090Z"
+        rfc2616:
+          type: datetime
+          format: rfc2616 
+          description: Date and time, rfc2616 format, like "Sun, 28 Feb 2016 16:41:41 GMT"
+        dateTimeNoFormat:
+          type: datetime
+          description: Date and time, assumed rfc3339 format, like "2016-02-28T16:41:41.090Z"
+        dateOnlyDefaultValue:
+          type: date-only
+          default: 2015-05-23
+          description: Date only, with a default value.
+        timeOnlyDefaultValue:
+          type: time-only
+          default: 12:30:00
+          description: Time only, with a default value.
+        rfc3339DefaultValue:
+          type: datetime
+          format: rfc3339
+          default: 2016-02-28T16:41:41.090Z
+          description: Date and time, rfc3339 format, default value
+        rfc2616DefaultValue:
+          type: datetime
+          format: rfc2616 
+          default: Sun, 28 Feb 2016 16:41:41 GMT
+          description: Date and time, rfc2616 format, default value
+        dateTimeDefaultValue:
+          type: datetime
+          default: 2016-02-28T16:41:41.090Z
+          description: Date and time, with a default value.
+        dateTimeUnion:
+          type: datetime | string
+          description: Date and time union with string.
+        dateTimeNil:
+          type: datetime | nil
+          description: Required but nillable.
+        dateArray:
+          type: datetime[]
+          description: A list of datetime
+  /numbers:
+    get:
+      queryParameters: 
+        simple: number
+        intFormat:
+          type: number
+          format: int
+          description: int format number
+        int8Format:
+          type: number
+          format: int8
+          description: int8 format number
+        int16Format:
+          type: number
+          format: int16
+          description: int16 format number
+        int32Format:
+          type: number
+          format: int32
+          description: int32 format number
+        int64Format:
+          type: number
+          format: int64
+          description: int64 format number
+        longFormat:
+          type: number
+          format: long
+          description: long format number
+        floatFormat:
+          type: number
+          format: float
+          description: float format number
+        doubleFormat:
+          type: number
+          format: double
+          description: double format number
+        floatWithMultiple:
+          type: number
+          format: float
+          multipleOf: 1.1
+          description: float format number with multiple of.
+        integerFormat:
+          type: integer
+          description: An integer
+        integerMinMax:
+          type: integer
+          minimum: 0
+          maximum: 100
+          multipleOf: 5
+          description: Min, max, and multiple of.
+        integerUnionString:
+          type: integer | string
+          description: Union with string
+        integerUnionNil:
+          type: integer | nil
+          description: Required but nillable
+        notRequired:
+          type: integer
+          required: false
+          description: Required but nillable
+        integerDefault:
+          type: integer
+          default: 12
+          description: Integer with default "12"
+        floatDefault:
+          type: number
+          format: float
+          multipleOf: 1.1
+          default: 2.2
+          description: float with default if "2.2"
+        integerArray:
+          type: integer[]
+          description: A list of integers
+/queryString:
+  get:
+    queryString:
+      type: [paging,  lat-long | loc ]
+      examples:
+        first:
+          value:
+            start: 2
+            lat: 12
+            long: 13
+        second:
+          value:
+            start: 2
+            page-size: 20
+            location: 1,2
+        third:  # not valid
+          value:
+            lat: 12
+            location: 2
+          strict: false # because it's not valid
+/traits:
+  get:
+    is: [Paginated: {resourceType: Person}]
+    headers:
+      x-people-op-id:
+        (annotationTest):
+        type: string
+        pattern: ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[4][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$
+        description: People ops ID. It is UUID v4 string
+        example: 9719fa6f-c666-48e0-a191-290890760b30
+/annotations:
+  (clearanceLevel):
+      level: high
+      signature: 230-ghtwvfrs1itr
+  get:
+    (deprecated): This method is deprecated and will be removed.
+    responses: 
+      200:
+        description: 
+          

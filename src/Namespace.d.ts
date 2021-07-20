@@ -16,12 +16,15 @@ interface Document {
   references: string;
   examples: string;
   linkTarget: string;
+  linkLabel: string;
   referenceId: string;
   structuredValue: string;
   raw: string;
   extends: string;
   value: string;
   name: string;
+  strict: string;
+  deprecated: string;
 }
 
 interface Core {
@@ -34,6 +37,7 @@ interface Core {
   title: string;
   name: string;
   description: string;
+  summary: string;
   documentation: string;
   provider: string;
   email: string;
@@ -42,6 +46,7 @@ interface Core {
   license: string;
   mediaType: string;
   extensionName: string;
+  deprecated: string;
 }
 
 interface Security {
@@ -73,6 +78,7 @@ interface Security {
   signature: string;
   tokenCredentialsUri: string;
   requestTokenUri: string;
+  refreshUri: string;
   securityRequirement: string;
   openIdConnectUrl: string;
   bearerFormat: string;
@@ -99,10 +105,12 @@ interface ApiContract {
   Callback: string;
   TemplatedLink: string;
   IriTemplateMapping: string;
+  Tag: string;
   header: string;
   parameter: string;
   paramName: string;
   uriParameter: string;
+  cookieParameter: string;
   variable: string;
   payload: string;
   server: string;
@@ -134,6 +142,11 @@ interface ApiContract {
   Message: string;
   headerSchema: string;
   contentType: string;
+  allowEmptyValue: string;
+  style: string;
+  explode: string;
+  allowReserved: string;
+  tag: string;
 }
 
 interface Shapes {
@@ -150,6 +163,7 @@ interface Shapes {
   TupleShape: string;
   DataTypeFragment: string;
   RecursiveShape: string;
+  XMLSerializer: string;
   range: string;
   items: string;
   anyOf: string;
@@ -169,7 +183,13 @@ interface Shapes {
   xmlAttribute: string;
   xmlWrapped: string;
   readOnly: string;
+  writeOnly: string;
   deprecated: string;
+  fixPoint: string;
+  discriminator: string;
+  discriminatorValue: string;
+  format: string;
+  multipleOf: string;
 }
 
 interface Data {
@@ -212,19 +232,19 @@ interface DocSourceMaps {
 interface Vocabularies {
   toString(): string;
   key: string;
-  document: Document;
-  core: Core;
-  security: Security;
-  apiContract: ApiContract;
-  shapes: Shapes;
-  data: Data;
-  docSourceMaps: DocSourceMaps;
+  document: Readonly<Document>;
+  core: Readonly<Core>;
+  security: Readonly<Security>;
+  apiContract: Readonly<ApiContract>;
+  shapes: Readonly<Shapes>;
+  data: Readonly<Data>;
+  docSourceMaps: Readonly<DocSourceMaps>;
 }
 
 interface Aml {
   toString(): string;
   key: string;
-  vocabularies: Vocabularies;
+  vocabularies: Readonly<Vocabularies>;
 }
 
 interface RdfSyntax {
@@ -287,19 +307,22 @@ interface Shacl {
   raw: string;
   datatype: string;
   minCount: string;
+  maxCount: string;
   xone: string;
   not: string;
   or: string;
+  closed: string;
+  path: string;
 }
 
 interface W3 {
   toString(): string;
   key: string;
-  rdfSyntax: RdfSyntax;
-  rdfSchema: RdfSchema;
-  hydra: Hydra;
-  xmlSchema: XmlSchema;
-  shacl: Shacl;
+  rdfSyntax: Readonly<RdfSyntax>;
+  rdfSchema: Readonly<RdfSchema>;
+  hydra: Readonly<Hydra>;
+  xmlSchema: Readonly<XmlSchema>;
+  shacl: Readonly<Shacl>;
 }
 
 interface Schema {
@@ -319,18 +342,18 @@ export interface Namespace {
   /**
    * AMF namespace
    */
-  aml: Aml;
+  aml: Readonly<Aml>;
   /**
    * AMF namespace (compatibility)
    */
-  raml: Aml;
+  raml: Readonly<Aml>;
   /**
    * W3 namespace
    */
-  w3: W3;
+  w3: Readonly<W3>;
   /**
    * Schema namespace. The same as aml.vocabularies
    */
-  schema: Schema;
+  schema: Readonly<Schema>;
 }
 export const ns: Namespace;
