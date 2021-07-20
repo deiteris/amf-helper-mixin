@@ -390,3 +390,15 @@ export interface XMLSerializer extends DomainElement {
 export interface Tag extends DomainElement {
   'http://a.ml/vocabularies/core#name'?: LdValueString[];
 }
+
+export interface DocumentSourceMaps extends DomainElement {
+  'http://a.ml/vocabularies/document-source-maps#synthesized-field'?: SynthesizedField[];
+  'http://a.ml/vocabularies/document-source-maps#lexical'?: SynthesizedField[];
+  'http://a.ml/vocabularies/document-source-maps#tracked-element'?: SynthesizedField[];
+}
+
+export interface SynthesizedField {
+  '@id': string;
+  'http://a.ml/vocabularies/document-source-maps#element'?: LdValueString[];
+  'http://a.ml/vocabularies/document-source-maps#value'?: LdValueString[];
+}

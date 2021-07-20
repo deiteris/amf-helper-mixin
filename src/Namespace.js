@@ -42,6 +42,7 @@ ns.aml.vocabularies.document.value = `${docKey}value`;
 ns.aml.vocabularies.document.name = `${docKey}name`;
 ns.aml.vocabularies.document.strict = `${docKey}strict`;
 ns.aml.vocabularies.document.deprecated = `${docKey}deprecated`;
+ns.aml.vocabularies.document.location = `${docKey}location`;
 ns.aml.vocabularies.core = {};
 ns.aml.vocabularies.core.key = `${ns.aml.vocabularies.key}core#`;
 const coreKey = ns.aml.vocabularies.core.key;
@@ -234,6 +235,7 @@ ns.aml.vocabularies.docSourceMaps = {};
 ns.aml.vocabularies.docSourceMaps.key = `${ns.aml.vocabularies.key}document-source-maps#`;
 const dsmKey = ns.aml.vocabularies.docSourceMaps.key;
 ns.aml.vocabularies.docSourceMaps.toString = () => dsmKey;
+ns.aml.vocabularies.docSourceMaps.SourceMap = `${dsmKey}SourceMap`;
 ns.aml.vocabularies.docSourceMaps.sources = `${dsmKey}sources`;
 ns.aml.vocabularies.docSourceMaps.element = `${dsmKey}element`;
 ns.aml.vocabularies.docSourceMaps.value = `${dsmKey}value`;
@@ -241,6 +243,7 @@ ns.aml.vocabularies.docSourceMaps.declaredElement = `${dsmKey}declared-element`;
 ns.aml.vocabularies.docSourceMaps.trackedElement = `${dsmKey}tracked-element`;
 ns.aml.vocabularies.docSourceMaps.parsedJsonSchema = `${dsmKey}parsed-json-schema`;
 ns.aml.vocabularies.docSourceMaps.lexical = `${dsmKey}lexical`;
+ns.aml.vocabularies.docSourceMaps.synthesizedField = `${dsmKey}synthesized-field`;
 
 // W3 namespace
 ns.w3 = {};

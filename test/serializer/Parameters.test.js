@@ -2,6 +2,9 @@ import { assert } from '@open-wc/testing';
 import { AmfLoader } from '../AmfLoader.js';
 import { AmfSerializer } from '../../index.js';
 
+/** @typedef {import('../../src/amf').ScalarShape} ScalarShape */
+/** @typedef {import('../../src/types').ApiScalarNode} ApiScalarNode */
+
 describe('AmfSerializer', () => {
   describe('RAML parameters', () => {
     describe('parameter()', () => {
@@ -107,6 +110,36 @@ describe('AmfSerializer', () => {
       assert.deepEqual(p.examples, [], 'has empty examples');
       assert.equal(p.mediaType, 'application/json', 'has mediaType');
       assert.typeOf(p.schema, 'object', 'has schema');
+    });
+
+    it('has the examples property', () => {
+      // it seems that AMF moves examples from parameter into the schema.
+      // This copies examples from the schema to the top level parameter so we can test it.
+      // Possibly this happens during the resolution phase.
+      const op = AmfLoader.lookupOperation(api, '/pet/findByStatus', 'get');
+      const ex = serializer._computeExpects(op);
+      const params = serializer._computeQueryParameters(ex);
+      const param = params.find(p => serializer._getValue(p, serializer.ns.aml.vocabularies.apiContract.paramName) === 'status');
+      const schema = /** @type ScalarShape */ (param[serializer._getAmfKey(serializer.ns.aml.vocabularies.shapes.schema)][0]);
+      const key = serializer._getAmfKey(serializer.ns.aml.vocabularies.apiContract.examples);
+      const info = schema[key];
+      param[key] = info;
+      const result = serializer.parameter(param);
+      const { examples } = result;
+      assert.typeOf(examples, 'array', 'has examples');
+      assert.lengthOf(examples, 1, 'has  a single example');
+      const [example] = examples;
+      assert.equal(example.id, info[0]['@id'], 'has the id');
+      assert.include(example.types, serializer.ns.aml.vocabularies.apiContract.Example, 'has the type');
+      assert.deepEqual(example.customDomainProperties, [], 'has empty customDomainProperties');
+      assert.isTrue(example.strict, 'has strict');
+      assert.equal(example.value, 'pending', 'has the value');
+      const { structuredValue } = example;
+      assert.typeOf(structuredValue, 'object', 'has the structuredValue');
+      assert.equal(structuredValue.name, 'scalar_1', 'has the name');
+      const typed = /** @type ApiScalarNode */ (structuredValue);
+      assert.equal(typed.value, 'pending', 'has the value');
+      assert.equal(typed.dataType, serializer.ns.w3.xmlSchema.string, 'has the dataType');
     });
   });
 });

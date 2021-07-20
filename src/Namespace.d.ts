@@ -25,6 +25,7 @@ interface Document {
   name: string;
   strict: string;
   deprecated: string;
+  location: string;
 }
 
 interface Core {
@@ -220,6 +221,7 @@ interface Data {
 interface DocSourceMaps {
   toString(): string;
   key: string;
+  SourceMap: string;
   sources: string;
   element: string;
   value: string;
@@ -227,6 +229,7 @@ interface DocSourceMaps {
   trackedElement: string;
   parsedJsonSchema: string;
   lexical: string;
+  synthesizedField: string;
 }
 
 interface Vocabularies {

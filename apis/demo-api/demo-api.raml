@@ -935,4 +935,12 @@ types:
     responses: 
       200:
         description: 
-          
+/examples:
+  get:
+    displayName: Included example
+    responses: 
+      200:
+        body: 
+          application/json:
+            type: object
+            example: !include examples/person.raml

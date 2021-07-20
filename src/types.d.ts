@@ -74,6 +74,7 @@ export interface ApiEndPoint extends ApiDomainProperty {
   payloads: ApiPayload[];
   servers: ApiServer[];
   security: ApiSecurityRequirement[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiOperation extends ApiDomainProperty {
@@ -93,16 +94,19 @@ export interface ApiOperation extends ApiDomainProperty {
   callbacks: ApiCallback[];
   servers: ApiServer[];
   tags: ApiTag[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiTag extends ApiDomainProperty {
   name: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiServer extends ApiDomainProperty {
   url: string;
   description?: string;
   variables: ApiParameter[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiParameter extends ApiDomainProperty {
@@ -119,6 +123,7 @@ export interface ApiParameter extends ApiDomainProperty {
   schema?: ApiShapeUnion;
   payloads: ApiPayload[];
   examples: ApiExample[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiExample extends ApiDomainProperty {
@@ -129,6 +134,8 @@ export interface ApiExample extends ApiDomainProperty {
   structuredValue?: ApiDataNodeUnion;
   strict: boolean;
   mediaType?: string;
+  location?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiPayload extends ApiDomainProperty {
@@ -137,6 +144,7 @@ export interface ApiPayload extends ApiDomainProperty {
   schema?: ApiShapeUnion;
   examples: ApiExample[];
   // encoding: ApiEncoding[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiResponse extends ApiDomainProperty {
@@ -147,6 +155,7 @@ export interface ApiResponse extends ApiDomainProperty {
   payloads: ApiPayload[];
   examples: ApiExample[];
   links: ApiTemplatedLink[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiTemplatedLink extends ApiDomainProperty {
@@ -157,22 +166,26 @@ export interface ApiTemplatedLink extends ApiDomainProperty {
   requestBody?: string;
   mapping?: ApiIriTemplateMapping;
   server?: ApiServer;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiIriTemplateMapping extends ApiDomainProperty {
   templateVariable?: string;
   linkExpression?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiSecurityRequirement extends ApiDomainProperty {
   name?: string;
   schemes: ApiParametrizedSecurityScheme[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiParametrizedSecurityScheme extends ApiDomainProperty {
   name?: string;
   settings?: ApiSecuritySettingsUnion;
   scheme?: ApiSecurityScheme;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiSecurityScheme extends ApiDomainProperty {
@@ -185,11 +198,13 @@ export interface ApiSecurityScheme extends ApiDomainProperty {
   queryParameters: ApiParameter[];
   responses: ApiResponse[];
   queryString?: ApiShapeUnion;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 
 export interface ApiSecuritySettings extends ApiDomainProperty {
   additionalProperties?: ApiDataNodeUnion;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiSecurityOAuth1Settings extends ApiSecuritySettings {
@@ -197,25 +212,30 @@ export interface ApiSecurityOAuth1Settings extends ApiSecuritySettings {
   authorizationUri?: string;
   tokenCredentialsUri?: string;
   signatures: string[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiSecurityOAuth2Settings extends ApiSecuritySettings {
   authorizationGrants: string[];
   flows: ApiSecurityOAuth2Flow[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiSecurityApiKeySettings extends ApiSecuritySettings {
   name?: string;
   in?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiSecurityHttpSettings extends ApiSecuritySettings {
   scheme?: string;
   bearerFormat?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiSecurityOpenIdConnectSettings extends ApiSecuritySettings {
   url?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export type ApiSecuritySettingsUnion = ApiSecuritySettings | ApiSecurityOAuth1Settings | ApiSecurityOAuth2Settings | ApiSecurityApiKeySettings | ApiSecurityHttpSettings | ApiSecurityOpenIdConnectSettings;
@@ -226,11 +246,13 @@ export interface ApiSecurityOAuth2Flow extends ApiDomainProperty {
   flow?: string;
   refreshUri?: string;
   scopes: ApiSecurityScope[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiSecurityScope extends ApiDomainProperty {
   name?: string;
   description?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiRequest extends ApiDomainProperty {
@@ -242,13 +264,14 @@ export interface ApiRequest extends ApiDomainProperty {
   queryString?: ApiShapeUnion;
   uriParameters: ApiParameter[];
   cookieParameters: ApiParameter[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
-
 
 export interface ApiCallback extends ApiDomainProperty {
   name?: string;
   expression?: string;
   endpoint?: ApiEndPoint;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 /**
@@ -260,6 +283,7 @@ export interface ApiCustomDomainExtension extends ApiDomainProperty {
   description?: string;
   domain: string[];
   schema?: ApiShapeUnion;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 /**
@@ -269,12 +293,14 @@ export interface ApiDomainExtension extends ApiDomainProperty {
   name?: string;
   definedBy?: ApiCustomDomainExtension;
   extension?: ApiDataNodeUnion;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiDocumentation extends ApiDomainProperty {
   url?: string;
   description?: string;
   title?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface SerializedApi extends ApiDomainProperty {
@@ -294,6 +320,7 @@ export interface SerializedApi extends ApiDomainProperty {
   documentations: string[];
   servers: string[];
   security: string[];
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export type ApiShapeUnion = ApiScalarShape | ApiNodeShape | ApiUnionShape | ApiFileShape | ApiSchemaShape | ApiAnyShape | ApiArrayShape | ApiTupleShape | ApiRecursiveShape;
@@ -317,6 +344,7 @@ export interface ApiShape extends ApiDomainProperty {
    * A label that appeared on a link.
    */
   linkLabel?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiPropertyShape extends ApiShape {
@@ -351,6 +379,7 @@ export interface ApiXMLSerializer extends ApiDomainProperty {
   name?: string;
   namespace?: string;
   prefix?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiScalarShape extends ApiAnyShape {
@@ -409,6 +438,7 @@ export interface ApiRecursiveShape extends ApiShape {
 
 export interface ApiDataNode extends ApiDomainProperty {
   name?: string;
+  sourceMaps?: ApiDocumentSourceMaps;
 }
 
 export interface ApiObjectNode extends ApiDataNode {
@@ -433,4 +463,16 @@ export interface ApiEncoding {
   explode?: boolean;
   allowReserved?: boolean;
   headers: ApiParameter[];
+  sourceMaps?: ApiDocumentSourceMaps;
+}
+
+export interface ApiDocumentSourceMaps {
+  synthesizedField?: ApiSynthesizedField[];
+  lexical?: ApiSynthesizedField[];
+  trackedElement?: ApiSynthesizedField[];
+}
+
+export interface ApiSynthesizedField {
+  element: string;
+  value: string;
 }

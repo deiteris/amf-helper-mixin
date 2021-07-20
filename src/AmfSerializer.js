@@ -41,15 +41,15 @@ import { AmfHelperMixin, expandKey, findAmfType, getArrayItems } from "./AmfHelp
 /** @typedef {import('./types').ApiSecurityOAuth2Flow} ApiSecurityOAuth2Flow */
 /** @typedef {import('./types').ApiSecuritySettingsUnion} ApiSecuritySettingsUnion */
 /** @typedef {import('./types').ApiSecurityScope} ApiSecurityScope */
-/** @typedef {import('./types').ApiCustomDomainExtension} ApiCustomDomainExtension */
-/** @typedef {import('./types').ApiDomainExtension} ApiDomainExtension */
-/** @typedef {import('./types').ApiEncoding} ApiEncoding */
 /** @typedef {import('./types').ApiIriTemplateMapping} ApiIriTemplateMapping */
 /** @typedef {import('./types').ApiCallback} ApiCallback */
 /** @typedef {import('./types').ApiDomainProperty} ApiDomainProperty */
 /** @typedef {import('./types').ApiCustomDomainProperty} ApiCustomDomainProperty */
 /** @typedef {import('./types').ApiRecursiveShape} ApiRecursiveShape */
 /** @typedef {import('./types').ApiTag} ApiTag */
+/** @typedef {import('./types').ApiDataNodeUnion} ApiDataNodeUnion */
+/** @typedef {import('./types').ApiDocumentSourceMaps} ApiDocumentSourceMaps */
+/** @typedef {import('./types').ApiSynthesizedField} ApiSynthesizedField */
 /** @typedef {import('./amf').Server} Server */
 /** @typedef {import('./amf').Parameter} Parameter */
 /** @typedef {import('./amf').Shape} Shape */
@@ -92,6 +92,8 @@ import { AmfHelperMixin, expandKey, findAmfType, getArrayItems } from "./AmfHelp
 /** @typedef {import('./amf').HttpSettings} HttpSettings */
 /** @typedef {import('./amf').OpenIdConnectSettings} OpenIdConnectSettings */
 /** @typedef {import('./amf').Tag} Tag */
+/** @typedef {import('./amf').DocumentSourceMaps} DocumentSourceMaps */
+/** @typedef {import('./amf').SynthesizedField} SynthesizedField */
 
 /**
  * A class that takes AMF's ld+json model and outputs JavaScript interface of it.
@@ -109,6 +111,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       url,
       variables: [],
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const variables = /** @type Parameter[] */ (object[this._getAmfKey(this.ns.aml.vocabularies.apiContract.variable)]);
     if (Array.isArray(variables) && variables.length) {
@@ -128,6 +131,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       payloads: [],
       examples: [],
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const name = this._getValue(object, ns.aml.vocabularies.core.name);
@@ -257,6 +261,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       and: [],
       xone: [],
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     if (linkLabel) {
       result.linkLabel = linkLabel;
@@ -791,6 +796,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const url = this._getLinkValue(object, this.ns.aml.vocabularies.core.url);
     if (url && typeof url === 'string') {
@@ -816,6 +822,8 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
+      strict: false,
     });
     const { ns } = this;
     const strict = this._getValue(object, ns.aml.vocabularies.document.strict);
@@ -838,6 +846,10 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
     if (raw && typeof raw === 'string') {
       result.value = raw;
     }
+    const location = this._getValue(object, ns.aml.vocabularies.document.location);
+    if (location && typeof location === 'string') {
+      result.location = location;
+    }
     // if (!mediaType.isNullOrEmpty) {
     //   result.mediaType = mediaType.value();
     // }
@@ -858,6 +870,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const xmlAttribute = this._getValue(object, ns.aml.vocabularies.shapes.xmlAttribute);
@@ -883,7 +896,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
 
   /**
    * @param {DataNode} object
-   * @returns {ApiScalarNode|ApiObjectNode|ApiArrayNode|undefined}
+   * @returns {ApiDataNodeUnion}
    */
   unknownDataNode(object) {
     let types = object['@type'];
@@ -1012,6 +1025,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
       path: '',
       operations: [],
       parameters: [],
@@ -1068,6 +1082,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
       method: '',
       deprecated: false,
       callbacks: [],
@@ -1163,6 +1178,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
       name: '',
     });
     const { ns } = this;
@@ -1182,6 +1198,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const name = this._getValue(object, ns.aml.vocabularies.core.name);
@@ -1211,6 +1228,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
       required: false,
       headers: [],
       queryParameters: [],
@@ -1266,6 +1284,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
       headers: [],
       payloads: [],
       examples: [],
@@ -1312,6 +1331,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
       examples: [],
       // encoding: [],
     });
@@ -1350,6 +1370,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const name = this._getValue(object, ns.aml.vocabularies.core.name);
@@ -1396,6 +1417,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const templateVariable = this._getValue(object, ns.aml.vocabularies.apiContract.templateVariable);
@@ -1418,6 +1440,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const name = this._getValue(object, ns.aml.vocabularies.core.name);
@@ -1450,6 +1473,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
       headers: [],
       queryParameters: [],
       responses: [],
@@ -1509,6 +1533,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
       schemes: [],
     });
     const { ns } = this;
@@ -1560,6 +1585,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     // if (additionalProperties && additionalProperties.id) {
     //   result.additionalProperties = this.unknownDataNode(additionalProperties);
@@ -1576,6 +1602,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
       signatures: [],
     });
     const { ns } = this;
@@ -1609,13 +1636,14 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       customDomainProperties: this.customDomainProperties(object),
       flows: [],
       authorizationGrants: [],
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const grants = /** @type string[] */ (this._getValueArray(object, ns.aml.vocabularies.security.authorizationGrant));
     if (Array.isArray(grants) && grants.length) {
       result.authorizationGrants = grants;
     }
-    const flows = /** @type OAuth2Flow[] */ (object[this._getAmfKey(ns.aml.vocabularies.security.flow)]);
+    const flows = /** @type OAuth2Flow[] */ (object[this._getAmfKey(ns.aml.vocabularies.security.flows)]);
     if (Array.isArray(flows) && flows.length) {
       result.flows = flows.map((p) => this.oAuth2Flow(p));
     }
@@ -1632,6 +1660,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
       scopes: [],
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const authorizationUri = this._getValue(object, ns.aml.vocabularies.security.authorizationUri);
@@ -1666,6 +1695,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const name = this._getValue(object, ns.aml.vocabularies.core.name);
@@ -1688,6 +1718,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const name = this._getValue(object, ns.aml.vocabularies.core.name);
@@ -1710,6 +1741,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const scheme = this._getValue(object, ns.aml.vocabularies.security.scheme);
@@ -1732,11 +1764,72 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
       customDomainProperties: this.customDomainProperties(object),
+      sourceMaps: this.sourceMap(object),
     });
     const { ns } = this;
     const url = this._getValue(object, ns.aml.vocabularies.security.openIdConnectUrl);
     if (url && typeof url === 'string') {
       result.url = url;
+    }
+    return result;
+  }
+
+  /**
+   * Serializes source maps, when available.
+   * @param {DocumentSourceMaps} object 
+   * @returns {ApiDocumentSourceMaps|undefined}
+   */
+  sourceMap(object) {
+    const { ns } = this;
+    let sm = object[this._getAmfKey(ns.aml.vocabularies.docSourceMaps.sources)];
+    if (!sm) {
+      return undefined;
+    }
+    if (Array.isArray(sm)) {
+      [sm] = sm;
+    }
+    const result = /** @type ApiDocumentSourceMaps */ ({
+      id: object['@id'],
+      types: object['@type'].map(this[expandKey].bind(this)),
+    });
+    const sf = sm[this._getAmfKey(ns.aml.vocabularies.docSourceMaps.synthesizedField)];
+    if (Array.isArray(sf) && sf.length) {
+      result.synthesizedField = sf.map(i => this.synthesizedField(i))
+    }
+    const lexical = sm[this._getAmfKey(ns.aml.vocabularies.docSourceMaps.lexical)];
+    if (Array.isArray(lexical) && lexical.length) {
+      result.lexical = lexical.map(i => this.synthesizedField(i))
+    }
+    const te = sm[this._getAmfKey(ns.aml.vocabularies.docSourceMaps.trackedElement)];
+    if (Array.isArray(te) && te.length) {
+      result.trackedElement = te.map(i => this.synthesizedField(i))
+    }
+    return result;
+  }
+
+  /**
+   * @param {SynthesizedField} object 
+   * @returns {ApiSynthesizedField}
+   */
+  synthesizedField(object) {
+    const result = /** @type ApiSynthesizedField */ ({
+      id: object['@id'],
+      element: undefined,
+      value: undefined,
+    });
+    let element = object[this._getAmfKey(this.ns.aml.vocabularies.docSourceMaps.element)];
+    if (element) {
+      if (Array.isArray(element)) {
+        [element] = element;
+      }
+      result.element = element['@value'] || element;
+    }
+    let value = object[this._getAmfKey(this.ns.aml.vocabularies.docSourceMaps.value)];
+    if (value) {
+      if (Array.isArray(value)) {
+        [value] = value;
+      }
+      result.value = value['@value'] || value;
     }
     return result;
   }

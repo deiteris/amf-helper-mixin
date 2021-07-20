@@ -32,6 +32,7 @@ describe('AmfSerializer', () => {
       assert.deepEqual(result.accepts, [], 'has no accepts');
       assert.deepEqual(result.schemes, [], 'has no schemes');
       assert.deepEqual(result.contentType, [], 'has no contentType');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('adds the responses', () => {
@@ -153,13 +154,14 @@ describe('AmfSerializer', () => {
       assert.equal(result.name, 'list', 'has the name');
       assert.typeOf(result.description, 'string', 'has the description');
       assert.isFalse(result.deprecated, 'is not deprecated');
-      assert.deepEqual(result.customDomainProperties, [], 'has no customDomainProperties')
-      assert.deepEqual(result.callbacks, [], 'has no callbacks')
-      assert.deepEqual(result.responses, [], 'has no responses')
-      assert.deepEqual(result.servers, [], 'has no servers')
-      assert.deepEqual(result.accepts, [], 'has no accepts')
-      assert.deepEqual(result.schemes, [], 'has no schemes')
-      assert.deepEqual(result.contentType, [], 'has no contentType')
+      assert.deepEqual(result.customDomainProperties, [], 'has no customDomainProperties');
+      assert.deepEqual(result.callbacks, [], 'has no callbacks');
+      assert.deepEqual(result.responses, [], 'has no responses');
+      assert.deepEqual(result.servers, [], 'has no servers');
+      assert.deepEqual(result.accepts, [], 'has no accepts');
+      assert.deepEqual(result.schemes, [], 'has no schemes');
+      assert.deepEqual(result.contentType, [], 'has no contentType');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('adds the security info', () => {

@@ -122,6 +122,7 @@ paths:
           description: Status values that need to be considered for filter
           required: false
           explode: true
+          example: pending
           schema:
             type: string
             enum:

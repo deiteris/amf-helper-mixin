@@ -38,6 +38,7 @@ describe('AmfSerializer', () => {
       assert.deepEqual(result.customDomainProperties, [], 'has empty customDomainProperties');
       assert.typeOf(result.items, 'object', 'has the items');
       assert.include(result.items.types, serializer.ns.w3.shacl.NodeShape, 'items has the NodeShape type');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('processes a NodeShape', () => {
@@ -61,6 +62,7 @@ describe('AmfSerializer', () => {
       assert.isFalse(result.closed, 'has the closed');
       assert.typeOf(result.properties, 'array', 'has the properties');
       assert.isNotEmpty(result.properties, 'the properties is not empty');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('processes an UnionShape', () => {
@@ -79,8 +81,10 @@ describe('AmfSerializer', () => {
       assert.deepEqual(result.customDomainProperties, [], 'has empty customDomainProperties');
       assert.typeOf(result.anyOf, 'array', 'has the anyOf');
       assert.lengthOf(result.anyOf, 2, 'has all anyOf');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
       const [any1] = result.anyOf;
-      assert.typeOf(any1.id, 'string', 'has the anyOf definition as Shape')
+      assert.typeOf(any1.id, 'string', 'has the anyOf definition as Shape');
+      assert.typeOf(any1.sourceMaps, 'object', 'has source maps');
     });
 
     it('processes a ScalarShape', () => {
@@ -98,6 +102,7 @@ describe('AmfSerializer', () => {
       assert.deepEqual(result.customDomainProperties, [], 'has empty customDomainProperties');
       assert.equal(result.dataType, 'http://www.w3.org/2001/XMLSchema#string', 'has the dataType');
       assert.lengthOf(result.values, 3, 'has the values set');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('processes a ScalarShape with enum values', () => {
@@ -116,6 +121,7 @@ describe('AmfSerializer', () => {
       assert.equal(v1.dataType, serializer.ns.w3.xmlSchema.string, 'v1 has the dataType');
       assert.equal(v2.dataType, serializer.ns.w3.xmlSchema.string, 'v2 has the dataType');
       assert.equal(v3.dataType, serializer.ns.w3.xmlSchema.string, 'v3 has the dataType');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('processes a FileShape with enum values', () => {
@@ -136,6 +142,7 @@ describe('AmfSerializer', () => {
       assert.deepEqual(result.fileTypes, ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'], 'has the fileTypes');
       assert.equal(result.minLength, 1, 'has the minLength set');
       assert.equal(result.maxLength, 10, 'has the maxLength set');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('processes a RecursiveShape', () => {
@@ -193,6 +200,7 @@ describe('AmfSerializer', () => {
       assert.deepEqual(result.and, [], 'has empty and');
       assert.deepEqual(result.values, [], 'has empty values');
       assert.lengthOf(result.xone, 2, 'has the xone array');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('processes the allOf shape (and)', () => {

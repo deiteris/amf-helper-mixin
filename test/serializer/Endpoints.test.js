@@ -24,6 +24,7 @@ describe('AmfSerializer', () => {
       assert.equal(result.path, '/pet', 'has the path');
       assert.typeOf(result.operations, 'array', 'has the operations');
       assert.lengthOf(result.operations, 2, 'has all operations');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('adds the servers property', () => {

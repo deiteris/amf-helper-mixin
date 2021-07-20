@@ -22,6 +22,7 @@ describe('AmfSerializer', () => {
       const result = serializer.server(servers[3]);
       assert.typeOf(result, 'object', 'returns an object');
       assert.include(result.types, serializer.ns.aml.vocabularies.apiContract.Server, 'has the server type');
+      assert.typeOf(result.sourceMaps, 'object', 'has source maps');
     });
 
     it('has the id', () => {

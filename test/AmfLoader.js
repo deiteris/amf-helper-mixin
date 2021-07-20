@@ -7,6 +7,7 @@ import { AmfHelperMixin } from '../amf-helper-mixin.js';
 /** @typedef {import('../src/amf').Shape} Shape */
 /** @typedef {import('../src/amf').Request} Request */
 /** @typedef {import('../src/amf').Response} Response */
+/** @typedef {import('../src/amf').SecurityRequirement} SecurityRequirement */
 
 export class AmfHelper extends AmfHelperMixin(Object) {
   /**
@@ -117,6 +118,27 @@ export class AmfHelper extends AmfHelperMixin(Object) {
       const objectName = this._getValue(typed, this.ns.w3.shacl.name);
       return objectName === name;
     });
+  }
+
+  /**
+   * @param {Object} model
+   * @param {string} endpoint
+   * @param {string} operation
+   * @return {SecurityRequirement[]}
+   */
+  lookupOperationSecurity(model, endpoint, operation) {
+    const op = this.lookupOperation(model, endpoint, operation);
+    if (!op) {
+      throw new Error(`Unknown operation for path ${endpoint} and method ${operation}`);
+    }
+    let security = op[this._getAmfKey(this.ns.aml.vocabularies.security.security)];
+    if (!security) {
+      throw new Error(`Operation has no "security" value.`);
+    }
+    if (!Array.isArray(security)) {
+      security = [security];
+    }
+    return security;
   }
 }
 
