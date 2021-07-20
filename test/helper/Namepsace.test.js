@@ -192,6 +192,7 @@ describe('Namespace', () => {
       ['name', `${key}name`],
       ['strict', `${key}strict`],
       ['deprecated', `${key}deprecated`],
+      ['location', `${key}location`],
     ].forEach(([property, value]) => {
       it(`has value for ${property}`, () => {
         const result = ns.aml.vocabularies.document[property];
@@ -426,6 +427,7 @@ describe('Namespace', () => {
     const key = 'http://a.ml/vocabularies/document-source-maps#';
 
     [
+      ['SourceMap', `${key}SourceMap`],
       ['sources', `${key}sources`],
       ['element', `${key}element`],
       ['value', `${key}value`],
@@ -433,6 +435,7 @@ describe('Namespace', () => {
       ['trackedElement', `${key}tracked-element`],
       ['parsedJsonSchema', `${key}parsed-json-schema`],
       ['lexical', `${key}lexical`],
+      ['synthesizedField', `${key}synthesized-field`],
     ].forEach(([property, value]) => {
       it(`has value for ${property}`, () => {
         const result = ns.aml.vocabularies.docSourceMaps[property];
