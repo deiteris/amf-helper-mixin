@@ -237,10 +237,20 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
   }
 
   /**
+   * @param {DomainElement} object 
+   * @returns {DomainElement|undefined}
+   */
+  getLinkTarget(object) {
+    const id = this._getLinkValue(object, this.ns.aml.vocabularies.document.linkTarget);
+    return this[findAmfType](id);
+  }
+
+  /**
    * @param {Shape} object 
    * @returns {ApiShape}
    */
   shape(object) {
+    this._resolve(object);
     /** @type string */
     let linkLabel;
     let target = object;
@@ -351,29 +361,20 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiAnyShape}
    */
   anyShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiAnyShape */ (this.shape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type Shape */ (this[findAmfType](id));
+      const value = /** @type Shape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
     }
-
-    const result = /** @type ApiAnyShape */ (this.shape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
-    }
+    result.examples = [];
 
     const { ns } = this;
     const examples = target[this._getAmfKey(ns.aml.vocabularies.apiContract.examples)];
     if (Array.isArray(examples) && examples.length) {
       result.examples = examples.map((item) => this.example(item));
-    } else {
-      result.examples = [];
     }
     const docs = target[this._getAmfKey(ns.aml.vocabularies.core.documentation)];
     if (Array.isArray(docs) && docs.length) {
@@ -392,20 +393,13 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiScalarShape}
    */
   scalarShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiScalarShape */ (this.anyShape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type ScalarShape */ (this[findAmfType](id));
+      const value = /** @type ScalarShape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
-    }
-    const result = /** @type ApiScalarShape */ (this.anyShape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
     }
     const { ns } = this;
     const pattern = this._getValue(target, ns.w3.shacl.pattern);
@@ -450,20 +444,13 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiNodeShape}
    */
   nodeShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiNodeShape */ (this.anyShape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type NodeShape */ (this[findAmfType](id));
+      const value = /** @type NodeShape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
-    }
-    const result = /** @type ApiNodeShape */ (this.anyShape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
     }
     const { ns } = this;
     const discriminator = this._getValue(target, ns.aml.vocabularies.shapes.discriminator);
@@ -518,23 +505,16 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiPropertyShape}
    */
   propertyShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiPropertyShape */ (this.shape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type PropertyShape */ (this[findAmfType](id));
+      const value = /** @type PropertyShape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
     }
-    const result = /** @type ApiPropertyShape */ (this.shape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
-    }
     const { ns } = this;
-    const path = this._getValue(target, ns.w3.shacl.path);
+    const path = this._getLinkValue(target, ns.w3.shacl.path);
     if (path && typeof path === 'string') {
       result.path = path;
     }
@@ -578,20 +558,13 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiFileShape}
    */
   fileShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiFileShape */ (this.anyShape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type FileShape */ (this[findAmfType](id));
+      const value = /** @type FileShape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
-    }
-    const result = /** @type ApiFileShape */ (this.anyShape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
     }
     const { ns } = this;
     const pattern = this._getValue(target, ns.w3.shacl.pattern);
@@ -636,27 +609,20 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiSchemaShape}
    */
   schemaShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiSchemaShape */ (this.anyShape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type SchemaShape */ (this[findAmfType](id));
+      const value = /** @type SchemaShape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
-    }
-    const result = /** @type ApiSchemaShape */ (this.anyShape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
     }
     const { ns } = this;
     const mediaType = this._getValue(target, ns.aml.vocabularies.core.mediaType);
     if (mediaType && typeof mediaType === 'string') {
       result.mediaType = mediaType;
     }
-    const raw = this._getValue(target, ns.w3.shacl.raw);
+    const raw = this._getValue(target, ns.aml.vocabularies.document.raw);
     if (raw && typeof raw === 'string') {
       result.raw = raw;
     }
@@ -668,20 +634,13 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiRecursiveShape}
    */
   recursiveShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiRecursiveShape */ (this.shape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type SchemaShape */ (this[findAmfType](id));
+      const value = /** @type RecursiveShape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
-    }
-    const result = /** @type ApiRecursiveShape */ (this.shape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
     }
     const { ns } = this;
     const fp = this._getLinkValue(object, ns.aml.vocabularies.shapes.fixPoint);
@@ -696,20 +655,13 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiDataArrangeShape}
    */
   dataArrangeShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiDataArrangeShape */ (this.anyShape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type DataArrangeShape */ (this[findAmfType](id));
+      const value = /** @type DataArrangeShape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
-    }
-    const result = /** @type ApiDataArrangeShape */ (this.anyShape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
     }
     // const { ns } = this;
     // const { minItems, maxItems, uniqueItems } = object;
@@ -730,20 +682,13 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiArrayShape}
    */
   arrayShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiArrayShape */ (this.dataArrangeShape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type ArrayShape */ (this[findAmfType](id));
+      const value = /** @type ArrayShape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
-    }
-    const result = /** @type ApiArrayShape */ (this.dataArrangeShape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
     }
 
     const items = target[this._getAmfKey(this.ns.aml.vocabularies.shapes.items)];
@@ -759,20 +704,13 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiTupleShape}
    */
   tupleShape(object) {
-    /** @type string */
-    let linkLabel;
     let target = object;
+    const result = /** @type ApiTupleShape */ (this.dataArrangeShape(target));
     if (this.isLink(target)) {
-      linkLabel = /** @type string */ (this._getValue(target, this.ns.aml.vocabularies.document.linkLabel));
-      const id = this._getLinkValue(target, this.ns.aml.vocabularies.document.linkTarget);
-      const value = /** @type TupleShape */ (this[findAmfType](id));
+      const value = /** @type TupleShape */ (this.getLinkTarget(target));
       if (value) {
         target = value;
       }
-    }
-    const result = /** @type ApiTupleShape */ (this.dataArrangeShape(target));
-    if (linkLabel) {
-      result.linkLabel = linkLabel;
     }
     const items = target[this._getAmfKey(this.ns.aml.vocabularies.shapes.items)];
     if (Array.isArray(items) && items.length) {
@@ -818,6 +756,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiExample} Serialized Example
    */
   example(object) {
+    this._resolve(object);
     const result = /** @type ApiExample */ ({
       id: object['@id'],
       types: object['@type'].map(this[expandKey].bind(this)),
@@ -1598,13 +1537,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiSecurityOAuth1Settings}
    */
   oAuth1Settings(object) {
-    const result = /** @type ApiSecurityOAuth1Settings */ ({
-      id: object['@id'],
-      types: object['@type'].map(this[expandKey].bind(this)),
-      customDomainProperties: this.customDomainProperties(object),
-      sourceMaps: this.sourceMap(object),
-      signatures: [],
-    });
+    const result = /** @type ApiSecurityOAuth1Settings */ (this.settings(object));
     const { ns } = this;
     const authorizationUri = this._getValue(object, ns.aml.vocabularies.security.authorizationUri);
     if (authorizationUri && typeof authorizationUri === 'string') {
@@ -1621,6 +1554,8 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
     const signatures = /** @type string[] */ (this._getValueArray(object, ns.aml.vocabularies.security.signature));
     if (Array.isArray(signatures) && signatures.length) {
       result.signatures = signatures;
+    } else {
+      result.signatures = [];
     }
     return result;
   }
@@ -1630,22 +1565,19 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiSecurityOAuth2Settings}
    */
   oAuth2Settings(object) {
-    const result = /** @type ApiSecurityOAuth2Settings */ ({
-      id: object['@id'],
-      types: object['@type'].map(this[expandKey].bind(this)),
-      customDomainProperties: this.customDomainProperties(object),
-      flows: [],
-      authorizationGrants: [],
-      sourceMaps: this.sourceMap(object),
-    });
+    const result = /** @type ApiSecurityOAuth2Settings */ (this.settings(object));
     const { ns } = this;
     const grants = /** @type string[] */ (this._getValueArray(object, ns.aml.vocabularies.security.authorizationGrant));
     if (Array.isArray(grants) && grants.length) {
       result.authorizationGrants = grants;
+    } else {
+      result.authorizationGrants = [];
     }
     const flows = /** @type OAuth2Flow[] */ (object[this._getAmfKey(ns.aml.vocabularies.security.flows)]);
     if (Array.isArray(flows) && flows.length) {
       result.flows = flows.map((p) => this.oAuth2Flow(p));
+    } else {
+      result.flows = [];
     }
     return result;
   }
@@ -1714,12 +1646,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiSecurityApiKeySettings}
    */
   apiKeySettings(object) {
-    const result = /** @type ApiSecurityApiKeySettings */ ({
-      id: object['@id'],
-      types: object['@type'].map(this[expandKey].bind(this)),
-      customDomainProperties: this.customDomainProperties(object),
-      sourceMaps: this.sourceMap(object),
-    });
+    const result = /** @type ApiSecurityApiKeySettings */ (this.settings(object));
     const { ns } = this;
     const name = this._getValue(object, ns.aml.vocabularies.core.name);
     if (name && typeof name === 'string') {
@@ -1737,12 +1664,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiSecurityHttpSettings}
    */
   httpSettings(object) {
-    const result = /** @type ApiSecurityHttpSettings */ ({
-      id: object['@id'],
-      types: object['@type'].map(this[expandKey].bind(this)),
-      customDomainProperties: this.customDomainProperties(object),
-      sourceMaps: this.sourceMap(object),
-    });
+    const result = /** @type ApiSecurityHttpSettings */ (this.settings(object));
     const { ns } = this;
     const scheme = this._getValue(object, ns.aml.vocabularies.security.scheme);
     if (scheme && typeof scheme === 'string') {
@@ -1760,12 +1682,7 @@ export class AmfSerializer extends AmfHelperMixin(Object) {
    * @returns {ApiSecurityOpenIdConnectSettings}
    */
   openIdConnectSettings(object) {
-    const result = /** @type ApiSecurityOpenIdConnectSettings */ ({
-      id: object['@id'],
-      types: object['@type'].map(this[expandKey].bind(this)),
-      customDomainProperties: this.customDomainProperties(object),
-      sourceMaps: this.sourceMap(object),
-    });
+    const result = /** @type ApiSecurityOpenIdConnectSettings */ (this.settings(object));
     const { ns } = this;
     const url = this._getValue(object, ns.aml.vocabularies.security.openIdConnectUrl);
     if (url && typeof url === 'string') {

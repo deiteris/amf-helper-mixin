@@ -8,6 +8,7 @@ import { AmfSerializer } from '../../index.js';
 /** @typedef {import('../../src/types').ApiSecurityOAuth1Settings} ApiSecurityOAuth1Settings */
 /** @typedef {import('../../src/types').ApiSecurityApiKeySettings} ApiSecurityApiKeySettings */
 /** @typedef {import('../../src/types').ApiSecurityOpenIdConnectSettings} ApiSecurityOpenIdConnectSettings */
+/** @typedef {import('../../src/types').ApiSecurityHttpSettings} ApiSecurityHttpSettings */
 
 describe('AmfSerializer', () => {
   describe('OAS security', () => {
@@ -121,13 +122,151 @@ describe('AmfSerializer', () => {
         assert.isUndefined(secScheme.queryString, 'settings has no queryString');
         assert.equal(secScheme.name, 'OpenID', 'settings has name');
         assert.isUndefined(secScheme.displayName, 'settings has no displayName');
-        assert.isUndefined(secScheme.description, 'settings has description');
+        assert.equal(secScheme.description, 'Using OpenId', 'settings has description');
         assert.equal(secScheme.type, 'openIdConnect', 'settings has type');
         
         const apiKeySettings = /** @type ApiSecurityOpenIdConnectSettings */ (secScheme.settings);
         assert.typeOf(apiKeySettings.sourceMaps, 'object', 'apiKeySettings has source maps');
         assert.deepEqual(apiKeySettings.customDomainProperties, [], 'apiKeySettings has customDomainProperties');
         assert.equal(apiKeySettings.url, 'https://example.com/.well-known/openid-configuration', 'apiKeySettings has in');
+      });
+
+      it('serializes basic HTTP', () => {
+        const security = AmfLoader.lookupOperationSecurity(api, '/http-security', 'get');
+        const result = serializer.securityRequirement(security[0]);
+        assert.equal(result.id, security[0]['@id'], 'has the id');
+        assert.include(result.types, serializer.ns.aml.vocabularies.security.securityRequirement, 'has the types');
+        assert.deepEqual(result.customDomainProperties, [], 'has no customDomainProperties');
+        assert.typeOf(result.sourceMaps, 'object', 'has source maps');
+        assert.typeOf(result.schemes, 'array', 'has schemes');
+        assert.lengthOf(result.schemes, 1, 'has single scheme');
+        const [scheme] = result.schemes;
+        assert.include(scheme.types, serializer.ns.aml.vocabularies.security.ParametrizedSecurityScheme, 'scheme has the types');
+        assert.deepEqual(scheme.customDomainProperties, [], 'scheme has no customDomainProperties');
+        assert.typeOf(scheme.sourceMaps, 'object', 'scheme has source maps');
+        assert.equal(scheme.name, 'BasicAuth', 'scheme has name');
+        
+        const secScheme = scheme.scheme;
+        assert.include(secScheme.types, serializer.ns.aml.vocabularies.security.SecurityScheme, 'settings has the types');
+        assert.deepEqual(secScheme.customDomainProperties, [], 'settings has no customDomainProperties');
+        assert.deepEqual(secScheme.headers, [], 'settings has headers');
+        assert.deepEqual(secScheme.queryParameters, [], 'settings has queryParameters');
+        assert.deepEqual(secScheme.responses, [], 'settings has responses');
+        assert.typeOf(secScheme.sourceMaps, 'object', 'settings has source maps');
+        assert.isUndefined(secScheme.queryString, 'settings has no queryString');
+        assert.equal(secScheme.name, 'BasicAuth', 'settings has name');
+        assert.isUndefined(secScheme.displayName, 'settings has no displayName');
+        assert.equal(secScheme.description, 'A basic HTTP scheme', 'settings has description');
+        assert.equal(secScheme.type, 'http', 'settings has type');
+        
+        const secSettings = /** @type ApiSecurityHttpSettings */ (secScheme.settings);
+        assert.typeOf(secSettings.sourceMaps, 'object', 'secSettings has source maps');
+        assert.deepEqual(secSettings.customDomainProperties, [], 'secSettings has customDomainProperties');
+        assert.equal(secSettings.scheme, 'basic', 'secSettings has in');
+      });
+
+      it('serializes Bearer auth', () => {
+        const security = AmfLoader.lookupOperationSecurity(api, '/http-security', 'post');
+        const result = serializer.securityRequirement(security[0]);
+        assert.equal(result.id, security[0]['@id'], 'has the id');
+        assert.include(result.types, serializer.ns.aml.vocabularies.security.securityRequirement, 'has the types');
+        assert.deepEqual(result.customDomainProperties, [], 'has no customDomainProperties');
+        assert.typeOf(result.sourceMaps, 'object', 'has source maps');
+        assert.typeOf(result.schemes, 'array', 'has schemes');
+        assert.lengthOf(result.schemes, 1, 'has single scheme');
+        const [scheme] = result.schemes;
+        assert.include(scheme.types, serializer.ns.aml.vocabularies.security.ParametrizedSecurityScheme, 'scheme has the types');
+        assert.deepEqual(scheme.customDomainProperties, [], 'scheme has no customDomainProperties');
+        assert.typeOf(scheme.sourceMaps, 'object', 'scheme has source maps');
+        assert.equal(scheme.name, 'BearerAuth', 'scheme has name');
+        
+        const secScheme = scheme.scheme;
+        assert.include(secScheme.types, serializer.ns.aml.vocabularies.security.SecurityScheme, 'settings has the types');
+        assert.deepEqual(secScheme.customDomainProperties, [], 'settings has no customDomainProperties');
+        assert.deepEqual(secScheme.headers, [], 'settings has headers');
+        assert.deepEqual(secScheme.queryParameters, [], 'settings has queryParameters');
+        assert.deepEqual(secScheme.responses, [], 'settings has responses');
+        assert.typeOf(secScheme.sourceMaps, 'object', 'settings has source maps');
+        assert.isUndefined(secScheme.queryString, 'settings has no queryString');
+        assert.equal(secScheme.name, 'BearerAuth', 'settings has name');
+        assert.isUndefined(secScheme.displayName, 'settings has no displayName');
+        assert.equal(secScheme.description, 'Bearer form of authentication', 'settings has description');
+        assert.equal(secScheme.type, 'http', 'settings has type');
+        
+        const secSettings = /** @type ApiSecurityHttpSettings */ (secScheme.settings);
+        assert.typeOf(secSettings.sourceMaps, 'object', 'secSettings has source maps');
+        assert.deepEqual(secSettings.customDomainProperties, [], 'secSettings has customDomainProperties');
+        assert.equal(secSettings.scheme, 'bearer', 'secSettings has in');
+      });
+
+      it('serializes auth with cookies', () => {
+        const security = AmfLoader.lookupOperationSecurity(api, '/http-security', 'patch');
+        const result = serializer.securityRequirement(security[0]);
+        assert.equal(result.id, security[0]['@id'], 'has the id');
+        assert.include(result.types, serializer.ns.aml.vocabularies.security.securityRequirement, 'has the types');
+        assert.deepEqual(result.customDomainProperties, [], 'has no customDomainProperties');
+        assert.typeOf(result.sourceMaps, 'object', 'has source maps');
+        assert.typeOf(result.schemes, 'array', 'has schemes');
+        assert.lengthOf(result.schemes, 1, 'has single scheme');
+        const [scheme] = result.schemes;
+        assert.include(scheme.types, serializer.ns.aml.vocabularies.security.ParametrizedSecurityScheme, 'scheme has the types');
+        assert.deepEqual(scheme.customDomainProperties, [], 'scheme has no customDomainProperties');
+        assert.typeOf(scheme.sourceMaps, 'object', 'scheme has source maps');
+        assert.equal(scheme.name, 'cookieAuth', 'scheme has name');
+        
+        const secScheme = scheme.scheme;
+        assert.include(secScheme.types, serializer.ns.aml.vocabularies.security.SecurityScheme, 'settings has the types');
+        assert.deepEqual(secScheme.customDomainProperties, [], 'settings has no customDomainProperties');
+        assert.deepEqual(secScheme.headers, [], 'settings has headers');
+        assert.deepEqual(secScheme.queryParameters, [], 'settings has queryParameters');
+        assert.deepEqual(secScheme.responses, [], 'settings has responses');
+        assert.typeOf(secScheme.sourceMaps, 'object', 'settings has source maps');
+        assert.isUndefined(secScheme.queryString, 'settings has no queryString');
+        assert.equal(secScheme.name, 'cookieAuth', 'settings has name');
+        assert.isUndefined(secScheme.displayName, 'settings has no displayName');
+        assert.isUndefined(secScheme.description, 'settings has description');
+        assert.equal(secScheme.type, 'Api Key', 'settings has type');
+        
+        const secSettings = /** @type ApiSecurityApiKeySettings */ (secScheme.settings);
+        assert.typeOf(secSettings.sourceMaps, 'object', 'secSettings has source maps');
+        assert.deepEqual(secSettings.customDomainProperties, [], 'secSettings has customDomainProperties');
+        assert.equal(secSettings.in, 'cookie', 'secSettings has in');
+        assert.equal(secSettings.name, 'JSESSIONID', 'secSettings has in');
+      });
+
+      it('serializes auth with query params', () => {
+        const security = AmfLoader.lookupOperationSecurity(api, '/http-security', 'options');
+        const result = serializer.securityRequirement(security[0]);
+        assert.equal(result.id, security[0]['@id'], 'has the id');
+        assert.include(result.types, serializer.ns.aml.vocabularies.security.securityRequirement, 'has the types');
+        assert.deepEqual(result.customDomainProperties, [], 'has no customDomainProperties');
+        assert.typeOf(result.sourceMaps, 'object', 'has source maps');
+        assert.typeOf(result.schemes, 'array', 'has schemes');
+        assert.lengthOf(result.schemes, 1, 'has single scheme');
+        const [scheme] = result.schemes;
+        assert.include(scheme.types, serializer.ns.aml.vocabularies.security.ParametrizedSecurityScheme, 'scheme has the types');
+        assert.deepEqual(scheme.customDomainProperties, [], 'scheme has no customDomainProperties');
+        assert.typeOf(scheme.sourceMaps, 'object', 'scheme has source maps');
+        assert.equal(scheme.name, 'ApiKeyQuery', 'scheme has name');
+        
+        const secScheme = scheme.scheme;
+        assert.include(secScheme.types, serializer.ns.aml.vocabularies.security.SecurityScheme, 'settings has the types');
+        assert.deepEqual(secScheme.customDomainProperties, [], 'settings has no customDomainProperties');
+        assert.deepEqual(secScheme.headers, [], 'settings has headers');
+        assert.deepEqual(secScheme.queryParameters, [], 'settings has queryParameters');
+        assert.deepEqual(secScheme.responses, [], 'settings has responses');
+        assert.typeOf(secScheme.sourceMaps, 'object', 'settings has source maps');
+        assert.isUndefined(secScheme.queryString, 'settings has no queryString');
+        assert.equal(secScheme.name, 'ApiKeyQuery', 'settings has name');
+        assert.isUndefined(secScheme.displayName, 'settings has no displayName');
+        assert.equal(secScheme.description, 'API Key in a query parameter', 'settings has description');
+        assert.equal(secScheme.type, 'Api Key', 'settings has type');
+        
+        const secSettings = /** @type ApiSecurityApiKeySettings */ (secScheme.settings);
+        assert.typeOf(secSettings.sourceMaps, 'object', 'secSettings has source maps');
+        assert.deepEqual(secSettings.customDomainProperties, [], 'secSettings has customDomainProperties');
+        assert.equal(secSettings.in, 'query', 'secSettings has in');
+        assert.equal(secSettings.name, 'X-API-Key', 'secSettings has in');
       });
     });
   });

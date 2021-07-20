@@ -11,6 +11,7 @@ import { AmfSerializer } from '../../index.js';
 /** @typedef {import('../../src/types').ApiFileShape} ApiFileShape */
 /** @typedef {import('../../src/types').ApiRecursiveShape} ApiRecursiveShape */
 /** @typedef {import('../../src/types').ApiCustomDomainProperty} ApiCustomDomainProperty */
+/** @typedef {import('../../src/types').ApiSchemaShape} ApiSchemaShape */
 
 describe('AmfSerializer', () => {
   describe('RAML shapes', () => {
@@ -176,6 +177,32 @@ describe('AmfSerializer', () => {
       // @ts-ignore
       assert.typeOf(item.value, 'string', 'has the value');
       assert.deepEqual(item.customDomainProperties, [], 'has empty customDomainProperties');
+    });
+
+    it('processes a SchemaShape', () => {
+      const expects = AmfLoader.lookupExpects(api, '/xml', 'post');
+      const payload = AmfLoader._computePayload(expects)[0];
+      const shape = payload[serializer._getAmfKey(serializer.ns.aml.vocabularies.shapes.schema)][0];
+      const result = /** @type ApiSchemaShape */ (serializer.unknownShape(shape));
+      assert.equal(result.mediaType, 'application/xml', 'has media type');
+      assert.typeOf(result.raw, 'string', 'has raw');
+      assert.typeOf(result.examples, 'array', 'has examples');
+      assert.lengthOf(result.examples, 1, 'has single examples');
+      const [ example ] = result.examples;
+      assert.isTrue(example.strict, 'example.strict is set')
+      assert.typeOf(example.value, 'string', 'example.value is set')
+      assert.typeOf(example.location, 'string', 'example.location is set')
+    });
+
+    it('resolves links', () => {
+      // takes any operation that has a link-target in the shape
+      const expects = AmfLoader.lookupExpects(api, '/files/{fileId}/comments', 'post');
+      const payload = AmfLoader._computePayload(expects)[0];
+      const shape = payload[serializer._getAmfKey(serializer.ns.aml.vocabularies.shapes.schema)][0];
+      const result = /** @type ApiNodeShape */ (serializer.unknownShape(shape));
+      assert.equal(result.linkLabel, 'CommentWritable', 'has linkLabel');
+      assert.typeOf(result.examples, 'array', 'has examples');
+      assert.lengthOf(result.examples, 1, 'has single examples');
     });
   });
 

@@ -134,6 +134,58 @@ describe('AmfSerializer', () => {
     
   });
 
+  describe('OAS properties', () => {
+    let api;
+    /** @type AmfSerializer */
+    let serializer;
+    before(async () => {
+      api = await AmfLoader.load(true, 'oas-3-api');
+      serializer = new AmfSerializer();
+      serializer.amf = api;
+    });
+
+    it('processes callbacks', () => {
+      const shape = AmfLoader.lookupOperation(api, '/subscribe', 'post');
+      const result = serializer.operation(shape);
+      const { callbacks } = result;
+      assert.typeOf(callbacks, 'array', 'has callbacks');
+      assert.lengthOf(callbacks, 1, 'has single callback');
+      const [callback] = callbacks;
+      assert.include(callback.types, serializer.ns.aml.vocabularies.apiContract.Callback, 'has the type');
+      assert.deepEqual(callback.customDomainProperties, [], 'has the customDomainProperties');
+      assert.typeOf(callback.sourceMaps, 'object', 'has the sourceMaps');
+      assert.equal(callback.name, 'myEvent', 'has the name');
+      assert.equal(callback.expression, '{$request.body#/callbackUrl}', 'has the expression');
+      assert.typeOf(callback.endpoint, 'object', 'has the endpoint');
+      const { endpoint } = callback;
+      assert.equal(endpoint.path, '/{$request.body#/callbackUrl}', 'endpoint has path');
+      assert.typeOf(endpoint.operations, 'array', 'endpoint has operations');
+      assert.lengthOf(endpoint.operations, 1, 'endpoint has single operation');
+    });
+
+    it('processes OAS properties', () => {
+      const shape = AmfLoader.lookupOperation(api, '/oas-properties', 'post');
+      const result = serializer.operation(shape);
+      
+      assert.isTrue(result.deprecated, 'has deprecated');
+      assert.lengthOf(result.servers, 4, 'has servers');
+      assert.equal(result.operationId, 'myId', 'has operationId');
+      assert.typeOf(result.documentation, 'object', 'has documentation');
+      const { documentation } = result;
+      assert.equal(documentation.url, 'https://docs.com', 'has documentation.url');
+      assert.equal(documentation.description, 'A doc', 'has documentation.description');
+      const { request } = result;
+      assert.typeOf(request, 'object', 'has request');
+      assert.isFalse(request.required, 'has request.required');
+      const { tags } = result;
+      assert.lengthOf(tags, 2, 'has tags');
+      const [tag] = tags;
+      assert.typeOf(tag, 'object', 'has a tag');
+      assert.include(tag.types, serializer.ns.aml.vocabularies.apiContract.Tag, 'tag has the type');
+      assert.equal(tag.name, 'pets', 'tag has the name');
+    });
+  });
+
   describe('RAML operations', () => {
     let api;
     /** @type AmfSerializer */

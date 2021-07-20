@@ -935,6 +935,16 @@ types:
     responses: 
       200:
         description: 
+/xml:
+  displayName: People
+  description: The people API used to access data about the people.
+  post:
+    displayName: Create a person
+    description: Use this method to add new person
+    body:
+      application/xml:
+        type: !include schemas/person.xsd
+        example: !include examples/person.xml
 /examples:
   get:
     displayName: Included example

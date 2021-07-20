@@ -117,20 +117,30 @@ components:
     BasicAuth:
       type: http
       scheme: basic
+      description: A basic HTTP scheme
 
     BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+      description: Bearer form of authentication
     
     ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
+      description: Using API keys
+
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: X-API-Key
+      description: API Key in a query parameter
     
     OpenID:
       type: openIdConnect
       openIdConnectUrl: https://example.com/.well-known/openid-configuration
+      description: Using OpenId
     
     OAuth2:
       type: oauth2
@@ -268,3 +278,79 @@ paths:
               responses:
                 '200':
                   description: Your server returns this code if it accepts the callback
+  /oas-properties:
+    post:
+      externalDocs:
+        url: https://docs.com
+        description: A doc
+      deprecated: true
+      tags:
+        - "pets"
+        - "tests"
+      description: A description
+      operationId: myId
+      requestBody:
+        description: A body
+        required: false
+        content:
+          application/x-www-form-urlencoded:
+            encoding: 
+              color:
+                style: form
+                explode: false
+            examples:
+              simple:
+                value:
+                  - yellow
+                  - red
+                  - pink
+                summary: A sample color value
+                description: Example of a color value
+            schema:
+              type: object
+              properties:
+                color:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: OK response
+  /http-security:
+    get:
+      security:
+        - BasicAuth: []
+      responses:
+        '201':
+          description: OK
+    post:
+      security:
+        - BearerAuth: []
+      responses:
+        '201':
+          description: OK
+    put:
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '201':
+          description: OK
+    patch:
+      security:
+        - cookieAuth: []
+      responses:
+        '201':
+          description: OK
+    options:
+      security:
+        - ApiKeyQuery: []
+      responses:
+        '102':
+          description: OK
+  /open-id:
+    get:
+      security:
+        - OpenID: []
+      responses:
+        '201':
+          description: OK
