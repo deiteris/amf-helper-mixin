@@ -58,7 +58,7 @@ node_modules
 coverage
 
 # AMF models
-/test/*.json
-!test/apis.json
+/apis/*.json
+!apis/apis.json
 
 .idea/
