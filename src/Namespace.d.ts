@@ -170,6 +170,7 @@ interface Shapes {
   xmlWrapped: string;
   readOnly: string;
   deprecated: string;
+  uniqueItems: string;
 }
 
 interface Data {
@@ -287,6 +288,7 @@ interface Shacl {
   raw: string;
   datatype: string;
   minCount: string;
+  maxCount: string;
   xone: string;
   not: string;
   or: string;
