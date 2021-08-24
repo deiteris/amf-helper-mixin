@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit-element';
-import { AmfHelperMixin } from '../amf-helper-mixin.js';
+import { AmfHelperMixin } from '../../amf-helper-mixin.js';
 
 export class TestElement extends AmfHelperMixin(LitElement) {
   static get styles() {

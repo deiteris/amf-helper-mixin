@@ -16,6 +16,28 @@ import { AmfModelExpander, JsonLdOptions, JsonLd } from 'amf-json-ld-lib'
 import { ns } from './Namespace.js';
 
 /** @typedef {import('./Namespace').ns} Namespace */
+/** @typedef {import('./amf').DomainElement} DomainElement */
+/** @typedef {import('./amf').AmfDocument} AmfDocument */
+/** @typedef {import('./amf').WebApi} WebApi */
+/** @typedef {import('./amf').AsyncApi} AsyncApi */
+/** @typedef {import('./amf').Server} Server */
+/** @typedef {import('./amf').EndPoint} EndPoint */
+/** @typedef {import('./amf').Operation} Operation */
+/** @typedef {import('./amf').Shape} Shape */
+/** @typedef {import('./amf').Parameter} Parameter */
+/** @typedef {import('./amf').Request} Request */
+/** @typedef {import('./amf').Response} Response */
+/** @typedef {import('./amf').Payload} Payload */
+/** @typedef {import('./amf').SecurityRequirement} SecurityRequirement */
+/** @typedef {import('./amf').SecurityScheme} SecurityScheme */
+/** @typedef {import('./types').ServersQueryOptions} ServersQueryOptions */
+/** @typedef {import('./types').ServerQueryOptions} ServerQueryOptions */
+/** @typedef {import('./types').ComputeUriOptions} ComputeUriOptions */
+
+export const expandKey = Symbol('expandKey');
+export const findAmfType = Symbol('findAmfType');
+export const findReferenceObject = Symbol('findReferenceObject');
+export const getArrayItems = Symbol('getArrayItems');
 
 /* eslint-disable class-methods-use-this */
 /* eslint-disable no-plusplus */
@@ -43,7 +65,7 @@ import { ns } from './Namespace.js';
  * Then it concatenates computed base URI with `endpoint`'s path property.
  *
  * @param {*} base
- * @return {*}
+ * @returns {*}
  * @mixin
  */
 export const AmfHelperMixin = (base) => class extends base {
@@ -65,7 +87,7 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * A namespace for AMF model.
-   * @return {Namespace}
+   * @returns {Namespace}
    */
   get ns() {
     return ns;
@@ -131,7 +153,7 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Returns compact model key for given value.
    * @param {string} property AMF original property
-   * @return {string} Compact model property name or the same value if
+   * @returns {string} Compact model property name or the same value if
    * value not found in the context.
    */
   _getAmfKey(property) {
@@ -182,8 +204,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Ensures that the model is AMF object.
    *
-   * @param {Object|Array} amf AMF json/ld model
-   * @return {Object|undefined} API spec
+   * @param {any} amf AMF json/ld model
+   * @returns {AmfDocument|undefined} API spec
    */
   _ensureAmfModel(amf) {
     if (!amf) {
@@ -206,7 +228,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * It returns new array of the item is not an array.
    *
    * @param {Array|any} value An item to test
-   * @return {Array|undefined}
+   * @returns {Array|undefined}
    */
   _ensureArray(value) {
     if (!value) {
@@ -220,9 +242,9 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Gets a single scalar value from a model.
-   * @param {Object} model Amf model to extract the value from.
+   * @param {DomainElement} model Amf model to extract the value from.
    * @param {string} key Model key to search for the value
-   * @return {string|number|boolean|undefined|null} Value for key
+   * @returns {string|number|boolean|undefined|null} Value for key
    */
   _getValue(model, key) {
     /* eslint-disable-next-line no-param-reassign */
@@ -248,25 +270,80 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Gets values from a model as an array of `@value` properties.
-   * @param {Object} model Amf model to extract the value from.
+   * @param {DomainElement} model Amf model to extract the value from.
    * @param {string} key Model key to search for the value
-   * @return {Array<string|number|boolean|null>|undefined} Value for key
+   * @returns {Array<string|number|boolean|null>|undefined} Value for key
    */
   _getValueArray(model, key) {
     /* eslint-disable-next-line no-param-reassign */
     key = this._getAmfKey(key);
     const data = model && this._ensureArray(model[key]);
-    if (!data || !(data instanceof Array)) {
+    if (!Array.isArray(data)) {
       return undefined;
     }
     return data.map((item) => item['@value'] || item);
   }
 
   /**
+   * Reads an array from the model.
+   * 
+   * @param {DomainElement} model Amf model to extract the value from.
+   * @param {string} key Model key to search for the value
+   * @returns {DomainElement[]|undefined} Value for the key
+   */
+  [getArrayItems](model, key) {
+    const k = this._getAmfKey(key);
+    const data = model && this._ensureArray(model[k]);
+    if (!Array.isArray(data)) {
+      return undefined;
+    }
+    return data;
+  }
+
+  /**
+   * Reads the value of the `@id` property.
+   * @param {DomainElement} model Amf model to extract the value from.
+   * @param {string} key Model key to search for the @id
+   * @returns {string|undefined}
+   */
+  _getLinkValue(model, key) {
+    const k = this._getAmfKey(key);
+    let data = model && model[k];
+    if (!data) {
+      return undefined;
+    }
+    if (Array.isArray(data)) {
+      [data] = data;
+    }
+    if (!data) {
+      return undefined;
+    }
+    return data['@id'];
+  }
+
+  /**
+   * Reads the list of value for the `@id` property.
+   * @param {DomainElement} model Amf model to extract the value from.
+   * @param {string} key Model key to search for the @id
+   * @returns {string[]|undefined}
+   */
+  _getLinkValues(model, key) {
+    const k = this._getAmfKey(key);
+    let data = /** @type DomainElement[] */ (model && model[k]);
+    if (!data) {
+      return undefined;
+    }
+    if (!Array.isArray(data)) {
+      data = [data];
+    }
+    return data.map(i => i['@id']);
+  }
+
+  /**
    * Checks if a model has a type.
-   * @param {Object} model Model to test
+   * @param {DomainElement} model Model to test
    * @param {string} type Type name
-   * @return {boolean} True if model has a type.
+   * @returns {boolean} True if model has a type.
    */
   _hasType(model, type) {
     const types = this._ensureArray(model && model['@type']);
@@ -284,9 +361,9 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Checks if a shape has a property.
-   * @param {Object} shape The shape to test
+   * @param {DomainElement} shape The shape to test
    * @param {string} key Property name to test
-   * @return {boolean}
+   * @returns {boolean}
    */
   _hasProperty(shape, key) {
     /* eslint-disable-next-line no-param-reassign */
@@ -297,9 +374,9 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes array value of a property in a model (shape).
    *
-   * @param {Object} shape AMF shape object
+   * @param {DomainElement} shape AMF shape object
    * @param {string} key Property name
-   * @return {Array<string|number|boolean|null|Object>|undefined}
+   * @returns {Array<string|number|boolean|null|Object>|undefined}
    */
   _computePropertyArray(shape, key) {
     if (!shape) {
@@ -308,7 +385,7 @@ export const AmfHelperMixin = (base) => class extends base {
     /* eslint-disable-next-line no-param-reassign */
     key = this._getAmfKey(key);
     const data = this._ensureArray(shape && shape[key]);
-    if (!data || !(data instanceof Array)) {
+    if (!data || !Array.isArray(data)) {
       return undefined;
     }
     return data;
@@ -318,9 +395,9 @@ export const AmfHelperMixin = (base) => class extends base {
    * Computes a value of a property in a model (shape).
    * It takes first value of a property, if exists.
    *
-   * @param {Object} shape AMF shape object
+   * @param {DomainElement} shape AMF shape object
    * @param {string} key Property name
-   * @return {string|number|boolean|null|Object|undefined}
+   * @returns {string|number|boolean|null|Object|undefined}
    */
   _computePropertyObject(shape, key) {
     /* eslint-disable-next-line no-param-reassign */
@@ -333,7 +410,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * Tests if a passed argument exists.
    *
    * @param {string|Object|number} value A value to test
-   * @return {boolean}
+   * @returns {boolean}
    */
   _computeHasStringValue(value) {
     return !!value || value === 0;
@@ -343,7 +420,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * Computes if passed argument is an array and has a value.
    * It does not check for type or value of the array items.
    * @param {Array} value Value to test
-   * @return {boolean}
+   * @returns {boolean}
    */
   _computeHasArrayValue(value) {
     return !!(value instanceof Array && value.length);
@@ -351,8 +428,8 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Computes description for a shape.
-   * @param {Object} shape AMF shape
-   * @return {string} Description value.
+   * @param {DomainElement} shape AMF shape
+   * @returns {string} Description value.
    */
   _computeDescription(shape) {
     return /** @type string */ (this._getValue(shape, this.ns.schema.desc));
@@ -360,8 +437,8 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Computes a list of headers
-   * @param {Object} shape
-   * @return {Array<Object>|Object|undefined}
+   * @param {DomainElement} shape
+   * @returns {Parameter[]|Parameter|undefined}
    */
   _computeHeaders(shape) {
     return this._computePropertyArray(shape, this.ns.aml.vocabularies.apiContract.header) || this._computeHeaderSchema(shape);
@@ -369,8 +446,8 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * 
-   * @param {Object} shape 
-   * @return {Object|undefined}
+   * @param {DomainElement} shape 
+   * @returns {Parameter|undefined}
    */
   _computeHeaderSchema(shape) {
     return this._computePropertyObject(shape, this.ns.aml.vocabularies.apiContract.headerSchema);
@@ -378,8 +455,8 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Computes a list of query parameters
-   * @param {Object} shape
-   * @return {Array<Object>|undefined}
+   * @param {DomainElement} shape
+   * @returns {Parameter[]|undefined}
    */
   _computeQueryParameters(shape) {
     return this._computePropertyArray(shape, this.ns.aml.vocabularies.apiContract.parameter);
@@ -389,26 +466,26 @@ export const AmfHelperMixin = (base) => class extends base {
    * In OAS URI parameters can be defined on an operation level under `uriParameter` property.
    * Normally `_computeQueryParameters()` function would be used to extract parameters from an endpoint.
    * This is a fallback option to test when an API is OAS.
-   * @param {Object} shape Method or Expects model
-   * @return {Array<Object>}
+   * @param {Operation|Request} shape Method or Expects model
+   * @returns {Parameter[]}
    */
   _computeUriParameters(shape) {
     if (!shape) {
       return undefined;
     }
-    const operationKey = this.ns.aml.vocabularies.apiContract.Operation;
-    const parameterKey = this.ns.aml.vocabularies.apiContract.uriParameter;
-    if (this._hasType(shape, operationKey)) {
-      /* eslint-disable-next-line no-param-reassign */
-      shape = this._computeExpects(shape);
+    const { apiContract } = this.ns.aml.vocabularies;
+    let object = shape;
+    if (this._hasType(object, apiContract.Operation)) {
+      const typed = /** @type Operation */ (object);
+      object = this._computeExpects(typed);
     }
-    return this._computePropertyArray(shape, parameterKey);
+    return this._computePropertyArray(object, apiContract.uriParameter);
   }
 
   /**
    * Computes a list of responses
-   * @param {Object} shape
-   * @return {Array<Object>|undefined}
+   * @param {Operation} shape
+   * @returns {Response[]|undefined}
    */
   _computeResponses(shape) {
     return this._computePropertyArray(shape, this.ns.aml.vocabularies.apiContract.response);
@@ -417,8 +494,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes value for `serverVariables` property.
    *
-   * @param {Object} server AMF API model for Server.
-   * @return {Array<Object>|undefined} Variables if defined.
+   * @param {Server} server AMF API model for Server.
+   * @returns {Parameter[]|undefined} Variables if defined.
    */
   _computeServerVariables(server) {
     return this._computePropertyArray(server, this.ns.aml.vocabularies.apiContract.variable);
@@ -427,10 +504,10 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes value for `endpointVariables` property.
    *
-   * @param {Object} endpoint Endpoint model
-   * @param {Object=} method Optional method to be used to lookup the parameters from
+   * @param {EndPoint} endpoint Endpoint model
+   * @param {Operation=} method Optional method to be used to lookup the parameters from
    * This is used for OAS model which can defined path parameters on a method level.
-   * @return {Array<Object>|undefined} Parameters if defined.
+   * @returns {Parameter[]|undefined} Parameters if defined.
    */
   _computeEndpointVariables(endpoint, method) {
     let result = this._computeQueryParameters(endpoint);
@@ -443,8 +520,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes value for the `payload` property
    *
-   * @param {Object} expects Current value of `expects` property.
-   * @return {Array<Object>|undefined} Payload model if defined.
+   * @param {Request} expects Current value of `expects` property.
+   * @returns {Payload[]|undefined} Payload model if defined.
    */
   _computePayload(expects) {
     return this._computePropertyArray(expects, this.ns.aml.vocabularies.apiContract.payload);
@@ -453,8 +530,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes value for `returns` property
    *
-   * @param {Object} method AMF `supportedOperation` model
-   * @return {Array<Object>|undefined}
+   * @param {Operation} method AMF `supportedOperation` model
+   * @returns {Response[]|undefined}
    */
   _computeReturns(method) {
     return this._computePropertyArray(method, this.ns.aml.vocabularies.apiContract.returns);
@@ -463,8 +540,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes value for `security` property
    *
-   * @param {Object} method AMF `supportedOperation` model
-   * @return {Array<Object>|undefined}
+   * @param {Operation} method AMF `supportedOperation` model
+   * @returns {SecurityRequirement[]|undefined}
    */
   _computeSecurity(method) {
     return this._computePropertyArray(method, this.ns.aml.vocabularies.security.security);
@@ -473,8 +550,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes value for `hasCustomProperties` property.
    *
-   * @param {Object} shape AMF `supportedOperation` model
-   * @return {boolean}
+   * @param {DomainElement} shape AMF `supportedOperation` model
+   * @returns {boolean}
    */
   _computeHasCustomProperties(shape) {
     return this._hasProperty(shape, this.ns.aml.vocabularies.document.customDomainProperties);
@@ -483,8 +560,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes API version from the AMF model.
    *
-   * @param {Object|Array<Object>} amf
-   * @return {string}
+   * @param {AmfDocument} amf
+   * @returns {string}
    */
   _computeApiVersion(amf) {
     const api = this._computeApi(amf);
@@ -497,8 +574,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes model's `encodes` property.
    *
-   * @param {Array<Object>|Object} model AMF data model
-   * @return {Array<Object>} List of encodes
+   * @param {AmfDocument} model AMF data model
+   * @returns {DomainElement|undefined} List of encodes
    */
   _computeEncodes(model) {
     if (!model) {
@@ -511,7 +588,7 @@ export const AmfHelperMixin = (base) => class extends base {
     const key = this._getAmfKey(this.ns.aml.vocabularies.document.encodes);
     const data = model[key];
     if (data) {
-      return data instanceof Array ? data[0] : data;
+      return Array.isArray(data) ? data[0] : data;
     }
     return undefined;
   }
@@ -519,8 +596,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes list of declarations in the AMF api model.
    *
-   * @param {Array<Object>|Object} model AMF json/ld model for an API
-   * @return {Array<Object>} List of declarations
+   * @param {AmfDocument} model AMF json/ld model for an API
+   * @returns {DomainElement[]|undefined} List of declarations
    */
   _computeDeclares(model) {
     if (!model) {
@@ -535,14 +612,14 @@ export const AmfHelperMixin = (base) => class extends base {
     }
     const key = this._getAmfKey(this.ns.aml.vocabularies.document.declares);
     const data = this._ensureArray(model[key]);
-    return data instanceof Array ? data : undefined;
+    return Array.isArray(data) ? data : undefined;
   }
 
   /**
    * Computes list of references in the AMF api model.
    *
-   * @param {Array<Object>|Object} model AMF json/ld model for an API
-   * @return {Array<Object>} List of declarations
+   * @param {AmfDocument} model AMF json/ld model for an API
+   * @returns {DomainElement[]|undefined} List of declarations
    */
   _computeReferences(model) {
     if (!model) {
@@ -563,8 +640,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes AMF's `http://schema.org/WebAPI` model
    *
-   * @param {Array<Object>|Object} model AMF json/ld model for an API
-   * @return {Object} Web API declaration.
+   * @param {AmfDocument} model AMF json/ld model for an API
+   * @returns {WebApi|undefined} Web API declaration.
    */
   _computeWebApi(model) {
     const enc = this._computeEncodes(model);
@@ -580,8 +657,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes AMF's `http://schema.org/API` model
    *
-   * @param {Array<Object>|Object} model AMF json/ld model for an API
-   * @return {Object} API declaration.
+   * @param {AmfDocument} model AMF json/ld model for an API
+   * @returns {AsyncApi|WebApi} API declaration.
    */
   _computeApi(model) {
     const enc = this._computeEncodes(model);
@@ -597,8 +674,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Returns whether an AMF node is a WebAPI node
    * 
-   * @param {Array<Object>|Object} model  AMF json/ld model for an API
-   * @return {Boolean}
+   * @param {AmfDocument} model  AMF json/ld model for an API
+   * @returns {boolean}
    */
   _isWebAPI(model) {
     const enc = this._computeEncodes(model);
@@ -611,8 +688,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Returns whether an AMF node is an AsyncAPI node
    * 
-   * @param {Array<Object>|Object} model  AMF json/ld model for an API
-   * @return {Boolean}
+   * @param {AmfDocument} model  AMF json/ld model for an API
+   * @returns {boolean}
    */
   _isAsyncAPI(model) {
     const enc = this._computeEncodes(model);
@@ -625,8 +702,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Returns whether an AMF node is an API node
    * 
-   * @param {Array<Object>|Object} model  AMF json/ld model for an API
-   * @return {Boolean}
+   * @param {AmfDocument} model  AMF json/ld model for an API
+   * @returns {boolean}
    */
   _isAPI(model) {
     const enc = this._computeEncodes(model);
@@ -639,8 +716,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes value for `server` property that is later used with other computations.
    *
-   * @param {Array<Object>|Object} model AMF model for an API
-   * @return {Object|undefined} The server model
+   * @param {AmfDocument} model AMF model for an API
+   * @returns {Server|undefined} The server model
    */
   _computeServer(model) {
     const api = this._computeApi(model);
@@ -658,7 +735,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * - Operation
    * - Endpoint
    * @param {Object} model The partial model to evaluate
-   * @return {boolean} Whether the model's type is part of the array of valid node types from which
+   * @returns {boolean} Whether the model's type is part of the array of valid node types from which
    * to read servers
    * @private
    */
@@ -683,12 +760,11 @@ export const AmfHelperMixin = (base) => class extends base {
   }
 
   /**
-   * @param {Object} options
-   * @param {string=} options.endpointId Optional endpoint to look for the servers in
-   * @param {string=} options.methodId Optional method to look for the servers in
-   * @return {Array<Object>} List of servers for method, if defined, or endpoint, if defined, or root level
+   * @param {ServersQueryOptions=} [options={}] Server query options
+   * @returns {Server[]} List of servers for method, if defined, or endpoint, if defined, or root level
    */
-  _getServers({ endpointId, methodId }){
+  _getServers(options = {}) {
+    const { endpointId, methodId } = options;
     const { amf } = this;
     if (!amf) {
       return undefined;
@@ -707,10 +783,10 @@ export const AmfHelperMixin = (base) => class extends base {
 
     const serverKey = this._getAmfKey(this.ns.aml.vocabularies.apiContract.server);
 
-    const getRootServers = () => this._getValueArray(api, serverKey);
+    const getRootServers = () => /** @type Server[] */ (this[getArrayItems](api, serverKey));
     const getEndpointServers = () => {
       const endpoint = this._computeEndpointModel(api, endpointId);
-      const servers = this._getValueArray(endpoint, serverKey);
+      const servers = /** @type Server[] */ (this[getArrayItems](endpoint, serverKey));
       if (servers) {
         return servers;
       }
@@ -718,7 +794,7 @@ export const AmfHelperMixin = (base) => class extends base {
     };
     const getMethodServers = () => {
       const method = this._computeMethodModel(api, methodId);
-      const servers = this._getValueArray(method, serverKey);
+      const servers = /** @type Server[] */ (this[getArrayItems](method, serverKey));
       if (servers) {
         return servers;
       }
@@ -736,13 +812,11 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Compute values for `server` property based on node an optional selected id.
    *
-   * @param {Object} options
-   * @param {String=} options.endpointId Optional endpoint id, required if method is provided
-   * @param {String=} options.methodId Optional method id
-   * @param {String=} options.id Optional selected server id
-   * @return {Array<Object>|undefined} The server list or undefined if node has no servers
+   * @param {ServerQueryOptions=} options Server query options
+   * @returns {Server[]|undefined} The server list or undefined if node has no servers
    */
-  _getServer({ endpointId, methodId, id }) {
+  _getServer(options = {}) {
+    const { endpointId, methodId, id } = options;
     const servers = this._getServers({ endpointId, methodId });
     return servers ? servers.filter((srv) => this._getValue(srv, '@id') === id) : undefined;
   }
@@ -750,11 +824,11 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes endpoint's URI based on `amf` and `endpoint` models.
    *
-   * @param {Object} server Server model of AMF API.
-   * @param {Object} endpoint Endpoint model
+   * @param {Server} server Server model of AMF API.
+   * @param {EndPoint} endpoint Endpoint model
    * @param {string=} baseUri Current value of `baseUri` property
    * @param {string=} version API current version
-   * @return {string} Endpoint's URI
+   * @returns {string} Endpoint's URI
    * @deprecated Use `_computeUri()` instead
    */
   _computeEndpointUri(server, endpoint, baseUri, version) {
@@ -774,19 +848,12 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes endpoint's URI based on `endpoint` model.
    *
-   * @param {Object} endpoint Model for the endpoint
-   * @param {Object} opts Configuration options
-   * @param {Object=} opts.server Model for current server, if available.
-   * @param {string=} opts.baseUri Base URI to be used with the endpoint's path.
-   * Note, base URI is ignored when `ignoreBase` is set
-   * @param {string=} opts.version Current version of the API. It is used to replace
-   * `{version}` from the URI template.
-   * @param {boolean=} [opts.ignoreBase = false] Whether or not to ignore rendering
-   * @param {string[]=} [opts.protocols] List of available protocols of the base URI with path.
-   * @param {boolean=} [opts.ignorePath]
-   * @return {string} The base uri for the endpoint.
+   * @param {EndPoint} endpoint Model for the endpoint
+   * @param {ComputeUriOptions=} options Configuration options
+   * @returns {string} The base uri for the endpoint.
    */
-  _computeUri(endpoint, { server, baseUri, version, ignoreBase=false, protocols, ignorePath = false } = {}) {
+  _computeUri(endpoint, options = {}) {
+    const { server, baseUri, version, ignoreBase=false, protocols, ignorePath = false } = options;
     let baseValue = '';
     if (ignoreBase === false) {
       baseValue = this._getBaseUri(baseUri, server, protocols) || '';
@@ -808,8 +875,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Appends endpoint's path to url
    * @param {string} url
-   * @param {Object} endpoint
-   * @return {string}
+   * @param {EndPoint} endpoint
+   * @returns {string}
    */
   _appendPath(url, endpoint) {
     const path = this._getValue(endpoint, this.ns.aml.vocabularies.apiContract.path);
@@ -820,9 +887,9 @@ export const AmfHelperMixin = (base) => class extends base {
    * Computes base URI value from either `baseUri` or `amf` value (in this order).
    *
    * @param {string} baseUri Value of `baseUri` property
-   * @param {Object} server AMF API model for Server.
-   * @param {Array<string>=} protocols List of supported protocols
-   * @return {string} Base uri value. Can be empty string.
+   * @param {Server} server AMF API model for Server.
+   * @param {string[]=} protocols List of supported protocols
+   * @returns {string} Base uri value. Can be empty string.
    */
   _getBaseUri(baseUri, server, protocols) {
     if (baseUri) {
@@ -834,11 +901,11 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes base URI from AMF model.
    *
-   * @param {Object} server AMF API model for Server.
-   * @param {?Array<string>} protocols The list of supported protocols. If not
+   * @param {Server} server AMF API model for Server.
+   * @param {string[]=} protocols The list of supported protocols. If not
    * provided and required to compute the url it uses `amf` to compute
    * protocols
-   * @return {string|undefined} Base uri value if exists.
+   * @returns {string|undefined} Base uri value if exists.
    */
   _getAmfBaseUri(server, protocols) {
     const key = this.ns.aml.vocabularies.core.urlTemplate;
@@ -851,12 +918,12 @@ export const AmfHelperMixin = (base) => class extends base {
    * A function that makes sure that the URL has a scheme definition.
    * If no supported protocols information is available it assumes `http`.
    *
-   * @param {String} value A url value
-   * @param {Array<string>=} protocols List of supported by the API protocols
+   * @param {string} value A url value
+   * @param {string[]=} protocols List of supported by the API protocols
    * An array of string like: `['HTTP', 'HTTPS']`. It lowercase the value.
    * If not set it tries to read supported protocols value from `amf`
    * property.
-   * @return {string} Url with scheme.
+   * @returns {string} Url with scheme.
    */
   _ensureUrlScheme(value, protocols) {
     if (value && typeof value === 'string') {
@@ -873,7 +940,7 @@ export const AmfHelperMixin = (base) => class extends base {
           }
         } else {
           /* eslint-disable-next-line no-param-reassign */
-          value = `http://${  value}`;
+          value = `http://${value}`;
         }
       }
     }
@@ -883,22 +950,22 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes supported protocols by the API.
    *
-   * @param {Object|Array} model AMF data model
-   * @return {Array<string>|undefined}
+   * @param {AmfDocument} model AMF data model
+   * @returns {string[]|undefined}
    */
   _computeProtocols(model) {
     const api = this._computeApi(model);
     if (!api) {
       return undefined;
     }
-    return /** @type {Array<string>} */ (this._getValueArray(api, this.ns.aml.vocabularies.apiContract.scheme));
+    return /** @type string[]} */ (this._getValueArray(api, this.ns.aml.vocabularies.apiContract.scheme));
   }
 
   /**
    * Computes value for the `expects` property.
    *
-   * @param {Object} method AMF `supportedOperation` model
-   * @return {Object}
+   * @param {Operation} method AMF `supportedOperation` model
+   * @returns {Request}
    */
   _computeExpects(method) {
     const operationKey = this.ns.aml.vocabularies.apiContract.Operation;
@@ -907,18 +974,18 @@ export const AmfHelperMixin = (base) => class extends base {
       const key = this._getAmfKey(expectsKey);
       const expects = this._ensureArray(method[key]);
       if (expects) {
-        return expects instanceof Array ? expects[0] : expects;
+        return Array.isArray(expects) ? expects[0] : expects;
       }
     }
     return undefined;
   }
 
   /**
-   * Tries to find an example value (whether it's default value or from an
+   * Finds an example value (whether it's default value or from an
    * example) to put it into snippet's values.
    *
-   * @param {Object} item A http://raml.org/vocabularies/http#Parameter property
-   * @return {string|undefined}
+   * @param {Parameter} item A http://raml.org/vocabularies/http#Parameter property
+   * @returns {string|undefined}
    */
   _computePropertyValue(item) {
     const exKey = this.ns.aml.vocabularies.apiContract.examples;
@@ -948,8 +1015,8 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Computes list of endpoints from a WebApi model.
-   * @param {Object} webApi
-   * @return {Array<Object>|undefined} An array of endpoints.
+   * @param {WebApi} webApi
+   * @returns {EndPoint[]|undefined} An array of endpoints.
    */
   _computeEndpoints(webApi) {
     if (!webApi) {
@@ -963,9 +1030,9 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes model for an endpoint documentation.
    *
-   * @param {Object} webApi Current value of `webApi` property
+   * @param {WebApi} webApi Current value of `webApi` property
    * @param {string} id Selected shape ID
-   * @return {Object} An endpoint definition
+   * @returns {EndPoint} An endpoint definition
    */
   _computeEndpointModel(webApi, id) {
     const endpoints = this._computeEndpoints(webApi);
@@ -978,9 +1045,9 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes model for an endpoint documentation using it's path.
    *
-   * @param {Object} webApi Current value of `webApi` property
+   * @param {WebApi} webApi Current value of `webApi` property
    * @param {string} path Endpoint path
-   * @return {Object|undefined} An endpoint definition
+   * @returns {EndPoint|undefined} An endpoint definition
    */
   _computeEndpointByPath(webApi, path) {
     if (!path || !webApi) {
@@ -1003,9 +1070,9 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes method for the method documentation.
    *
-   * @param {Object} webApi Current value of `webApi` property
+   * @param {WebApi} webApi Current value of `webApi` property
    * @param {string} selected Selected shape
-   * @return {Object} A method definition
+   * @returns {Operation} A method definition
    */
   _computeMethodModel(webApi, selected) {
     const methods = this.__computeMethodsListForMethod(webApi, selected);
@@ -1017,9 +1084,9 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Computes list of operations in an endpoint
-   * @param {Object} webApi The WebApi AMF model
+   * @param {WebApi} webApi The WebApi AMF model
    * @param {string} id Endpoint ID
-   * @return {Array<Object>} List of SupportedOperation objects
+   * @returns {Operation[]} List of SupportedOperation objects
    */
   _computeOperations(webApi, id) {
     const endpoint = this._computeEndpointModel(webApi, id);
@@ -1032,9 +1099,9 @@ export const AmfHelperMixin = (base) => class extends base {
 
   /**
    * Computes an endpoint for a method.
-   * @param {Object} webApi The WebApi AMF model
+   * @param {WebApi} webApi The WebApi AMF model
    * @param {string} methodId Method id
-   * @return {Object|undefined} An endpoint model of undefined.
+   * @returns {EndPoint|undefined} An endpoint model of undefined.
    */
   _computeMethodEndpoint(webApi, methodId) {
     if (!webApi || !methodId) {
@@ -1067,9 +1134,9 @@ export const AmfHelperMixin = (base) => class extends base {
    * Computes a list of methods for an endpoint that contains a method with
    * given id.
    *
-   * @param {Object} webApi WebApi model
+   * @param {WebApi} webApi WebApi model
    * @param {string} methodId Method id.
-   * @return {Array<Object>|undefined} A list of sibling methods or undefined.
+   * @returns {Operation[]|undefined} A list of sibling methods or undefined.
    */
   __computeMethodsListForMethod(webApi, methodId) {
     const endpoint = this._computeMethodEndpoint(webApi, methodId);
@@ -1083,10 +1150,10 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes a type documentation model.
    *
-   * @param {Array<Object>} declares Current value of `declares` property
-   * @param {Array<Object>} references Current value of `references` property
+   * @param {DomainElement[]} declares Current value of `declares` property
+   * @param {DomainElement[]} references Current value of `references` property
    * @param {string} selected Selected shape
-   * @return {Object} A type definition
+   * @returns {Shape} A type definition
    */
   _computeType(declares, references, selected) {
     if ((!declares && !references) || !selected) {
@@ -1111,10 +1178,73 @@ export const AmfHelperMixin = (base) => class extends base {
   }
 
   /**
+   * Finds a type in the model declares and references.
+   * @param {string} domainId The domain id of the type (AMF's shape).
+   * @returns {Shape|undefined} The AMF shape or undefined when not found.
+   */
+  [findAmfType](domainId) {
+    let { amf } = this;
+    if (!amf) {
+      return undefined;
+    }
+    if (Array.isArray(amf)) {
+      [amf] = amf;
+    }
+    const declares = this._computeDeclares(amf);
+    const compactId = domainId.replace('amf://id', '');
+    if (Array.isArray(declares)) {
+      const result = declares.find((item) => item['@id'] === domainId || item['@id'] === compactId);
+      if (result) {
+        return result;
+      }
+    }
+    return this[findReferenceObject](domainId);
+  }
+
+  /**
+   * Searches for an object in model's references list.
+   * It does not resolve the object (useful for handling links correctly).
+   * 
+   * @param {string} domainId The domain of the object to find in the references.
+   * @returns {DomainElement|undefined} The domain object or undefined.
+   */
+  [findReferenceObject](domainId) {
+    let { amf } = this;
+    if (!amf) {
+      return undefined;
+    }
+    if (Array.isArray(amf)) {
+      [amf] = amf;
+    }
+    const references = this._computeReferences(amf);
+    if (!Array.isArray(references) || !references.length) {
+      return undefined;
+    }
+    const compactId = domainId.replace('amf://id', '');
+    for (let i = 0, len = references.length; i < len; i++) {
+      const ref = /** @type AmfDocument */ (references[i]);
+      const declares = this._computeDeclares(ref);
+      if (!Array.isArray(declares)) {
+        continue;
+      }
+      for (let j = 0, lenDecl = declares.length; j < lenDecl; j++) {
+        let declared = declares[j];
+        if (Array.isArray(declared)) {
+          [declared] = declared;
+        }
+        if (declared['@id'] === domainId || declared['@id'] === compactId) {
+          return declared;
+        }
+      }
+    }
+    return undefined;
+  }
+
+  /**
    * Computes a type model from a reference (library for example).
-   * @param {Object} reference AMF model for a reference to extract the data from
+   * @param {DomainElement} reference AMF model for a reference to extract the data from
    * @param {string} selected Node ID to look for
-   * @return {Object|undefined} Type definition or undefined if not found.
+   * @returns {Shape|undefined} Type definition or undefined if not found.
    */
   _computeReferenceType(reference, selected) {
     const declare = this._computeDeclares(reference);
@@ -1140,9 +1270,9 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes model for selected security definition.
    *
-   * @param {Array<Object>} declares Current value of `declares` property
+   * @param {DomainElement[]} declares Current value of `declares` property
    * @param {string} selected Selected shape
-   * @return {Object|undefined} A security definition
+   * @returns {SecurityScheme|undefined} A security definition
    */
   _computeSecurityModel(declares, selected) {
     if (!declares || !selected) {
@@ -1154,9 +1284,9 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Computes a documentation model.
    *
-   * @param {Object} webApi Current value of `webApi` property
+   * @param {WebApi} webApi Current value of `webApi` property
    * @param {string} selected Selected shape
-   * @return {Object} A method definition
+   * @returns {DomainElement|undefined}
    */
   _computeDocument(webApi, selected) {
     if (!webApi || !selected) {
@@ -1170,8 +1300,8 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Resolves a reference to an external fragment.
    *
-   * @param {Object} shape A shape to resolve
-   * @return {Object} Resolved shape.
+   * @param {any} shape A shape to resolve
+   * @returns {any} Resolved shape.
    */
   _resolve(shape) {
     const {amf} = this;
@@ -1231,9 +1361,9 @@ export const AmfHelperMixin = (base) => class extends base {
   }
 
   /**
-   * @param {Object} amf References object to search in
+   * @param {AmfDocument} amf References object to search in
    * @param {string} id Id of the shape to resolve
-   * @return {Object | undefined} Resolved shape for given reference, undefined otherwise
+   * @returns {DomainElement | undefined} Resolved shape for given reference, undefined otherwise
    */
   _getLinkTarget(amf, id) {
     if (!amf || !id) {
@@ -1259,9 +1389,9 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Resolves the shape of a given reference.
    *
-   * @param {Object} references References object to search in
+   * @param {DomainElement[]} references References object to search in
    * @param {string} id Id of the shape to resolve
-   * @return {Object | undefined} Resolved shape for given reference, undefined otherwise
+   * @returns {DomainElement | undefined} Resolved shape for given reference, undefined otherwise
    */
   _obtainShapeFromReferences(references, id) {
     if (!Array.isArray(references) || !references.length) {
@@ -1288,9 +1418,9 @@ export const AmfHelperMixin = (base) => class extends base {
   /**
    * Searches a node with a given ID in an array
    *
-   * @param {Array<Object>} array Array to search for a given ID
+   * @param {DomainElement[]} array Array to search for a given ID
    * @param {string} id Id to search for
-   * @return {Object | undefined} Node with the given ID when found, undefined otherwise
+   * @returns {DomainElement | undefined} Node with the given ID when found, undefined otherwise
    */
   _findById(array, id) {
     if (!array) return undefined;
@@ -1344,7 +1474,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * then the special merge function for that key will be used to match that property
    * @param {any} shapeA AMF node
    * @param {any} shapeB AMF node
-   * @return {*} Merged AMF node
+   * @returns {*} Merged AMF node
    * @private
    */
   _mergeShapes(shapeA, shapeB) {
@@ -1366,7 +1496,7 @@ export const AmfHelperMixin = (base) => class extends base {
    * Result is wrapped in an array as per AMF model standard
    * @param shapeA AMF node
    * @param shapeB AMF node
-   * @return {(*|{})[]} Empty object or resulting merge, wrapped in an array
+   * @returns {(*|{})[]} Empty object or resulting merge, wrapped in an array
    * @private
    */
   _mergeSourceMapsSources(shapeA, shapeB) {
@@ -1382,5 +1512,33 @@ export const AmfHelperMixin = (base) => class extends base {
       bSources = bSources[0];
     }
     return [Object.assign(aSources, bSources)];
+  }
+
+  /**
+   * Expands the key property from compacted mode to full mode.
+   * @param {string} value The value to process
+   * @returns {string} The expanded value.
+   */
+  [expandKey](value) {
+    let { amf } = this;
+    if (!value || typeof value !== 'string' || !amf) {
+      return value;
+    }
+    if (Array.isArray(amf)) {
+      [amf] = amf;
+    }
+    const ctx = amf['@context'];
+    if (!ctx) {
+      return value;
+    }
+    const [root, key] = value.split(':');
+    if (!root || !key) {
+      return value;
+    }
+    const prefix = ctx[root];
+    if (!prefix) {
+      return value;
+    }
+    return `${prefix}${key}`;
   }
 };
