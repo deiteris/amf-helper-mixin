@@ -1,13 +1,19 @@
 import { fixture, assert } from '@open-wc/testing';
-import { AmfLoader } from './amf-loader.js';
+import { AmfLoader } from '../AmfLoader.js';
 import './test-element.js';
 
+/** @typedef {import('./test-element').TestElement} TestElement */
+
 describe('Base URI test', () => {
+  /**
+   * @returns {Promise<TestElement>}
+   */
   async function basicFixture() {
     return fixture(`<test-element></test-element>`);
   }
 
   describe('Base URI test', () => {
+    /** @type TestElement */
     let element;
     let model;
     let server;
@@ -15,7 +21,7 @@ describe('Base URI test', () => {
     let gavEndpoint;
 
     before(async () => {
-      model = await AmfLoader.load();
+      model = await AmfLoader.load(false);
     });
 
     beforeEach(async () => {
@@ -28,7 +34,7 @@ describe('Base URI test', () => {
     });
 
     it('_getAmfBaseUri returns servers base uri', () => {
-      const result = element._getAmfBaseUri(server);
+      const result = element._getAmfBaseUri(server, undefined);
       assert.equal(result, 'https://api.mulesoft.com/{version}');
     });
 
@@ -68,7 +74,7 @@ describe('Base URI test', () => {
     });
 
     it('_getAmfBaseUri() uses AMF encoded protocols with the base uri', () => {
-      const result = element._getAmfBaseUri(noSchemeServer(element));
+      const result = element._getAmfBaseUri(noSchemeServer(element), undefined);
       assert.equal(result, 'https://api.mulesoft.com/test');
     });
 
@@ -94,7 +100,7 @@ describe('Base URI test', () => {
     });
 
     it('_ensureUrlScheme() adds scheme for url from AMF model', () => {
-      const result = element._ensureUrlScheme('domain.com');
+      const result = element._ensureUrlScheme('domain.com', undefined);
       assert.equal(result, 'https://domain.com');
     });
 
@@ -105,7 +111,7 @@ describe('Base URI test', () => {
 
     it('_ensureUrlScheme() adds default scheme', () => {
       element.amf = undefined;
-      const result = element._ensureUrlScheme('domain.com');
+      const result = element._ensureUrlScheme('domain.com', undefined);
       assert.equal(result, 'http://domain.com');
     });
 

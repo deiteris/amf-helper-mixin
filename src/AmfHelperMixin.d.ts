@@ -1,4 +1,6 @@
+import { AmfDocument, AsyncApi, DomainElement, Endpoint, Operation, Parameter, Payload, Request, Response, SecurityRequirement, SecurityScheme, Server, Shape, WebApi } from './amf';
 import { Namespace } from './Namespace';
+import { ComputeUriOptions, ServerQueryOptions, ServersQueryOptions } from './types';
 
 export {AmfHelperMixin};
 
@@ -31,21 +33,10 @@ interface AmfHelperMixinConstructor {
 
 export {AmfHelperMixinConstructor};
 
-interface GetServersOptions {
-  endpointId?: String;
-  methodId?: String;
-}
-interface GetServerOptions {
-  endpointId?: String;
-  methodId?: String;
-  id?: String
-}
-interface ComputeUriOptions {
-  server?: Object;
-  baseUri?: string;
-  version?: string;
-  ignoreBase?: string;
-}
+export const expandKey: unique symbol;
+export const findAmfType: unique symbol;
+export const findReferenceObject: unique symbol;
+export const getArrayItems: unique symbol;
 
 interface AmfHelperMixin {
 
@@ -62,8 +53,8 @@ interface AmfHelperMixin {
    *
    * It is only useful for the element to resolve references.
    */
-  amf: object|object[]|undefined;
-  _amf: object|object[]|undefined;
+  amf: AmfDocument|undefined;
+  _amf: AmfDocument|undefined;
 
   /**
    * This is an abstract method to be implemented by the components.
@@ -71,7 +62,7 @@ interface AmfHelperMixin {
    * set the value.
    * @param amf Current AMF model. Can be undefined.
    */
-  __amfChanged(amf: any): void
+  __amfChanged(amf: AmfDocument): void
 
   /**
    * Returns compact model key for given value.
@@ -88,7 +79,7 @@ interface AmfHelperMixin {
    * @param amf AMF json/ld model
    * @returns API spec
    */
-  _ensureAmfModel(amf: any): object|undefined;
+  _ensureAmfModel(amf: any): AmfDocument|undefined;
 
   /**
    * Ensures that the value is an array.
@@ -98,7 +89,17 @@ interface AmfHelperMixin {
    *
    * @param value An item to test
    */
-  _ensureArray(value: any[]|any): any[]|undefined;
+  _ensureArray<T>(value: T): T[]|undefined;
+
+  /**
+   * Ensures that the value is an array.
+   * It returns undefined when there's no value.
+   * It returns the same array if the value is already an array.
+   * It returns new array of the item is not an array.
+   *
+   * @param value An item to test
+   */
+  _ensureArray<T>(value: T[]): T[]|undefined;
 
   /**
    * Gets a single scalar value from a model.
@@ -107,7 +108,7 @@ interface AmfHelperMixin {
    * @param key Model key to search for the value
    * @returns Value for key
    */
-  _getValue(model: object, key: string): string|number|boolean|undefined|null;
+  _getValue(model: DomainElement, key: string): string|number|boolean|undefined|null;
 
   /**
    * Gets values from a model as an array of `@value` properties.
@@ -116,7 +117,30 @@ interface AmfHelperMixin {
    * @param key Model key to search for the value
    * @returns Value for key
    */
-  _getValueArray(model: object, key: string): Array<string|number|boolean|null>|undefined;
+  _getValueArray(model: DomainElement, key: string): Array<string|number|boolean|null>|undefined;
+
+  /**
+   * Reads an array from the model.
+   * 
+   * @param model Amf model to extract the value from.
+   * @param key Model key to search for the value
+   * @returns Value for the key
+   */
+  [getArrayItems](model: DomainElement, key: string): DomainElement[]|undefined;
+
+  /**
+   * Reads the value of the `@id` property.
+   * @param model Amf model to extract the value from.
+   * @param key Model key to search for the @id
+   */
+  _getLinkValue(model: DomainElement, key: string): string|undefined;
+
+  /**
+   * Reads the list of value for the `@id` property.
+   * @param model Amf model to extract the value from.
+   * @param key Model key to search for the `@id`
+   */
+  _getLinkValues(model: DomainElement, key: string): string[]|undefined;
 
   /**
    * Checks if a model has a type.
@@ -125,7 +149,7 @@ interface AmfHelperMixin {
    * @param type Type name
    * @returns True if model has a type.
    */
-  _hasType(model: object, type: string): boolean|null;
+  _hasType(model: DomainElement, type: string): boolean|null;
 
   /**
    * Checks if a shape has a property.
@@ -133,7 +157,7 @@ interface AmfHelperMixin {
    * @param shape The shape to test
    * @param key Property name to test
    */
-  _hasProperty(shape: object, key: string): boolean|null;
+  _hasProperty(shape: DomainElement, key: string): boolean|null;
 
   /**
    * Computes array value of a property in a model (shape).
@@ -141,7 +165,7 @@ interface AmfHelperMixin {
    * @param shape AMF shape object
    * @param key Property name
    */
-  _computePropertyArray(shape: object, key: string): Array<string|number|boolean|null|Object>|undefined;
+  _computePropertyArray(shape: DomainElement, key: string): Array<string|number|boolean|null|Object>|undefined;
 
   /**
    * Computes a value of a property in a model (shape).
@@ -150,7 +174,7 @@ interface AmfHelperMixin {
    * @param shape AMF shape object
    * @param key Property name
    */
-  _computePropertyObject(shape: object, key: string): string|number|boolean|null|Object|undefined;
+  _computePropertyObject(shape: DomainElement, key: string): string|number|boolean|null|Object|undefined;
 
   /**
    * Tests if a passed argument exists.
@@ -173,18 +197,18 @@ interface AmfHelperMixin {
    * @param shape AMF shape
    * @returns Description value.
    */
-  _computeDescription(shape: object): string|undefined;
+  _computeDescription(shape: DomainElement): string|undefined;
   /**
    * Computes a list of headers
    */
-  _computeHeaders(shape: object): object[]|undefined|object;
+  _computeHeaders(shape: DomainElement): Parameter[]|undefined|Parameter;
 
-  _computeHeaderSchema(shape: object): object|undefined;
+  _computeHeaderSchema(shape: DomainElement): Parameter|undefined;
   
   /**
    * Computes a list of query parameters
    */
-  _computeQueryParameters(shape: object): object[]|undefined;
+  _computeQueryParameters(shape: DomainElement): Parameter[]|undefined;
 
   /**
    * In OAS URI parameters can be defined on an operation level under `uriParameter` property.
@@ -193,11 +217,11 @@ interface AmfHelperMixin {
    *
    * @param shape Method or Expects model
    */
-  _computeUriParameters(shape: object): object[]|undefined;
+  _computeUriParameters(shape: Operation|Request): Parameter[]|undefined;
   /**
    * Computes a list of responses
    */
-  _computeResponses(shape: object): object[]|undefined;
+  _computeResponses(shape: Operation): Response[]|undefined;
 
   /**
    * Computes value for `serverVariables` property.
@@ -205,7 +229,7 @@ interface AmfHelperMixin {
    * @param server AMF API model for Server.
    * @returns Variables if defined.
    */
-  _computeServerVariables(server: object): Array<object>|undefined;
+  _computeServerVariables(server: Server): Parameter[]|undefined;
 
   /**
    * Computes value for `endpointVariables` property.
@@ -215,7 +239,7 @@ interface AmfHelperMixin {
    * This is used for OAS model which can defined path parameters on a method level.
    * @returns Parameters if defined.
    */
-  _computeEndpointVariables(endpoint: object, method?: object): Array<object>|undefined;
+  _computeEndpointVariables(endpoint: Server, method?: Operation): Parameter[]|undefined;
 
   /**
    * Computes value for the `payload` property
@@ -223,33 +247,33 @@ interface AmfHelperMixin {
    * @param expects Current value of `expects` property.
    * @returns Payload model if defined.
    */
-  _computePayload(expects: object): Array<object>|undefined;
+  _computePayload(expects: Request): Payload[]|undefined;
 
   /**
    * Computes value for `returns` property
    *
    * @param method AMF `supportedOperation` model
    */
-  _computeReturns(method: object): Array<object|null>|null|undefined;
+  _computeReturns(method: Operation): Response[]|undefined;
 
   /**
    * Computes value for `security` property
    *
    * @param method AMF `supportedOperation` model
    */
-  _computeSecurity(method: object): Array<object|null>|null|undefined;
+  _computeSecurity(method: Operation): SecurityRequirement[]|undefined;
 
   /**
    * Computes value for `hasCustomProperties` property.
    *
    * @param shape AMF `supportedOperation` model
    */
-  _computeHasCustomProperties(shape: object): boolean|null;
+  _computeHasCustomProperties(shape: DomainElement): boolean|null;
 
   /**
    * Computes API version from the AMF model.
    */
-  _computeApiVersion(amf: object|Array<object>): string|undefined;
+  _computeApiVersion(amf: AmfDocument): string|undefined;
 
   /**
    * Computes model's `encodes` property.
@@ -257,7 +281,7 @@ interface AmfHelperMixin {
    * @param model AMF data model
    * @returns List of encodes
    */
-  _computeEncodes(model: object[]|object): Array<object>|null;
+  _computeEncodes(model: AmfDocument): DomainElement[]|undefined;
 
   /**
    * Computes list of declarations in the AMF api model.
@@ -265,7 +289,7 @@ interface AmfHelperMixin {
    * @param model AMF json/ld model for an API
    * @returns List of declarations
    */
-  _computeDeclares(model: object[]|object): Array<object>|undefined;
+  _computeDeclares(model: AmfDocument): DomainElement[]|undefined;
 
   /**
    * Computes list of references in the AMF api model.
@@ -273,7 +297,7 @@ interface AmfHelperMixin {
    * @param model AMF json/ld model for an API
    * @returns List of declarations
    */
-  _computeReferences(model: object[]|object): Array<object>|undefined;
+  _computeReferences(model: AmfDocument): DomainElement[]|undefined;
 
   /**
    * Computes AMF's `http://schema.org/WebAPI` model
@@ -281,7 +305,7 @@ interface AmfHelperMixin {
    * @param model AMF json/ld model for an API
    * @returns Web API declaration.
    */
-  _computeWebApi(model: object[]|object): object|undefined;
+  _computeWebApi(model: AmfDocument): WebApi|undefined;
 
   /**
    * Computes AMF's `http://schema.org/API` model
@@ -289,28 +313,28 @@ interface AmfHelperMixin {
    * @param model AMF json/ld model for an API
    * @return The API declaration.
    */
-  _computeApi(model: any): object;
+  _computeApi(model: AmfDocument): AsyncApi|WebApi;
 
   /**
    * Returns whether an AMF node is a WebAPI node
    * 
    * @param model  AMF json/ld model for an API
    */
-  _isWebAPI(model: any): boolean;
+  _isWebAPI(model: AmfDocument): boolean;
 
   /**
    * Returns whether an AMF node is an AsyncAPI node
    * 
    * @param model  AMF json/ld model for an API
    */
-  _isAsyncAPI(model: any): boolean;
+  _isAsyncAPI(model: AmfDocument): boolean;
 
   /**
    * Returns whether an AMF node is an API node
    * 
    * @param model  AMF json/ld model for an API
    */
-  _isAPI(model: any): boolean;
+  _isAPI(model: AmfDocument): boolean;
 
   /**
    * Computes value for `server` property that is later used with other computations.
@@ -318,7 +342,7 @@ interface AmfHelperMixin {
    * @param model AMF model for an API
    * @returns The server model
    */
-  _computeServer(model: object[]|object): object|undefined;
+  _computeServer(model: AmfDocument): Server|undefined;
 
   /**
    * Determines whether a partial model is valid for reading servers from
@@ -333,14 +357,14 @@ interface AmfHelperMixin {
   /**
    * @returns List of servers for method, if defined, or endpoint, if defined, or root level
    */
-  _getServers(opts: GetServersOptions): object[]|undefined;
+  _getServers(opts?: ServersQueryOptions): Server[]|undefined;
 
   /**
    * Compute values for `server` property based on node an optional selected id.
    *
    * @returns The server list or undefined if node has no servers
    */
-  _getServer(opts: GetServerOptions): object|undefined;
+  _getServer(opts?: ServerQueryOptions): Server[]|undefined;
 
   /**
    * Computes endpoint's URI based on `amf` and `endpoint` models.
@@ -350,25 +374,22 @@ interface AmfHelperMixin {
    * @param baseUri Current value of `baseUri` property
    * @param version API current version
    * @returns Endpoint's URI
+   * @deprecated Use `_computeUri()` instead
    */
-  _computeEndpointUri(server?: object, endpoint?: object, baseUri?: string, version?: string): string|undefined;
+  _computeEndpointUri(server: Server, endpoint: Endpoint, baseUri?: string, version?: string): string|undefined;
 
   /**
    * Computes endpoint's URI based on `endpoint` model.
    *
    * @param endpoint Model for the endpoint
-   * @param [opts={}] Configuration options
-   * @param {Object} [opts.server]
-   * @param {string} [opts.baseUri]
-   * @param {string} [opts.version]
-   * @param {boolean} [opts.ignoreBase=false]
+   * @param opts Configuration options
    */
-  _computeUri(endpoint: object, opts: ComputeUriOptions): string;
+  _computeUri(endpoint: Endpoint, opts?: ComputeUriOptions): string;
 
   /**
    * Appends endpoint's path to the url
    */
-  _appendPath(url: string, endpoint: any): string;
+  _appendPath(url: string, endpoint: Endpoint): string;
 
   /**
    * Computes base URI value from either `baseUri`, `iron-meta` with
@@ -379,7 +400,7 @@ interface AmfHelperMixin {
    * @param protocols List of supported protocols
    * @returns Base uri value. Can be empty string.
    */
-  _getBaseUri(baseUri: string, server: object, protocols?: Array<string>): string;
+  _getBaseUri(baseUri: string, server: Server, protocols?: string[]): string;
 
   /**
    * Computes base URI from AMF model.
@@ -390,7 +411,7 @@ interface AmfHelperMixin {
    * protocols
    * @returns Base uri value if exists.
    */
-  _getAmfBaseUri(server: object, protocols: Array<string>): string|undefined;
+  _getAmfBaseUri(server: Server, protocols: string[]): string|undefined;
 
   /**
    * A function that makes sure that the URL has a scheme definition.
@@ -403,21 +424,21 @@ interface AmfHelperMixin {
    * property.
    * @returns Url with scheme.
    */
-  _ensureUrlScheme(value: string, protocols: Array<string>): string|undefined;
+  _ensureUrlScheme(value: string, protocols: string[]): string|undefined;
 
   /**
    * Computes supported protocols by the API.
    *
    * @param model AMF data model
    */
-  _computeProtocols(model: object|object[]): Array<string>|undefined;
+  _computeProtocols(model: AmfDocument): string[]|undefined;
 
   /**
    * Computes value for the `expects` property.
    *
    * @param method AMF `supportedOperation` model
    */
-  _computeExpects(method: object): object|undefined;
+  _computeExpects(method: Operation): Request|undefined;
 
   /**
    * Tries to find an example value (whether it's default value or from an
@@ -425,14 +446,14 @@ interface AmfHelperMixin {
    *
    * @param item A http://raml.org/vocabularies/http#Parameter property
    */
-  _computePropertyValue(item: object): string|undefined;
+  _computePropertyValue(item: Parameter): string|undefined;
 
   /**
    * Computes list of endpoints from a WebApi model.
    *
    * @returns Always returns an array of endpoints.
    */
-  _computeEndpoints(webApi: object): object[]|undefined;
+  _computeEndpoints(webApi: WebApi): Endpoint[]|undefined;
 
   /**
    * Computes model for an endpoint documentation.
@@ -441,7 +462,7 @@ interface AmfHelperMixin {
    * @param id Selected shape ID
    * @returns An endpoint definition
    */
-  _computeEndpointModel(webApi: object, id: string): object|undefined;
+  _computeEndpointModel(webApi: WebApi, id: string): Endpoint|undefined;
 
   /**
    * Computes model for an endpoint documentation using it's path.
@@ -450,7 +471,7 @@ interface AmfHelperMixin {
    * @param path Endpoint path
    * @returns An endpoint definition
    */
-  _computeEndpointByPath(webApi: object, path: string): object|undefined;
+  _computeEndpointByPath(webApi: WebApi, path: string): Endpoint|undefined;
 
   /**
    * Computes method for the method documentation.
@@ -459,7 +480,7 @@ interface AmfHelperMixin {
    * @param selected Selected shape
    * @returns A method definition
    */
-  _computeMethodModel(webApi: object, selected: string): object|undefined;
+  _computeMethodModel(webApi: WebApi, selected: string): Operation|undefined;
 
   /**
    * Computes list of operations in an endpoint
@@ -468,7 +489,7 @@ interface AmfHelperMixin {
    * @param id Endpoint ID
    * @returns List of SupportedOperation objects
    */
-  _computeOperations(webApi: object, id: string): Array<object>|undefined;
+  _computeOperations(webApi: WebApi, id: string): Operation[]|undefined;
 
   /**
    * Computes an endpoint for a method.
@@ -477,7 +498,7 @@ interface AmfHelperMixin {
    * @param methodId Method id
    * @returns An endpoint model of undefined.
    */
-  _computeMethodEndpoint(webApi: object, methodId: string): object|undefined;
+  _computeMethodEndpoint(webApi: WebApi, methodId: string): Endpoint|undefined;
 
   /**
    * Computes a list of methods for an endpoint that contains a method with
@@ -487,7 +508,7 @@ interface AmfHelperMixin {
    * @param methodId Method id.
    * @returns A list of sibling methods or undefined.
    */
-  __computeMethodsListForMethod(webApi: any, methodId: string): any[]|undefined;
+  __computeMethodsListForMethod(webApi: WebApi, methodId: string): Operation[]|undefined;
 
   /**
    * Computes a type documentation model.
@@ -497,7 +518,23 @@ interface AmfHelperMixin {
    * @param selected Selected shape
    * @returns A type definition
    */
-  _computeType(declares: object[], references: object[], selected: string): object|undefined;
+  _computeType(declares: DomainElement[], references: DomainElement[], selected: string): Shape|undefined;
+
+  /**
+   * Finds a type in the model declares and references.
+   * @param domainId The domain id of the type (AMF's shape).
+   * @returns The AMF shape or undefined when not found.
+   */
+  [findAmfType](domainId?: string): Shape|undefined;
+
+  /**
+   * Searches for an object in model's references list.
+   * It does not resolve the object (useful for handling links correctly).
+   * 
+   * @param domainId The domain of the object to find in the references.
+   * @returns The domain object or undefined.
+   */
+  [findReferenceObject](domainId?: string): DomainElement|undefined;
 
   /**
    * Computes a type model from a reference (library for example).
@@ -506,7 +543,7 @@ interface AmfHelperMixin {
    * @param selected Node ID to look for
    * @returns Type definition or undefined if not found.
    */
-  _computeReferenceType(reference: object, selected: string): object|undefined;
+  _computeReferenceType(reference: DomainElement, selected: string): Shape|undefined;
 
   /**
    * Computes model for selected security definition.
@@ -515,7 +552,7 @@ interface AmfHelperMixin {
    * @param selected Selected shape
    * @returns A security definition
    */
-  _computeSecurityModel(declares: any[], selected: string): object|undefined;
+  _computeSecurityModel(declares: DomainElement[], selected: string): SecurityScheme|undefined;
 
   /**
    * Computes a documentation model.
@@ -524,7 +561,7 @@ interface AmfHelperMixin {
    * @param selected Selected shape
    * @returns A method definition
    */
-  _computeDocument(webApi: any, selected: string): any|undefined;
+  _computeDocument(webApi: WebApi, selected: string): DomainElement|undefined;
 
   /**
    * Resolves a reference to an external fragment.
@@ -532,8 +569,8 @@ interface AmfHelperMixin {
    * @param shape A shape to resolve
    * @returns Resolved shape.
    */
-  _resolve(shape: object): object;
-  _getLinkTarget(amf: object, id: string): object;
+  _resolve<T>(shape: T): T;
+  _getLinkTarget(amf: AmfDocument, id: string): DomainElement|undefined;
 
   /**
    * Resolves the shape of a given reference.
@@ -542,7 +579,7 @@ interface AmfHelperMixin {
    * @param id Id of the shape to resolve
    * @returns Resolved shape for given reference, undefined otherwise
    */
-  _obtainShapeFromReferences(references: object, id: string): object|undefined;
+  _obtainShapeFromReferences(references: DomainElement[], id: string): DomainElement|undefined;
 
   /**
    * Searches a node with a given ID in an array
@@ -551,9 +588,9 @@ interface AmfHelperMixin {
    * @param id Id to search for
    * @returns Node with the given ID when found, undefined otherwise
    */
-  _findById(array: object[], id: string): object|undefined;
-  _getReferenceId(amf: object, id: string): object|undefined;
-  _resolveRecursive(shape: object): void;
+  _findById(array: DomainElement[], id: string): DomainElement|undefined;
+  _getReferenceId(amf: AmfDocument, id: string): DomainElement|undefined;
+  _resolveRecursive<T>(shape: T): T;
 
   /**
    * Merge two shapes together. If the resulting shape has one of the "special merge" keys,
@@ -562,7 +599,7 @@ interface AmfHelperMixin {
    * @param shapeB AMF node
    * @returns Merged AMF node
    */
-  _mergeShapes(shapeA: object, shapeB: object): object;
+  _mergeShapes(shapeA: any, shapeB: any): any;
 
   /**
    * Obtains source map sources value from two shapes and returns the merged result
@@ -572,5 +609,12 @@ interface AmfHelperMixin {
    * @param AMF node
    * @returns Empty object or resulting merge, wrapped in an array
    */
-  _mergeSourceMapsSources(shapeA: object, shapeB: object): object[];
+  _mergeSourceMapsSources(shapeA: any, shapeB: any): any[];
+
+  /**
+   * Expands the key property from compacted mode to full mode.
+   * @param value The value to process
+   * @returns The expanded value.
+   */
+  [expandKey](value: string): string;
 }
